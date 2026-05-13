@@ -38,15 +38,14 @@
       font-family: 'DM Sans', sans-serif;
       background: var(--cream);
       color: var(--ink);
-      overflow: hidden;
     }
 
     /* ─── LAYOUT ─── */
     .app {
       display: flex;
       flex-direction: column;
-      height: 100dvh;
-      height: 100vh;
+      min-height: 100dvh;
+      min-height: 100vh;
       max-width: 540px;
       margin: 0 auto;
       padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
@@ -112,7 +111,6 @@
     /* ─── MAIN SCROLL ─── */
     main {
       flex: 1;
-      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       padding: .85rem 1rem 1.25rem;
       display: flex;
