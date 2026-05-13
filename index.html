@@ -1,471 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson Tracker — Teach with clarity</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Range Tutors - Find Your Teacher & Resources</title>
+    <link rel="stylesheet" href="styles.css">
+    </head>
 
-    :root {
-      --cream:    #F7F4EF;
-      --paper:    #FFFFFF;
-      --ink:      #1A1714;
-      --ink-soft: #6B6560;
-      --ink-faint:#B8B4AE;
-      --coral:    #E8553E;
-      --sage:     #3D8C6A;
-      --amber:    #D4850A;
-      --card-shadow: 0 2px 12px rgba(26,23,20,.07), 0 1px 3px rgba(26,23,20,.05);
-      --card-shadow-hover: 0 8px 32px rgba(26,23,20,.12), 0 2px 8px rgba(26,23,20,.07);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--ink);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ─── NAV ─── */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 1.5rem;
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-    .logo {
-      font-family: 'Lora', serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--ink);
-      text-decoration: none;
-      letter-spacing: -.01em;
-    }
-    .logo span { color: var(--coral); }
-    .nav-cta {
-      background: var(--ink);
-      color: #fff;
-      text-decoration: none;
-      font-size: .85rem;
-      font-weight: 500;
-      padding: .5rem 1.1rem;
-      border-radius: 100px;
-      transition: background .2s, transform .15s;
-    }
-    .nav-cta:hover { background: var(--coral); transform: translateY(-1px); }
-
-    /* ─── HERO ─── */
-    .hero {
-      max-width: 680px;
-      margin: 3rem auto 0;
-      padding: 0 1.5rem;
-      text-align: center;
-    }
-
-    .hero-tag {
-      display: inline-block;
-      background: rgba(232,85,62,.1);
-      color: var(--coral);
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .35rem .9rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-      animation: fadeUp .5s ease both;
-    }
-
-    h1 {
-      font-family: 'Lora', serif;
-      font-size: clamp(2.2rem, 6vw, 3.5rem);
-      line-height: 1.13;
-      letter-spacing: -.02em;
-      color: var(--ink);
-      margin-bottom: 1.25rem;
-      animation: fadeUp .5s .1s ease both;
-    }
-    h1 em { font-style: italic; color: var(--coral); }
-
-    .hero-sub {
-      font-size: 1.05rem;
-      line-height: 1.65;
-      color: var(--ink-soft);
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
-      font-weight: 400;
-      animation: fadeUp .5s .2s ease both;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: .75rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeUp .5s .3s ease both;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--coral);
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: .9rem 2rem;
-      border-radius: 100px;
-      transition: transform .15s, box-shadow .2s, background .2s;
-      box-shadow: 0 4px 16px rgba(232,85,62,.35);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,85,62,.4); background: #d44232; }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-primary svg { width: 18px; height: 18px; }
-
-    /* ─── DEMO VISUAL ─── */
-    .hero-visual {
-      margin: 3.5rem auto 0;
-      max-width: 440px;
-      padding: 0 1.5rem;
-      animation: fadeUp .6s .4s ease both;
-    }
-    .mock-card {
-      background: var(--paper);
-      border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: var(--card-shadow);
-      border: 1px solid rgba(26,23,20,.06);
-    }
-    .mock-label {
-      font-size: .7rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: .85rem;
-    }
-    .mock-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .6rem;
-    }
-    .mock-btn {
-      padding: .75rem .5rem;
-      border-radius: 12px;
-      font-size: .78rem;
-      font-weight: 500;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-inline: .85rem;
-    }
-    .mock-btn.err { background: rgba(232,85,62,.08); color: #c03a26; }
-    .mock-btn.pos { background: rgba(61,140,106,.09); color: #2d7254; }
-    .mock-btn .count {
-      background: rgba(26,23,20,.08);
-      border-radius: 20px;
-      font-size: .72rem;
-      font-weight: 700;
-      padding: .1rem .45rem;
-      min-width: 1.4rem;
-      text-align: center;
-    }
-
-    /* ─── DIVIDER ─── */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      max-width: 680px;
-      margin: 4rem auto 0;
-      padding: 0 1.5rem;
-      color: var(--ink-faint);
-      font-size: .8rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-    .section-divider::before, .section-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--ink-faint);
-      opacity: .35;
-    }
-
-    /* ─── FEATURES ─── */
-    .features {
-      max-width: 1000px;
-      margin: 2.5rem auto 0;
-      padding: 0 1.5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-    .feature-card {
-      background: var(--paper);
-      border-radius: 16px;
-      padding: 1.75rem 1.5rem;
-      box-shadow: var(--card-shadow);
-      border: 1px solid rgba(26,23,20,.05);
-      transition: box-shadow .25s, transform .2s;
-      animation: fadeUp .5s ease both;
-    }
-    .feature-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
-    .feature-card:nth-child(1) { animation-delay: .1s; }
-    .feature-card:nth-child(2) { animation-delay: .2s; }
-    .feature-card:nth-child(3) { animation-delay: .3s; }
-
-    .feature-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-    .feature-icon.red   { background: rgba(232,85,62,.1); }
-    .feature-icon.green { background: rgba(61,140,106,.1); }
-    .feature-icon.amber { background: rgba(212,133,10,.1); }
-
-    .feature-title {
-      font-family: 'Lora', serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: .5rem;
-      color: var(--ink);
-    }
-    .feature-desc {
-      font-size: .88rem;
-      line-height: 1.6;
-      color: var(--ink-soft);
-    }
-
-    /* ─── HOW IT WORKS ─── */
-    .how {
-      max-width: 680px;
-      margin: 4.5rem auto 0;
-      padding: 0 1.5rem;
-    }
-    .how h2 {
-      font-family: 'Lora', serif;
-      font-size: 1.7rem;
-      letter-spacing: -.02em;
-      text-align: center;
-      margin-bottom: 2rem;
-      color: var(--ink);
-    }
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      position: relative;
-    }
-    .steps::before {
-      content: '';
-      position: absolute;
-      left: 1.45rem;
-      top: 2.2rem;
-      bottom: 2.2rem;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--coral), var(--sage));
-      opacity: .3;
-    }
-    .step {
-      display: flex;
-      gap: 1.25rem;
-      align-items: flex-start;
-      padding: 1.25rem 0;
-    }
-    .step-num {
-      width: 2.9rem;
-      height: 2.9rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: .9rem;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-    }
-    .step:nth-child(1) .step-num { background: rgba(232,85,62,.12); color: var(--coral); }
-    .step:nth-child(2) .step-num { background: rgba(212,133,10,.12); color: var(--amber); }
-    .step:nth-child(3) .step-num { background: rgba(61,140,106,.12); color: var(--sage); }
-    .step-body { padding-top: .45rem; }
-    .step-title {
-      font-weight: 600;
-      font-size: .95rem;
-      color: var(--ink);
-      margin-bottom: .25rem;
-    }
-    .step-desc { font-size: .85rem; color: var(--ink-soft); line-height: 1.55; }
-
-    /* ─── BOTTOM CTA ─── */
-    .cta-section {
-      max-width: 680px;
-      margin: 4.5rem auto;
-      padding: 0 1.5rem;
-      text-align: center;
-    }
-    .cta-box {
-      background: var(--ink);
-      border-radius: 20px;
-      padding: 3rem 2rem;
-      color: #fff;
-    }
-    .cta-box h2 {
-      font-family: 'Lora', serif;
-      font-size: 1.8rem;
-      line-height: 1.2;
-      margin-bottom: .75rem;
-      letter-spacing: -.02em;
-    }
-    .cta-box h2 em { font-style: italic; color: #F5A68E; }
-    .cta-box p {
-      font-size: .9rem;
-      color: rgba(255,255,255,.6);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-    .btn-primary-light {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--coral);
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: .9rem 2rem;
-      border-radius: 100px;
-      transition: transform .15s, box-shadow .2s;
-      box-shadow: 0 4px 20px rgba(232,85,62,.45);
-    }
-    .btn-primary-light:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,85,62,.55); }
-
-    /* ─── FOOTER ─── */
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      font-size: .78rem;
-      color: var(--ink-faint);
-      border-top: 1px solid rgba(26,23,20,.06);
-    }
-
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
 <body>
-
-  <nav>
-    <a class="logo" href="index.html">Lesson<span>.</span>Tracker</a>
-    <a class="nav-cta" href="tracker.html">Start Tracking →</a>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-tag">For ESL Teachers</div>
-    <h1>Teach with clarity,<br><em>not guesswork</em></h1>
-    <p class="hero-sub">Track student errors in real time and instantly know what to focus on next lesson.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="tracker.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
-        Start Live Lesson Tracker
-      </a>
-    </div>
-  </section>
-
-  <!-- MOCK PREVIEW -->
-  <div class="hero-visual">
-    <div class="mock-card">
-      <div class="mock-label">Live Lesson — Now tracking</div>
-      <div class="mock-buttons">
-        <div class="mock-btn err">Wrong article <span class="count">3</span></div>
-        <div class="mock-btn err">Past tense <span class="count">5</span></div>
-        <div class="mock-btn err">Hesitation <span class="count">2</span></div>
-        <div class="mock-btn err">Repeating word <span class="count">1</span></div>
-        <div class="mock-btn pos">Used modal <span class="count">2</span></div>
-        <div class="mock-btn pos">Phrasal verb <span class="count">0</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FEATURES SECTION -->
-  <div class="section-divider">Features</div>
-  <div class="features">
-    <div class="feature-card">
-      <div class="feature-icon red">⚡</div>
-      <div class="feature-title">Track in real time</div>
-      <p class="feature-desc">Large, tap-friendly buttons log errors and wins with zero friction — keep your eyes on the student, not the screen.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon green">📊</div>
-      <div class="feature-title">See patterns instantly</div>
-      <p class="feature-desc">Every tap is counted and ranked. By lesson end you know exactly what recurred and what was skipped.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon amber">🎯</div>
-      <div class="feature-title">Get next lesson focus</div>
-      <p class="feature-desc">The summary screen gives you a clear primary and secondary focus so you walk into the next session with a plan.</p>
-    </div>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <section class="how">
-    <h2>How it works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <div class="step-title">Tap errors during the lesson</div>
-          <p class="step-desc">One tap per mistake or positive moment. The tracker runs silently in the background of your lesson.</p>
+    <header>
+        <a href="index.html">
+            <img class="logo" src="images/logo.png" alt="Free Range Tutors Logo">
+        </a>
+        
+        <div class="header-title-area">
+            <span class="header-main-title">Free Range Tutors</span>
+            <span class="header-tagline">Keep 100% of Your Earnings!</span>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <div class="step-title">End the lesson</div>
-          <p class="step-desc">Hit "End Lesson" when you're done. Your session data is saved immediately.</p>
+
+         <nav>
+             <a href="index.html">Find a Tutor</a> |
+             <a href="materials.html">Materials</a> |
+             <a href="tools.html">Tools</a> |
+             <a href="cambridge-grader.html">AI Grader</a> |
+             <a href="index.html#contact">Get Your Page</a>
+         </nav>
+    </header>
+
+    <h1>Find Your Independent Tutor</h1>
+    <p>Browse through our list of skilled tutors and book lessons directly. No platform commissions!</p>
+
+    <section class="why-us">
+        <h2>Why Choose Free Range Tutors?</h2>
+        <p>We empower teachers to break free from expensive platforms. For a one-time setup fee of <strong>€99</strong>, you get your own professional webpage hosted at freerangetutors.com/yourname, complete with booking and payment integration, allowing you to keep 100% of your earnings.</p>
+    </section>
+
+     <section class="materials-promo">
+        <h2>Explore Free Resources & Tools</h2>
+        <p>Looking for specialized materials or helpful apps? We're building a library of free resources (SEN, Advanced ESL) and useful tools like a Report Generator and Lesson Planner.</p>
+        <p>
+            <a href="materials.html" class="button">Browse Materials</a>
+            <a href="tools.html" class="button" style="margin-left: 10px;">Explore Tools</a>
+        </p>
+    </section>
+
+    <h2>Our Tutors</h2>
+    <div class="tutor-list">
+        <div class="tutor-column">
+            <h3>A</h3> <ul> <li><a href="/alex">Alex - Conversational English</a></li> </ul>
+            <h3>B</h3> <ul> <li><a href="/beth">Beth - Grammar Expert</a></li> </ul>
+            <h3>C</h3> <ul> <li><a href="/charlie">Charlie - Pronunciation Coach</a></li> </ul>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <div class="step-title">Get an instant summary</div>
-          <p class="step-desc">See top issues, missing skills, and a suggested focus for next time — generated automatically.</p>
+        <div class="tutor-column">
+            <h3>J</h3> <ul> <li><a href="/john">John - IELTS & TOEFL Expert</a></li> </ul>
+            <h3>M</h3> <ul> <li><a href="mike.html">Mike - ESL Specialist</a></li> </ul>
+            <h3>S</h3> <ul> <li><a href="/sarah">Sarah - Business English Coach</a></li> </ul>
         </div>
-      </div>
+        <div class="tutor-column">
+            <h3>T</h3> <ul> <li><a href="/tom">Tom - Academic Writing</a></li> </ul>
+            <h3>V</h3> <ul> <li><a href="/victoria">Victoria - Speaking Coach</a></li> </ul>
+            <h3>Z</h3> <ul> <li><a href="/zoe">Zoe - Exam Preparation</a></li> </ul>
+        </div>
     </div>
-  </section>
 
-  <!-- BOTTOM CTA -->
-  <div class="cta-section">
-    <div class="cta-box">
-      <h2>Ready for your<br><em>next lesson?</em></h2>
-      <p>No sign-up, no downloads. Works right in your browser.</p>
-      <a class="btn-primary-light" href="tracker.html">Open Live Tracker →</a>
-    </div>
-  </div>
+    <div class="contact" id="contact">
+        <h2>Get Your Own Tutor Page</h2>
+        <p>Ready to build your independent teaching business? Contact us below to get started with your own webpage for only <strong>€99</strong>.</p>
+        <p>Email: <a href="mailto:contact@freerangetutors.com">contact@freerangetutors.com</a></p>
+        </div>
 
-  <footer>Built for ESL teachers. No data leaves your device.</footer>
+    <footer>
+        <p>&copy; 2025 Free Range Tutors. All rights reserved. | <a href="#">Back to Top</a></p>
+        </footer>
 
+    <script src="scripts.js"></script>
 </body>
 </html>
