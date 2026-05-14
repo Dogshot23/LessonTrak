@@ -31,6 +31,10 @@
       --sage:         #3D8C6A;
       --sage-bg:      rgba(61,140,106,.08);
       --sage-border:  rgba(61,140,106,.18);
+      /* ── NEW: New Language accent ── */
+      --slate:        #4A6FA5;
+      --slate-bg:     rgba(74,111,165,.08);
+      --slate-border: rgba(74,111,165,.18);
     }
 
     html, body {
@@ -129,8 +133,9 @@
       text-transform: uppercase;
       margin-bottom: .55rem;
     }
-    .section-label.err { color: var(--coral); }
-    .section-label.pos { color: var(--sage); }
+    .section-label.err  { color: var(--coral); }
+    .section-label.pos  { color: var(--sage); }
+    .section-label.lang { color: var(--slate); }
     .section-label-line {
       flex: 1;
       height: 1px;
@@ -345,6 +350,90 @@
     .sheet-cancel:hover  { background: #ede9e3; }
     .sheet-confirm:hover { background: #d44232; }
     .sheet-confirm:active, .sheet-cancel:active { transform: scale(.97); }
+
+    /* ─── NEW LANGUAGE SECTION ─── */
+    .lang-input-row {
+      display: flex;
+      gap: .45rem;
+      margin-bottom: .45rem;
+    }
+    .lang-input {
+      flex: 1;
+      border: 1.5px solid rgba(26,23,20,.12);
+      border-radius: 10px;
+      padding: .58rem .8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .88rem;
+      background: var(--paper);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      min-width: 0;
+    }
+    .lang-input::placeholder { color: var(--ink-faint); }
+    .lang-input:focus { border-color: var(--slate); }
+    .lang-add-btn {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lang-add-btn:hover  { background: #2e2a26; }
+    .lang-add-btn:active { transform: scale(.9); }
+
+    .lang-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .lang-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper);
+      border: 1px solid var(--slate-border);
+      border-radius: 9px;
+      padding: .42rem .55rem .42rem .75rem;
+      font-size: .86rem;
+      color: var(--ink);
+      animation: fadeIn .18s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .lang-item-text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .lang-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-faint);
+      font-size: 1rem;
+      line-height: 1;
+      padding: .1rem .2rem .1rem .55rem;
+      flex-shrink: 0;
+      transition: color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lang-remove:hover { color: var(--coral); }
   </style>
 </head>
 <body>
@@ -471,6 +560,26 @@
       </div>
     </div>
 
+    <!-- NEW LANGUAGE -->
+    <div>
+      <div class="section-label lang">
+        New Language
+        <div class="section-label-line"></div>
+      </div>
+      <div class="lang-input-row">
+        <input
+          type="text"
+          id="lang-input"
+          class="lang-input"
+          placeholder="Add word or phrase…"
+          maxlength="80"
+          onkeydown="if(event.key==='Enter') addLanguage()"
+        />
+        <button class="lang-add-btn" onclick="addLanguage()" aria-label="Add">+</button>
+      </div>
+      <ul class="lang-list" id="lang-list"></ul>
+    </div>
+
   </main>
 
   <!-- END LESSON -->
@@ -537,6 +646,7 @@
       good_grammar: 0, good_vocab: 0, complex_structure: 0,
       connector: 0, natural_phrase: 0
     },
+    newLanguage: [],   // ← NEW
     startedAt: null
   };
 
@@ -547,7 +657,6 @@
         const parsed = JSON.parse(saved);
         // Only restore if < 6 hours old
         if (parsed.startedAt && Date.now() - parsed.startedAt < 6 * 3600 * 1000) {
-          // Migrate old sessions if needed – keep keys that exist
           state.startedAt = parsed.startedAt;
           for (const k of Object.keys(state.errors)) {
             if (parsed.errors && parsed.errors[k] !== undefined) state.errors[k] = parsed.errors[k];
@@ -555,6 +664,8 @@
           for (const k of Object.keys(state.positives)) {
             if (parsed.positives && parsed.positives[k] !== undefined) state.positives[k] = parsed.positives[k];
           }
+          // ── NEW: restore language list ──
+          if (Array.isArray(parsed.newLanguage)) state.newLanguage = parsed.newLanguage;
         } else {
           state.startedAt = Date.now();
           saveState();
@@ -588,6 +699,7 @@
     }
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
+    renderLanguage();   // ← NEW
   }
 
   // ── Tap handler ────────────────────────────────────────────────────
@@ -611,6 +723,46 @@
     for (const v of Object.values(state.positives)) posTotal += v;
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
+  }
+
+  // ── New Language ───────────────────────────────────────────────────
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function addLanguage() {
+    const input = document.getElementById('lang-input');
+    const val = input.value.trim();
+    if (!val) return;
+    state.newLanguage.push(val);
+    saveState();
+    input.value = '';
+    input.focus();
+    renderLanguage();
+  }
+
+  function removeLanguage(i) {
+    state.newLanguage.splice(i, 1);
+    saveState();
+    renderLanguage();
+  }
+
+  function renderLanguage() {
+    const list = document.getElementById('lang-list');
+    if (!list) return;
+    list.innerHTML = '';
+    state.newLanguage.forEach((item, i) => {
+      const li = document.createElement('li');
+      li.className = 'lang-item';
+      li.innerHTML =
+        `<span class="lang-item-text">${escapeHtml(item)}</span>` +
+        `<button class="lang-remove" onclick="removeLanguage(${i})" aria-label="Remove">×</button>`;
+      list.appendChild(li);
+    });
   }
 
   // ── End lesson sheet ──────────────────────────────────────────────
@@ -649,6 +801,7 @@
         good_grammar: 0, good_vocab: 0, complex_structure: 0,
         connector: 0, natural_phrase: 0
       },
+      newLanguage: [],   // ← NEW
       startedAt: Date.now()
     };
     saveState();
