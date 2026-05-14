@@ -55,13 +55,6 @@
       padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
     }
 
-    /* ─── COLUMN PANELS (shared base) ─── */
-    .col {
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
-    }
-
     /* ─── HEADER ─── */
     header {
       display: flex;
@@ -279,8 +272,10 @@
 
     /* ─── END LESSON BUTTON ─── */
     .end-section {
-      padding: .6rem 0 0;
+      padding: .6rem 1rem calc(.8rem + env(safe-area-inset-bottom, 0px));
       flex-shrink: 0;
+      border-top: 1px solid rgba(26,23,20,.07);
+      background: var(--cream);
     }
     .end-btn {
       width: 100%;
@@ -439,87 +434,6 @@
       -webkit-tap-highlight-color: transparent;
     }
     .lang-remove:hover { color: var(--coral); }
-
-    /* ─── MOBILE: restore vertical stack ─── */
-    @media (max-width: 899px) {
-      main {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-      }
-      /* Reorder panels to match original mobile flow:
-         totals+positives+end → errors → new language */
-      .col-center { order: 1; }
-      .col-errors  { order: 2; }
-      .col-right   { order: 3; }
-      .end-section {
-        padding: .6rem 0 calc(.8rem + env(safe-area-inset-bottom, 0px));
-        margin-top: .25rem;
-        border-top: 1px solid rgba(26,23,20,.07);
-      }
-      .end-btn { width: 100%; }
-    }
-
-    /* ─── DESKTOP: 3-column grid ─── */
-    @media (min-width: 900px) {
-      html, body {
-        height: 100%;
-        overflow: hidden;
-      }
-      .app {
-        max-width: none;
-        height: 100vh;
-        overflow: hidden;
-      }
-      header {
-        padding: .7rem 1.5rem .6rem;
-      }
-      main {
-        display: grid;
-        grid-template-columns: 1fr 1fr 0.8fr;
-        gap: .9rem;
-        padding: .9rem 1.1rem;
-        overflow: hidden;
-        flex: 1;
-        min-height: 0;
-      }
-      .col {
-        background: var(--paper);
-        border-radius: 14px;
-        border: 1px solid rgba(26,23,20,.06);
-        padding: .9rem;
-        gap: .6rem;
-        overflow-y: auto;
-        min-height: 0;
-      }
-      /* Right column: flex so End Lesson sticks to bottom */
-      .col-right {
-        display: flex;
-        flex-direction: column;
-      }
-      .col-center .btn-grid-wrap {
-        flex: 1;
-      }
-      .end-section {
-        margin-top: auto;
-        padding-top: .75rem;
-        border-top: 1px solid rgba(26,23,20,.07);
-      }
-      .end-btn { width: 100%; }
-      /* Slightly tighter buttons on desktop to fit columns */
-      .track-btn {
-        padding: .65rem .7rem .6rem;
-      }
-      .btn-count {
-        font-size: 1.25rem;
-      }
-      .totals-bar {
-        padding: .6rem .85rem;
-      }
-      .total-val {
-        font-size: 1.25rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -536,8 +450,21 @@
 
   <main id="main-scroll">
 
-    <!-- ── LEFT COLUMN: Errors ── -->
-    <div class="col col-errors">
+    <!-- TOTALS -->
+    <div class="totals-bar">
+      <div class="total-item">
+        <div class="total-val" id="total-errors">0</div>
+        <div class="total-lbl">Errors</div>
+      </div>
+      <div class="total-divider"></div>
+      <div class="total-item">
+        <div class="total-val" id="total-positives">0</div>
+        <div class="total-lbl">Positives</div>
+      </div>
+    </div>
+
+    <!-- ERRORS -->
+    <div>
       <div class="section-label err">
         Errors
         <div class="section-label-line"></div>
@@ -588,71 +515,53 @@
       </div>
     </div>
 
-    <!-- ── CENTER COLUMN: Totals + Positives + End Lesson ── -->
-    <div class="col col-center">
-
-      <!-- TOTALS -->
-      <div class="totals-bar">
-        <div class="total-item">
-          <div class="total-val" id="total-errors">0</div>
-          <div class="total-lbl">Errors</div>
-        </div>
-        <div class="total-divider"></div>
-        <div class="total-item">
-          <div class="total-val" id="total-positives">0</div>
-          <div class="total-lbl">Positives</div>
-        </div>
+    <!-- POSITIVES -->
+    <div>
+      <div class="section-label pos">
+        Positives
+        <div class="section-label-line"></div>
       </div>
-
-      <!-- POSITIVES -->
-      <div class="btn-grid-wrap">
-        <div class="section-label pos">
-          Positives
-          <div class="section-label-line"></div>
-        </div>
-        <div class="btn-grid">
-          <button class="track-btn pos" onclick="tap('positives','good_grammar',this)">
-            <div class="btn-label">Good Grammar</div>
-            <div class="btn-bottom">
-              <div class="btn-count" id="c-good_grammar">0</div>
-              <div class="btn-icon">✅</div>
-            </div>
-          </button>
-          <button class="track-btn pos" onclick="tap('positives','good_vocab',this)">
-            <div class="btn-label">Good Vocabulary</div>
-            <div class="btn-bottom">
-              <div class="btn-count" id="c-good_vocab">0</div>
-              <div class="btn-icon">🌟</div>
-            </div>
-          </button>
-          <button class="track-btn pos" onclick="tap('positives','complex_structure',this)">
-            <div class="btn-label">Complex Structure</div>
-            <div class="btn-bottom">
-              <div class="btn-count" id="c-complex_structure">0</div>
-              <div class="btn-icon">🏗️</div>
-            </div>
-          </button>
-          <button class="track-btn pos" onclick="tap('positives','connector',this)">
-            <div class="btn-label">Connector Used</div>
-            <div class="btn-bottom">
-              <div class="btn-count" id="c-connector">0</div>
-              <div class="btn-icon">🔗</div>
-            </div>
-          </button>
-          <button class="track-btn pos" onclick="tap('positives','natural_phrase',this)">
-            <div class="btn-label">Natural Phrase</div>
-            <div class="btn-bottom">
-              <div class="btn-count" id="c-natural_phrase">0</div>
-              <div class="btn-icon">💎</div>
-            </div>
-          </button>
-        </div>
+      <div class="btn-grid">
+        <button class="track-btn pos" onclick="tap('positives','good_grammar',this)">
+          <div class="btn-label">Good Grammar</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-good_grammar">0</div>
+            <div class="btn-icon">✅</div>
+          </div>
+        </button>
+        <button class="track-btn pos" onclick="tap('positives','good_vocab',this)">
+          <div class="btn-label">Good Vocabulary</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-good_vocab">0</div>
+            <div class="btn-icon">🌟</div>
+          </div>
+        </button>
+        <button class="track-btn pos" onclick="tap('positives','complex_structure',this)">
+          <div class="btn-label">Complex Structure</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-complex_structure">0</div>
+            <div class="btn-icon">🏗️</div>
+          </div>
+        </button>
+        <button class="track-btn pos" onclick="tap('positives','connector',this)">
+          <div class="btn-label">Connector Used</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-connector">0</div>
+            <div class="btn-icon">🔗</div>
+          </div>
+        </button>
+        <button class="track-btn pos" onclick="tap('positives','natural_phrase',this)">
+          <div class="btn-label">Natural Phrase</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-natural_phrase">0</div>
+            <div class="btn-icon">💎</div>
+          </div>
+        </button>
       </div>
-
     </div>
 
-    <!-- ── RIGHT COLUMN: New Language ── -->
-    <div class="col col-right">
+    <!-- NEW LANGUAGE -->
+    <div>
       <div class="section-label lang">
         New Language
         <div class="section-label-line"></div>
@@ -669,14 +578,14 @@
         <button class="lang-add-btn" onclick="addLanguage()" aria-label="Add">+</button>
       </div>
       <ul class="lang-list" id="lang-list"></ul>
-
-      <!-- END LESSON (sticks to bottom of right column) -->
-      <div class="end-section">
-        <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
-      </div>
     </div>
 
   </main>
+
+  <!-- END LESSON -->
+  <div class="end-section">
+    <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
+  </div>
 
 </div>
 

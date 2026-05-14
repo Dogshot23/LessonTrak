@@ -492,8 +492,8 @@
         overflow-y: auto;
         min-height: 0;
       }
-      /* Right column: flex so End Lesson sticks to bottom */
-      .col-right {
+      /* Center column: flex so End Lesson sticks to bottom */
+      .col-center {
         display: flex;
         flex-direction: column;
       }
@@ -649,6 +649,11 @@
         </div>
       </div>
 
+      <!-- END LESSON (sticks to bottom of center column) -->
+      <div class="end-section">
+        <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
+      </div>
+
     </div>
 
     <!-- ── RIGHT COLUMN: New Language ── -->
@@ -669,11 +674,6 @@
         <button class="lang-add-btn" onclick="addLanguage()" aria-label="Add">+</button>
       </div>
       <ul class="lang-list" id="lang-list"></ul>
-
-      <!-- END LESSON (sticks to bottom of right column) -->
-      <div class="end-section">
-        <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
-      </div>
     </div>
 
   </main>
