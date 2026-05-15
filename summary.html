@@ -442,9 +442,8 @@
 
 <div class="demo-banner" id="demo-banner">
   <div class="demo-banner-text">
-    <strong>This is a demo summary.</strong> Use it in a real lesson to get personalised feedback.
+    <strong>This is a demo lesson summary.</strong>
   </div>
-  <a class="action-btn primary" href="tracker.html">Start Your Lesson →</a>
 </div>
 
 <main id="main-content">
@@ -621,7 +620,7 @@
     const secondaryKey   = missingPos[0] || posEntries[posEntries.length - 1]?.[0] || null;
     const topStrengthKey = posEntries[0]?.[0] || null;
 
-    const encouragement = buildEncouragement(topStrengthKey, primaryKey);
+    const encouragement = state.encouragement || buildEncouragement(topStrengthKey, primaryKey);
 
     // Format duration
     let durationStr = '';
@@ -869,6 +868,8 @@
 
   // ── Init ──────────────────────────────────────────────────────────
   (function init() {
+    const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true';
+
     let state = null;
     try {
       const raw = localStorage.getItem(SESSION_KEY);
@@ -879,16 +880,38 @@
       (Object.values(state.errors    || {}).some(v => v > 0) ||
        Object.values(state.positives || {}).some(v => v > 0));
 
-    if (!hasData) {
+    if (isDemo && !hasData) {
+      // ── Demo mode: inject example data into existing UI ─────────
+      renderSummary({
+        errors: {
+          articles: 3, tense: 2, word_order: 1,
+          vocabulary: 0, pronunciation: 0, fluency: 0
+        },
+        positives: {
+          good_grammar: 0, good_vocab: 0, complex_structure: 0,
+          connector: 1, natural_phrase: 1
+        },
+        encouragement: "You're improving steadily — let\u2019s build on this next lesson.",
+        newLanguage: []
+      });
+
+      // Add "Start Real Lesson" button at the bottom of main
+      const mainEl = document.getElementById('main-content');
+      const demoStartBtn = document.createElement('a');
+      demoStartBtn.href = 'tracker.html';
+      demoStartBtn.className = 'action-btn primary';
+      demoStartBtn.style.cssText = 'display:flex;max-width:320px;margin:.25rem auto 0;animation:fadeUp .4s .5s ease both;opacity:0;animation-fill-mode:both';
+      demoStartBtn.textContent = 'Start Real Lesson \u2192';
+      mainEl.appendChild(demoStartBtn);
+
+      document.getElementById('demo-banner').classList.add('visible');
+    } else if (!hasData) {
       renderEmpty();
     } else {
       renderSummary(state);
-    }
-
-    // ── Demo mode ────────────────────────────────────────────────
-    const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true';
-    if (isDemo) {
-      document.getElementById('demo-banner').classList.add('visible');
+      if (isDemo) {
+        document.getElementById('demo-banner').classList.add('visible');
+      }
     }
   })();
 </script>
