@@ -205,6 +205,11 @@
     .track-btn.err::after { background: rgba(232,85,62,.14); }
     .track-btn.pos::after { background: rgba(61,140,106,.14); }
     .track-btn.flash::after { opacity: 1; }
+    /* ── HOT: pattern forming (count > 3) ── */
+    .track-btn.err.hot  { border-color: rgba(232,85,62,.45); background: rgba(232,85,62,.06); }
+    .track-btn.pos.hot  { border-color: rgba(61,140,106,.45); background: rgba(61,140,106,.06); }
+    .track-btn.err.hot .btn-count { font-weight: 800; }
+    .track-btn.pos.hot .btn-count { font-weight: 800; }
 
     .btn-label {
       font-size: .8rem;
@@ -520,6 +525,73 @@
         font-size: 1.25rem;
       }
     }
+    /* ─── TEST THIS BOX ─── */
+    .test-this-box {
+      background: var(--paper);
+      border: 1px solid rgba(26,23,20,.08);
+      border-radius: 13px;
+      padding: .8rem .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .test-this-title {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .1rem;
+    }
+    .test-this-category {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--coral);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .test-this-prompt-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: .2rem;
+    }
+    .test-this-prompt {
+      font-size: .87rem;
+      color: var(--ink);
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .test-this-focus {
+      font-size: .76rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      padding-top: .1rem;
+      border-top: 1px solid rgba(26,23,20,.06);
+      margin-top: .15rem;
+    }
+    .test-this-new-btn {
+      background: none;
+      border: 1px solid rgba(26,23,20,.13);
+      border-radius: 8px;
+      padding: .32rem .65rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .74rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: .2rem;
+      transition: background .15s, color .15s, border-color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .test-this-new-btn:hover {
+      background: rgba(26,23,20,.05);
+      color: var(--ink);
+      border-color: rgba(26,23,20,.24);
+    }
   </style>
 </head>
 <body>
@@ -565,24 +637,31 @@
           </div>
         </button>
         <button class="track-btn err" onclick="tap('errors','vocabulary',this)">
-          <div class="btn-label">Vocabulary</div>
+          <div class="btn-label">Wrong Word Choice</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-vocabulary">0</div>
             <div class="btn-icon">📚</div>
           </div>
         </button>
         <button class="track-btn err" onclick="tap('errors','pronunciation',this)">
-          <div class="btn-label">Pronunciation</div>
+          <div class="btn-label">Unclear Pronunciation</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-pronunciation">0</div>
             <div class="btn-icon">🗣️</div>
           </div>
         </button>
         <button class="track-btn err" onclick="tap('errors','fluency',this)">
-          <div class="btn-label">Fluency</div>
+          <div class="btn-label">Hesitation / Long Pauses</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-fluency">0</div>
             <div class="btn-icon">💬</div>
+          </div>
+        </button>
+        <button class="track-btn err" onclick="tap('errors','expression',this)">
+          <div class="btn-label">Struggled to Express Idea</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-expression">0</div>
+            <div class="btn-icon">🤔</div>
           </div>
         </button>
       </div>
@@ -612,35 +691,35 @@
         </div>
         <div class="btn-grid">
           <button class="track-btn pos" onclick="tap('positives','good_grammar',this)">
-            <div class="btn-label">Good Grammar</div>
+            <div class="btn-label">Accurate Sentence</div>
             <div class="btn-bottom">
               <div class="btn-count" id="c-good_grammar">0</div>
               <div class="btn-icon">✅</div>
             </div>
           </button>
           <button class="track-btn pos" onclick="tap('positives','good_vocab',this)">
-            <div class="btn-label">Good Vocabulary</div>
+            <div class="btn-label">Good Word Choice</div>
             <div class="btn-bottom">
               <div class="btn-count" id="c-good_vocab">0</div>
               <div class="btn-icon">🌟</div>
             </div>
           </button>
           <button class="track-btn pos" onclick="tap('positives','complex_structure',this)">
-            <div class="btn-label">Complex Structure</div>
+            <div class="btn-label">Used Complex Sentence</div>
             <div class="btn-bottom">
               <div class="btn-count" id="c-complex_structure">0</div>
               <div class="btn-icon">🏗️</div>
             </div>
           </button>
           <button class="track-btn pos" onclick="tap('positives','connector',this)">
-            <div class="btn-label">Connector Used</div>
+            <div class="btn-label">Linked Ideas Clearly</div>
             <div class="btn-bottom">
               <div class="btn-count" id="c-connector">0</div>
               <div class="btn-icon">🔗</div>
             </div>
           </button>
           <button class="track-btn pos" onclick="tap('positives','natural_phrase',this)">
-            <div class="btn-label">Natural Phrase</div>
+            <div class="btn-label">Natural / Native-like Phrase</div>
             <div class="btn-bottom">
               <div class="btn-count" id="c-natural_phrase">0</div>
               <div class="btn-icon">💎</div>
@@ -669,6 +748,16 @@
         <button class="lang-add-btn" onclick="addLanguage()" aria-label="Add">+</button>
       </div>
       <ul class="lang-list" id="lang-list"></ul>
+
+      <!-- TEST THIS BOX -->
+      <div class="test-this-box" id="test-this-box">
+        <div class="test-this-title">🎯 Test This</div>
+        <div class="test-this-category" id="tt-category"></div>
+        <div class="test-this-prompt-label">Prompt:</div>
+        <div class="test-this-prompt" id="tt-prompt"></div>
+        <div class="test-this-focus" id="tt-focus"></div>
+        <button class="test-this-new-btn" onclick="showPrompt(true)">↻ New prompt</button>
+      </div>
 
       <!-- END LESSON (sticks to bottom of right column) -->
       <div class="end-section">
@@ -714,16 +803,17 @@
       articles:      'Articles',
       tense:         'Tense',
       word_order:    'Word Order',
-      vocabulary:    'Vocabulary',
-      pronunciation: 'Pronunciation',
-      fluency:       'Fluency'
+      vocabulary:    'Wrong Word Choice',
+      pronunciation: 'Unclear Pronunciation',
+      fluency:       'Hesitation / Long Pauses',
+      expression:    'Struggled to Express Idea'
     },
     positives: {
-      good_grammar:      'Good Grammar',
-      good_vocab:        'Good Vocabulary',
-      complex_structure: 'Complex Structure',
-      connector:         'Connector Used',
-      natural_phrase:    'Natural Phrase'
+      good_grammar:      'Accurate Sentence',
+      good_vocab:        'Good Word Choice',
+      complex_structure: 'Used Complex Sentence',
+      connector:         'Linked Ideas Clearly',
+      natural_phrase:    'Natural / Native-like Phrase'
     }
   };
 
@@ -731,7 +821,7 @@
   let state = {
     errors: {
       articles: 0, tense: 0, word_order: 0,
-      vocabulary: 0, pronunciation: 0, fluency: 0
+      vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0
     },
     positives: {
       good_grammar: 0, good_vocab: 0, complex_structure: 0,
@@ -780,12 +870,18 @@
     let errTotal = 0, posTotal = 0;
     for (const [key, val] of Object.entries(state.errors)) {
       const el = document.getElementById('c-' + key);
-      if (el) el.textContent = val;
+      if (el) {
+        el.textContent = val;
+        el.closest('.track-btn')?.classList.toggle('hot', val > 3);
+      }
       errTotal += val;
     }
     for (const [key, val] of Object.entries(state.positives)) {
       const el = document.getElementById('c-' + key);
-      if (el) el.textContent = val;
+      if (el) {
+        el.textContent = val;
+        el.closest('.track-btn')?.classList.toggle('hot', val > 3);
+      }
       posTotal += val;
     }
     document.getElementById('total-errors').textContent    = errTotal;
@@ -809,6 +905,12 @@
     btn.classList.add('flash');
     setTimeout(() => btn.classList.remove('flash'), 280);
 
+    // Emphasise button when a pattern is forming (count > 3)
+    btn.classList.toggle('hot', state[group][key] > 3);
+
+    // Keep Test This box pointed at the highest error category
+    showPrompt(false);
+
     let errTotal = 0, posTotal = 0;
     for (const v of Object.values(state.errors))    errTotal += v;
     for (const v of Object.values(state.positives)) posTotal += v;
@@ -816,7 +918,78 @@
     document.getElementById('total-positives').textContent = posTotal;
   }
 
-  // ── New Language ───────────────────────────────────────────────────
+  // ── Test This: Prompt Library ──────────────────────────────────────
+  const promptLibrary = {
+    "Articles": [
+      { text: "Describe a place you visited and explain why you liked it.", focus: "Listen for correct article use (a, the, zero article)" },
+      { text: "Tell me about your home — the rooms, the furniture, the area.", focus: "Watch for missing or incorrect articles before nouns" },
+      { text: "Describe someone in your family in detail.", focus: "Check articles before roles and countable nouns" }
+    ],
+    "Tense": [
+      { text: "Tell me about what you did last weekend.", focus: "Listen for consistent past tense verb forms" },
+      { text: "Describe your plans for the next month.", focus: "Listen for correct future forms (will / going to / present continuous)" },
+      { text: "Tell me about a time you made a difficult decision.", focus: "Watch for tense consistency across the narrative" }
+    ],
+    "Word Order": [
+      { text: "Describe your daily routine in detail.", focus: "Check sentence structure — subject, verb, object, adverb order" },
+      { text: "Compare two cities or places you know well.", focus: "Listen for adjective and adverb placement" },
+      { text: "Explain how you would teach someone a skill you have.", focus: "Watch for inverted or misplaced elements in instructions" }
+    ],
+    "Wrong Word Choice": [
+      { text: "Explain your opinion about social media.", focus: "Listen for imprecise or confusable word choices" },
+      { text: "Describe a film or book you enjoyed recently.", focus: "Watch for over-general words — nice, good, thing" },
+      { text: "Explain the difference between two jobs you would consider.", focus: "Listen for lexical precision and register" }
+    ],
+    "Unclear Pronunciation": [
+      { text: "Describe your hometown — location, atmosphere, what it's known for.", focus: "Listen for word stress and vowel clarity" },
+      { text: "Name and describe five objects you can see right now.", focus: "Focus on final consonants and syllable stress" },
+      { text: "Tell me about a journey you take regularly.", focus: "Watch for linking sounds and sentence-level rhythm" }
+    ],
+    "Hesitation / Long Pauses": [
+      { text: "Speak for one minute about your favourite hobby without stopping.", focus: "Encourage continuous speech — note pause length and frequency" },
+      { text: "Tell me about your typical weekday from morning to night.", focus: "Watch for fillers, restarts, and mid-sentence abandonment" },
+      { text: "Explain step by step how to cook a simple meal.", focus: "Encourage fluent sequencing — listen for flow" }
+    ],
+    "Struggled to Express Idea": [
+      { text: "Explain something difficult or surprising you learned recently.", focus: "Watch for idea breakdown, circumlocution, or topic switch" },
+      { text: "Describe how you felt during an important moment in your life.", focus: "Listen for idea abandonment or vague substitution" },
+      { text: "Explain what frustrates you most about learning English.", focus: "Watch for loss of specificity when ideas get complex" }
+    ]
+  };
+
+  // Map state keys → prompt library category names
+  const ERR_KEY_TO_CATEGORY = {
+    articles:      'Articles',
+    tense:         'Tense',
+    word_order:    'Word Order',
+    vocabulary:    'Wrong Word Choice',
+    pronunciation: 'Unclear Pronunciation',
+    fluency:       'Hesitation / Long Pauses',
+    expression:    'Struggled to Express Idea'
+  };
+
+  function getTopErrorCategory() {
+    let topKey = null, topVal = 0;
+    for (const [k, v] of Object.entries(state.errors)) {
+      if (v > topVal) { topVal = v; topKey = k; }
+    }
+    return (topKey && topVal > 0) ? ERR_KEY_TO_CATEGORY[topKey] : null;
+  }
+
+  function showPrompt(forceRandom) {
+    const categories = Object.keys(promptLibrary);
+    const category   = (!forceRandom && getTopErrorCategory())
+                       || categories[Math.floor(Math.random() * categories.length)];
+    const prompts    = promptLibrary[category];
+    const prompt     = prompts[Math.floor(Math.random() * prompts.length)];
+    document.getElementById('tt-category').textContent = 'Elicit: ' + category;
+    document.getElementById('tt-prompt').textContent   = '\u201C' + prompt.text + '\u201D';
+    document.getElementById('tt-focus').textContent    = 'Focus: ' + prompt.focus;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => showPrompt(false));
+
+
   function escapeHtml(str) {
     return str
       .replace(/&/g, '&amp;')
@@ -886,7 +1059,7 @@
     state = {
       errors: {
         articles: 0, tense: 0, word_order: 0,
-        vocabulary: 0, pronunciation: 0, fluency: 0
+        vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0
       },
       positives: {
         good_grammar: 0, good_vocab: 0, complex_structure: 0,
