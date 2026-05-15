@@ -592,9 +592,35 @@
       color: var(--ink);
       border-color: rgba(26,23,20,.24);
     }
+    /* ─── DEMO BANNER ─── */
+    .demo-banner {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      background: rgba(212,133,10,.12);
+      color: var(--amber);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      padding: .55rem 1rem;
+      text-align: center;
+    }
+    .demo-banner.visible { display: flex; }
+    .demo-banner-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulse 1.1s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>
+
+<div class="demo-banner" id="demo-banner">
+  <span class="demo-banner-dot"></span>
+  Demo Mode — simulating a short lesson
+</div>
 
 <div class="app">
 
@@ -916,7 +942,46 @@
   }
 
   // ── Test This: Prompt Library ──────────────────────────────────────
-  const promptLibrary = {
+  // ── Demo Mode ──────────────────────────────────────────────────────
+  const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true';
+
+  if (isDemo) {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Show banner
+      document.getElementById('demo-banner').classList.add('visible');
+
+      // Disable interaction during simulation
+      document.body.style.pointerEvents = 'none';
+
+      // Helper: click a button N times with staggered timing
+      function simulateClicks(selector, times, baseDelay, interval) {
+        for (let i = 0; i < times; i++) {
+          setTimeout(() => {
+            const btn = document.querySelector(selector);
+            if (btn) btn.click();
+          }, baseDelay + i * interval);
+        }
+      }
+
+      // Simulate errors: Articles ×3, Tense ×2, Word Order ×1
+      simulateClicks('[onclick*="\'articles\'"]',  3, 900,  320);
+      simulateClicks('[onclick*="\'tense\'"]',     2, 1900, 320);
+      simulateClicks('[onclick*="\'word_order\'"]',1, 2700, 0);
+
+      // Simulate positives: Accurate Sentence ×2, Good Word Choice ×1
+      simulateClicks('[onclick*="\'good_grammar\'"]', 2, 3100, 320);
+      simulateClicks('[onclick*="\'good_vocab\'"]',   1, 3800, 0);
+
+      // End lesson after simulation completes
+      setTimeout(() => {
+        document.body.style.pointerEvents = '';
+        const endBtn = document.querySelector('.end-btn');
+        if (endBtn) endBtn.click();
+      }, 4600);
+    });
+  }
+
+
     "Articles": [
       { text: "Describe a place you visited and explain why you liked it.", focus: "Listen for correct article use (a, the, zero article)" },
       { text: "Tell me about your home — the rooms, the furniture, the area.", focus: "Watch for missing or incorrect articles before nouns" },
@@ -1072,35 +1137,6 @@
 
   // ── Init ──────────────────────────────────────────────────────────
   loadState();
-</script>
-
-<script>
-(function() {
-  const isDemo = new URLSearchParams(window.location.search).get("demo") === "true";
-  if (!isDemo) return;
-  // small label
-  const label = document.createElement("div");
-  label.textContent = "Demo Mode — simulating a short lesson";
-  label.style.position = "fixed";
-  label.style.top = "10px";
-  label.style.left = "50%";
-  label.style.transform = "translateX(-50%)";
-  label.style.background = "#000";
-  label.style.color = "#fff";
-  label.style.padding = "6px 12px";
-  label.style.fontSize = "12px";
-  label.style.borderRadius = "6px";
-  label.style.zIndex = "9999";
-  document.body.appendChild(label);
-  // disable interaction
-  document.body.style.pointerEvents = "none";
-  // IMPORTANT:
-  // We do NOT simulate button clicks here (to avoid breaking logic)
-  // Instead, we simulate completion by redirecting to summary
-  setTimeout(() => {
-    window.location.href = "summary.html?demo=true";
-  }, 1500);
-})();
 </script>
 
 </body>

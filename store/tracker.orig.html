@@ -1074,34 +1074,5 @@
   loadState();
 </script>
 
-<script>
-(function() {
-  const isDemo = new URLSearchParams(window.location.search).get("demo") === "true";
-  if (!isDemo) return;
-  // small label
-  const label = document.createElement("div");
-  label.textContent = "Demo Mode — simulating a short lesson";
-  label.style.position = "fixed";
-  label.style.top = "10px";
-  label.style.left = "50%";
-  label.style.transform = "translateX(-50%)";
-  label.style.background = "#000";
-  label.style.color = "#fff";
-  label.style.padding = "6px 12px";
-  label.style.fontSize = "12px";
-  label.style.borderRadius = "6px";
-  label.style.zIndex = "9999";
-  document.body.appendChild(label);
-  // disable interaction
-  document.body.style.pointerEvents = "none";
-  // IMPORTANT:
-  // We do NOT simulate button clicks here (to avoid breaking logic)
-  // Instead, we simulate completion by redirecting to summary
-  setTimeout(() => {
-    window.location.href = "summary.html?demo=true";
-  }, 1500);
-})();
-</script>
-
 </body>
 </html>
