@@ -908,9 +908,6 @@
     // Emphasise button when a pattern is forming (count > 3)
     btn.classList.toggle('hot', state[group][key] > 3);
 
-    // Keep Test This box pointed at the highest error category
-    showPrompt(false);
-
     let errTotal = 0, posTotal = 0;
     for (const v of Object.values(state.errors))    errTotal += v;
     for (const v of Object.values(state.positives)) posTotal += v;
