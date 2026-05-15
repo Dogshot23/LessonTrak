@@ -398,6 +398,33 @@
       flex-shrink: 0;
     }
 
+    /* ─── DEMO BANNER ─── */
+    .demo-banner {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+      background: rgba(212,133,10,.09);
+      border: 1px solid rgba(212,133,10,.22);
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.25rem auto 0;
+      max-width: 1100px;
+      text-align: center;
+    }
+    .demo-banner.visible { display: flex; }
+    .demo-banner-text {
+      font-size: .88rem;
+      color: var(--amber);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .demo-banner-text strong { font-weight: 700; }
+    .demo-banner .action-btn {
+      font-size: .88rem;
+      padding: .6rem 1.4rem;
+    }
+
     /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
@@ -412,6 +439,13 @@
   <span class="header-title">Lesson Summary</span>
   <a class="new-btn" href="tracker.html" onclick="startNew()">New Lesson</a>
 </header>
+
+<div class="demo-banner" id="demo-banner">
+  <div class="demo-banner-text">
+    <strong>This is a demo summary.</strong> Use it in a real lesson to get personalised feedback.
+  </div>
+  <a class="action-btn primary" href="tracker.html">Start Your Lesson →</a>
+</div>
 
 <main id="main-content">
   <!-- JS renders content here -->
@@ -849,6 +883,12 @@
       renderEmpty();
     } else {
       renderSummary(state);
+    }
+
+    // ── Demo mode ────────────────────────────────────────────────
+    const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true';
+    if (isDemo) {
+      document.getElementById('demo-banner').classList.add('visible');
     }
   })();
 </script>
