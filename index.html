@@ -110,9 +110,28 @@
       line-height: 1.65;
       color: var(--ink-soft);
       max-width: 480px;
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 1.25rem;
       font-weight: 400;
       animation: fadeUp .5s .2s ease both;
+    }
+
+    .hero-trust {
+      font-size: .82rem;
+      color: var(--ink-faint);
+      font-weight: 400;
+      margin-bottom: 2.25rem;
+      animation: fadeUp .5s .25s ease both;
+      letter-spacing: .01em;
+    }
+    .hero-trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+    }
+    .hero-trust span::before {
+      content: '✓';
+      color: var(--sage);
+      font-weight: 700;
     }
 
     .hero-actions {
@@ -141,10 +160,26 @@
     .btn-primary:active { transform: translateY(0); }
     .btn-primary svg { width: 18px; height: 18px; }
 
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: transparent;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: .9rem 2rem;
+      border-radius: 100px;
+      border: 1.5px solid rgba(26,23,20,.18);
+      transition: transform .15s, border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { transform: translateY(-2px); border-color: rgba(26,23,20,.35); background: rgba(26,23,20,.03); }
+
     /* ─── DEMO VISUAL ─── */
     .hero-visual {
       margin: 3.5rem auto 0;
-      max-width: 440px;
+      max-width: 460px;
       padding: 0 1.5rem;
       animation: fadeUp .6s .4s ease both;
     }
@@ -155,13 +190,43 @@
       box-shadow: var(--card-shadow);
       border: 1px solid rgba(26,23,20,.06);
     }
+    .mock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
     .mock-label {
       font-size: .7rem;
       font-weight: 600;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--ink-faint);
-      margin-bottom: .85rem;
+    }
+    .mock-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: rgba(61,140,106,.1);
+      color: var(--sage);
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 100px;
+    }
+    .mock-live-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
     }
     .mock-buttons {
       display: grid;
@@ -189,6 +254,27 @@
       padding: .1rem .45rem;
       min-width: 1.4rem;
       text-align: center;
+    }
+    .mock-footer {
+      margin-top: 1rem;
+      padding-top: .85rem;
+      border-top: 1px solid rgba(26,23,20,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mock-tally {
+      font-size: .75rem;
+      color: var(--ink-soft);
+    }
+    .mock-tally strong { color: var(--ink); font-weight: 600; }
+    .mock-end-btn {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--coral);
+      background: rgba(232,85,62,.08);
+      border-radius: 100px;
+      padding: .3rem .8rem;
     }
 
     /* ─── DIVIDER ─── */
@@ -392,14 +478,15 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-tag">For ESL Teachers</div>
-    <h1>Teach with clarity,<br><em>not guesswork</em></h1>
-    <p class="hero-sub">Track student errors in real time and instantly know what to focus on next lesson.</p>
+    <h1>Stop guessing<br>what to <em>teach next.</em></h1>
+    <p class="hero-sub">Track student errors live during your lesson and get a clear, actionable focus for the next one — in seconds.</p>
+    <p class="hero-trust"><span>No sign-up. No setup. Works instantly in your browser.</span></p>
     <div class="hero-actions">
       <a class="btn-primary" href="tracker.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
-        Start Live Lesson Tracker
+        Start Live Lesson Tracker →
       </a>
-      <a class="btn-primary" href="tracker.html?demo=true" style="background:transparent;color:var(--ink);box-shadow:none;border:1.5px solid rgba(26,23,20,.18);">
+      <a class="btn-secondary" href="tracker.html?demo=true">
         Try Demo (30 seconds)
       </a>
     </div>
@@ -408,7 +495,10 @@
   <!-- MOCK PREVIEW -->
   <div class="hero-visual">
     <div class="mock-card">
-      <div class="mock-label">Live Lesson — Now tracking</div>
+      <div class="mock-header">
+        <div class="mock-label">Live Lesson — Now tracking</div>
+        <div class="mock-live-badge">Live</div>
+      </div>
       <div class="mock-buttons">
         <div class="mock-btn err">Wrong article <span class="count">3</span></div>
         <div class="mock-btn err">Past tense <span class="count">5</span></div>
@@ -416,6 +506,10 @@
         <div class="mock-btn err">Repeating word <span class="count">1</span></div>
         <div class="mock-btn pos">Used modal <span class="count">2</span></div>
         <div class="mock-btn pos">Phrasal verb <span class="count">0</span></div>
+      </div>
+      <div class="mock-footer">
+        <div class="mock-tally"><strong>13</strong> events logged</div>
+        <div class="mock-end-btn">End Lesson</div>
       </div>
     </div>
   </div>
@@ -426,17 +520,17 @@
     <div class="feature-card">
       <div class="feature-icon red">⚡</div>
       <div class="feature-title">Track in real time</div>
-      <p class="feature-desc">Large, tap-friendly buttons log errors and wins with zero friction — keep your eyes on the student, not the screen.</p>
+      <p class="feature-desc">Log errors and wins instantly without breaking your lesson flow. One tap is all it takes.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon green">📊</div>
       <div class="feature-title">See patterns instantly</div>
-      <p class="feature-desc">Every tap is counted and ranked. By lesson end you know exactly what recurred and what was skipped.</p>
+      <p class="feature-desc">Know what your student struggles with — and what they're improving — without reviewing notes after the fact.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon amber">🎯</div>
-      <div class="feature-title">Get next lesson focus</div>
-      <p class="feature-desc">The summary screen gives you a clear primary and secondary focus so you walk into the next session with a plan.</p>
+      <div class="feature-title">Know what to teach next</div>
+      <p class="feature-desc">Get a simple, actionable focus for your next lesson in seconds — generated automatically from real patterns.</p>
     </div>
   </div>
 
@@ -447,22 +541,22 @@
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <div class="step-title">Tap errors during the lesson</div>
-          <p class="step-desc">One tap per mistake or positive moment. The tracker runs silently in the background of your lesson.</p>
+          <div class="step-title">Track what actually goes wrong</div>
+          <p class="step-desc">Tap errors and positive moments as they happen. The tracker runs silently in the background of your lesson.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <div class="step-title">End the lesson</div>
-          <p class="step-desc">Hit "End Lesson" when you're done. Your session data is saved immediately.</p>
+          <div class="step-title">Finish with clear data</div>
+          <p class="step-desc">End the lesson with a clean record of performance — no scrambling to remember what happened.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <div class="step-title">Get an instant summary</div>
-          <p class="step-desc">See top issues, missing skills, and a suggested focus for next time — generated automatically.</p>
+          <div class="step-title">Know exactly what to teach next</div>
+          <p class="step-desc">Get a suggested focus based on real patterns — so you walk into the next session with a plan.</p>
         </div>
       </div>
     </div>
@@ -471,7 +565,7 @@
   <!-- BOTTOM CTA -->
   <div class="cta-section">
     <div class="cta-box">
-      <h2>Ready for your<br><em>next lesson?</em></h2>
+      <h2>Stop guessing what<br>to <em>teach next.</em></h2>
       <p>No sign-up, no downloads. Works right in your browser.</p>
       <a class="btn-primary-light" href="tracker.html">Open Live Tracker →</a>
     </div>
