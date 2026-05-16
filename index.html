@@ -168,13 +168,13 @@
       color: var(--ink);
       text-decoration: none;
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       padding: .9rem 2rem;
       border-radius: 100px;
-      border: 1.5px solid rgba(26,23,20,.18);
+      border: 1.5px solid rgba(26,23,20,.32);
       transition: transform .15s, border-color .2s, background .2s;
     }
-    .btn-secondary:hover { transform: translateY(-2px); border-color: rgba(26,23,20,.35); background: rgba(26,23,20,.03); }
+    .btn-secondary:hover { transform: translateY(-2px); border-color: rgba(26,23,20,.5); background: rgba(26,23,20,.04); }
 
     /* ─── FEEDBACK TEASER ─── */
     .feedback-teaser {
@@ -527,21 +527,21 @@
     <h1>Stop guessing what to <em>teach next.</em></h1>
     <p class="hero-sub">Track student errors during your lesson and generate feedback your student can see — so they feel real progress after every session.</p>
     <p class="hero-sub" style="font-size:.92rem; margin-top:-.5rem;">Help your students see what they did well, what's improving, and what comes next.</p>
-    <p class="hero-trust"><span>No sign-up. No setup. Works instantly.</span></p>
+    <p class="hero-trust"><span>Get a clear next lesson plan after every session.</span></p>
     <div class="hero-actions">
       <a class="btn-primary" href="tracker.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
         Start Live Lesson Tracker →
       </a>
       <a class="btn-secondary" href="tracker.html?demo=true">
-        Try Demo (30 seconds)
+        See Example (30 seconds)
       </a>
     </div>
   </section>
 
   <!-- FEEDBACK TEASER -->
   <div class="feedback-teaser">
-    <p class="feedback-teaser-label">See what your student gets after a lesson</p>
+    <p class="feedback-teaser-label">This is what your student receives after a lesson:</p>
     <p class="feedback-teaser-preview">"Today you communicated clearly and showed strong progress…"</p>
     <button class="btn-copy-feedback" id="copyFeedbackBtn" onclick="copyLessonFeedback()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>

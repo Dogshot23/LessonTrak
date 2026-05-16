@@ -891,6 +891,27 @@
     // Assign copy text after element is in DOM
     document.getElementById('copy-feedback-btn')._copyText = copyText;
 
+    // ── Demo override: replace copy text with exact demo content ──
+    if (new URLSearchParams(window.location.search).get('demo') === 'true') {
+      document.getElementById('copy-feedback-btn')._copyText =
+        '📝 Lesson Summary\n' +
+        '─────────────────\n\n' +
+        '🎯 Main focus\n' +
+        '  • Articles\n\n' +
+        '✨ Strengths\n' +
+        '  • Modal verbs\n' +
+        '  • Natural phrases\n\n' +
+        '📅 Next lesson\n' +
+        '  • We\'ll work on using articles (a, an, the) more naturally in conversation.\n' +
+        '  • We\'ll continue building confidence with past tense forms.\n\n' +
+        'You\'re already communicating clearly and using strong language — now we\'re refining accuracy and consistency. Looking forward to next lesson 👍\n\n' +
+        '📖 New Language Covered\n' +
+        '  • might have\n' +
+        '  • used to\n' +
+        '  • in the end\n' +
+        '  • at the moment';
+    }
+
     // ── Duration ──────────────────────────────────────────────────
     if (durationStr) {
       const durDiv = document.createElement('div');
