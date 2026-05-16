@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KKHTF8PMYV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KKHTF8PMYV');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Tracker — Teach with clarity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F7F4EF;
+      --paper:    #FFFFFF;
+      --ink:      #1A1714;
+      --ink-soft: #6B6560;
+      --ink-faint:#B8B4AE;
+      --coral:    #E8553E;
+      --sage:     #3D8C6A;
+      --amber:    #D4850A;
+      --card-shadow: 0 2px 12px rgba(26,23,20,.07), 0 1px 3px rgba(26,23,20,.05);
+      --card-shadow-hover: 0 8px 32px rgba(26,23,20,.12), 0 2px 8px rgba(26,23,20,.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -.01em;
+    }
+    .logo span { color: var(--coral); }
+    .nav-cta {
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 500;
+      padding: .5rem 1.1rem;
+      border-radius: 100px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--coral); transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 680px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(232,85,62,.1);
+      color: var(--coral);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp .5s ease both;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      line-height: 1.13;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      animation: fadeUp .5s .1s ease both;
+    }
+    h1 em { font-style: italic; color: var(--coral); }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 480px;
+      margin: 0 auto 1.25rem;
+      font-weight: 400;
+      animation: fadeUp .5s .2s ease both;
+    }
+
+    .hero-trust {
+      font-size: .82rem;
+      color: var(--ink-faint);
+      font-weight: 400;
+      margin-bottom: 2.25rem;
+      animation: fadeUp .5s .25s ease both;
+      letter-spacing: .01em;
+    }
+    .hero-trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+    }
+    .hero-trust span::before {
+      content: '✓';
+      color: var(--sage);
+      font-weight: 700;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp .5s .3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--coral);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: .9rem 2rem;
+      border-radius: 100px;
+      transition: transform .15s, box-shadow .2s, background .2s;
+      box-shadow: 0 4px 16px rgba(232,85,62,.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,85,62,.4); background: #d44232; }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary svg { width: 18px; height: 18px; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: transparent;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: .9rem 2rem;
+      border-radius: 100px;
+      border: 1.5px solid rgba(26,23,20,.32);
+      transition: transform .15s, border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { transform: translateY(-2px); border-color: rgba(26,23,20,.5); background: rgba(26,23,20,.04); }
+
+    /* ─── FEEDBACK TEASER ─── */
+    .feedback-teaser {
+      margin: 1.75rem auto 0;
+      max-width: 360px;
+      padding: 0 1.5rem;
+      text-align: center;
+      animation: fadeUp .5s .35s ease both;
+    }
+    .feedback-teaser-label {
+      font-size: .75rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+      letter-spacing: .01em;
+      margin-bottom: .65rem;
+    }
+    .feedback-teaser-preview {
+      font-size: .84rem;
+      color: #444;
+      font-style: italic;
+      margin: 0 auto .8rem;
+      line-height: 1.55;
+      max-width: 280px;
+    }
+    .btn-copy-feedback {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: #eef1fb;
+      color: #3a4a7a;
+      border: 1.5px solid rgba(58,74,122,.15);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .84rem;
+      font-weight: 500;
+      padding: .55rem 1.2rem;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-copy-feedback:hover { background: #e0e5f7; border-color: rgba(58,74,122,.3); color: #2a3860; }
+    .btn-copy-feedback svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .feedback-teaser-hint {
+      font-size: .74rem;
+      color: var(--ink-soft);
+      margin-top: .5rem;
+    }
+
+    /* ─── DEMO VISUAL ─── */
+    .hero-visual {
+      margin: 3.5rem auto 0;
+      max-width: 460px;
+      padding: 0 1.5rem;
+      animation: fadeUp .6s .4s ease both;
+    }
+    .mock-card {
+      background: var(--paper);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(26,23,20,.06);
+    }
+    .mock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .mock-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .mock-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: rgba(61,140,106,.1);
+      color: var(--sage);
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 100px;
+    }
+    .mock-live-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+    .mock-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+    }
+    .mock-btn {
+      padding: .75rem .5rem;
+      border-radius: 12px;
+      font-size: .78rem;
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: .85rem;
+    }
+    .mock-btn.err { background: rgba(232,85,62,.08); color: #c03a26; }
+    .mock-btn.pos { background: rgba(61,140,106,.09); color: #2d7254; }
+    .mock-btn .count {
+      background: rgba(26,23,20,.08);
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .1rem .45rem;
+      min-width: 1.4rem;
+      text-align: center;
+    }
+    .mock-footer {
+      margin-top: 1rem;
+      padding-top: .85rem;
+      border-top: 1px solid rgba(26,23,20,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mock-tally {
+      font-size: .75rem;
+      color: var(--ink-soft);
+    }
+    .mock-tally strong { color: var(--ink); font-weight: 600; }
+    .mock-end-btn {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--coral);
+      background: rgba(232,85,62,.08);
+      border-radius: 100px;
+      padding: .3rem .8rem;
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 680px;
+      margin: 4rem auto 0;
+      padding: 0 1.5rem;
+      color: var(--ink-faint);
+      font-size: .8rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--ink-faint);
+      opacity: .35;
+    }
+
+    /* ─── FEATURES ─── */
+    .features {
+      max-width: 1000px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(26,23,20,.05);
+      transition: box-shadow .25s, transform .2s;
+      animation: fadeUp .5s ease both;
+    }
+    .feature-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
+    .feature-card:nth-child(1) { animation-delay: .1s; }
+    .feature-card:nth-child(2) { animation-delay: .2s; }
+    .feature-card:nth-child(3) { animation-delay: .3s; }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .feature-icon.red   { background: rgba(232,85,62,.1); }
+    .feature-icon.green { background: rgba(61,140,106,.1); }
+    .feature-icon.amber { background: rgba(212,133,10,.1); }
+
+    .feature-title {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+      color: var(--ink);
+    }
+    .feature-desc {
+      font-size: .88rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how {
+      max-width: 680px;
+      margin: 4.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .how h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.7rem;
+      letter-spacing: -.02em;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--ink);
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 1.45rem;
+      top: 2.2rem;
+      bottom: 2.2rem;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--coral), var(--sage));
+      opacity: .3;
+    }
+    .step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding: 1.25rem 0;
+    }
+    .step-num {
+      width: 2.9rem;
+      height: 2.9rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .9rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .step:nth-child(1) .step-num { background: rgba(232,85,62,.12); color: var(--coral); }
+    .step:nth-child(2) .step-num { background: rgba(212,133,10,.12); color: var(--amber); }
+    .step:nth-child(3) .step-num { background: rgba(61,140,106,.12); color: var(--sage); }
+    .step-body { padding-top: .45rem; }
+    .step-title {
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--ink);
+      margin-bottom: .25rem;
+    }
+    .step-desc { font-size: .85rem; color: var(--ink-soft); line-height: 1.55; }
+
+    /* ─── BOTTOM CTA ─── */
+    .cta-section {
+      max-width: 680px;
+      margin: 4.5rem auto;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+    .cta-box {
+      background: var(--ink);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.8rem;
+      line-height: 1.2;
+      margin-bottom: .75rem;
+      letter-spacing: -.02em;
+    }
+    .cta-box h2 em { font-style: italic; color: #F5A68E; }
+    .cta-box p {
+      font-size: .9rem;
+      color: rgba(255,255,255,.6);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .btn-primary-light {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--coral);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: .9rem 2rem;
+      border-radius: 100px;
+      transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(232,85,62,.45);
+    }
+    .btn-primary-light:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,85,62,.55); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .78rem;
+      color: var(--ink-faint);
+      border-top: 1px solid rgba(26,23,20,.06);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">Lesson<span>.</span>Tracker</a>
+    <a class="nav-cta" href="tracker.html">Start Tracking →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">For ESL Teachers</div>
+    <h1>Stop guessing what to <em>teach next.</em></h1>
+    <p class="hero-sub">Track student errors during your lesson and generate feedback your student can see — so they feel real progress after every session.</p>
+    <p class="hero-sub" style="font-size:.92rem; margin-top:-.5rem;">Help your students see what they did well, what's improving, and what comes next.</p>
+    <p class="hero-trust"><span>Get a clear next lesson plan after every session.</span></p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="tracker.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+        Start Live Lesson Tracker →
+      </a>
+      <a class="btn-secondary" href="tracker.html?demo=true">
+        See Example (30 seconds)
+      </a>
+    </div>
+  </section>
+
+  <!-- FEEDBACK TEASER -->
+  <div class="feedback-teaser">
+    <p class="feedback-teaser-label">This is what your student receives after a lesson:</p>
+    <p class="feedback-teaser-preview">"Today you communicated clearly and showed strong progress…"</p>
+    <button class="btn-copy-feedback" id="copyFeedbackBtn" onclick="copyLessonFeedback()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Lesson Feedback
+    </button>
+    <p class="feedback-teaser-hint">Click to copy → paste into chat, notes, or messages</p>
+  </div>
+
+  <!-- MOCK PREVIEW -->
+  <div class="hero-visual">
+    <div class="mock-card">
+      <div class="mock-header">
+        <div class="mock-label">Live Lesson — Now tracking</div>
+        <div class="mock-live-badge">Live</div>
+      </div>
+      <div class="mock-buttons">
+        <div class="mock-btn err">Wrong article <span class="count">3</span></div>
+        <div class="mock-btn err">Past tense <span class="count">5</span></div>
+        <div class="mock-btn err">Hesitation <span class="count">2</span></div>
+        <div class="mock-btn err">Repeating word <span class="count">1</span></div>
+        <div class="mock-btn pos">Used modal <span class="count">2</span></div>
+        <div class="mock-btn pos">Phrasal verb <span class="count">0</span></div>
+      </div>
+      <div class="mock-footer">
+        <div class="mock-tally"><strong>13</strong> events logged</div>
+        <div class="mock-end-btn">End Lesson</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES SECTION -->
+  <div class="section-divider">Features</div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon red">⚡</div>
+      <div class="feature-title">Track in real time</div>
+      <p class="feature-desc">Log errors and wins instantly without breaking your lesson flow. One tap is all it takes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon green">📊</div>
+      <div class="feature-title">See patterns instantly</div>
+      <p class="feature-desc">Know what your student struggles with — and what they're improving — without reviewing notes after the fact.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon amber">🎯</div>
+      <div class="feature-title">Know what to teach next</div>
+      <p class="feature-desc">Get a simple, actionable focus for your next lesson in seconds — generated automatically from real patterns.</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Track what actually goes wrong</div>
+          <p class="step-desc">Tap errors and positive moments as they happen. The tracker runs silently in the background of your lesson.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Finish with clear data</div>
+          <p class="step-desc">End the lesson with a clean record of performance — no scrambling to remember what happened.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Know exactly what to teach next</div>
+          <p class="step-desc">Get a suggested focus based on real patterns — so you walk into the next session with a plan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2>Stop guessing what to <em>teach next.</em></h2>
+      <p>No sign-up, no downloads. Works right in your browser.</p>
+      <a class="btn-primary-light" href="tracker.html">Open Live Tracker →</a>
+    </div>
+  </div>
+
+  <footer>Built for ESL teachers. No data leaves your device.</footer>
+
+  <script>
+    function copyLessonFeedback() {
+      const text = "Today you communicated clearly and used some strong language, especially with modal verbs and natural phrases.\n\nA few small patterns came up:\n• Articles (a / the) — sometimes missing\n• Past tense — a few verbs stayed in present form\n\nThese are very normal and we'll improve them quickly.\n\nNext lesson, we'll focus on using articles more naturally and continue building past tense confidence.\n\nYou're making real progress — your communication is becoming more natural. Looking forward to the next lesson 👍";
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyFeedbackBtn');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        btn.style.borderColor = 'var(--sage)';
+        btn.style.color = 'var(--sage)';
+        setTimeout(() => { btn.innerHTML = original; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
