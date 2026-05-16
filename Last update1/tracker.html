@@ -38,8 +38,7 @@
     }
 
     html, body {
-      height: auto;
-      overflow-y: auto;
+      height: 100%;
       font-family: 'DM Sans', sans-serif;
       background: var(--cream);
       color: var(--ink);
@@ -128,14 +127,6 @@
       display: flex;
       flex-direction: column;
       gap: .85rem;
-    }
-
-    /* ─── COLUMNS WRAPPER ─── */
-    .cols-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: .85rem;
-      width: 100%;
     }
 
     /* ─── SECTION BLOCKS ─── */
@@ -461,11 +452,6 @@
         flex-direction: column;
         overflow-y: auto;
       }
-      .cols-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: .85rem;
-      }
       /* Reorder panels to match original mobile flow:
          totals+positives+end → errors → new language */
       .col-center { order: 1; }
@@ -482,30 +468,23 @@
     /* ─── DESKTOP: 3-column grid ─── */
     @media (min-width: 900px) {
       html, body {
-        height: auto;
-        overflow-y: auto;
+        height: 100%;
+        overflow: hidden;
       }
       .app {
         max-width: none;
-        min-height: 100vh;
-        overflow-y: auto;
+        height: 100vh;
+        overflow: hidden;
       }
       header {
         padding: .7rem 1.5rem .6rem;
       }
       main {
-        display: flex;
-        flex-direction: column;
-        gap: .9rem;
-        padding: .9rem 1.1rem;
-        overflow-y: auto;
-        flex: 1;
-        min-height: 0;
-      }
-      .cols-wrapper {
         display: grid;
         grid-template-columns: 1fr 1fr 0.8fr;
         gap: .9rem;
+        padding: .9rem 1.1rem;
+        overflow: hidden;
         flex: 1;
         min-height: 0;
       }
@@ -517,7 +496,6 @@
         gap: .6rem;
         overflow-y: auto;
         min-height: 0;
-        width: 100%;
       }
       /* Right column: flex so End Lesson sticks to bottom */
       .col-right {
@@ -629,10 +607,6 @@
   </header>
 
   <main id="main-scroll">
-
-    <p style="font-size:.8rem;color:var(--ink-soft);text-align:center;padding:.1rem .5rem .25rem;line-height:1.45;">Track a few key moments, then click 'End Lesson' to generate feedback for your student.</p>
-
-    <div class="cols-wrapper">
 
     <!-- ── LEFT COLUMN: Errors ── -->
     <div class="col col-errors">
@@ -787,12 +761,9 @@
 
       <!-- END LESSON (sticks to bottom of right column) -->
       <div class="end-section">
-        <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;line-height:1.4;">Finish to create feedback you can send</p>
         <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
       </div>
-    </div><!-- /.col.col-right -->
-
-    </div><!-- /.cols-wrapper -->
+    </div>
 
   </main>
 

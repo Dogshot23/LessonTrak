@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Lesson Feedback</title>
+  <title>Lesson Summary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -425,44 +425,6 @@
       padding: .6rem 1.4rem;
     }
 
-    /* ─── FULL-WIDTH FEEDBACK SECTION ─── */
-    .feedback-section {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.25rem;
-      margin-top: .5rem;
-      animation: fadeUp .4s .3s ease both;
-    }
-    .feedback-left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: .65rem;
-      min-width: 0;
-    }
-    /* encourage-card inside feedback-section: cancel its own animation
-       (the parent section is already animating) */
-    .feedback-section .encourage-card {
-      animation: none;
-      opacity: 1;
-    }
-    .feedback-right {
-      width: 260px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: .65rem;
-    }
-    /* copy-btn inside feedback-right: full width, cancel own animation */
-    .feedback-right .copy-btn {
-      animation: none;
-      opacity: 1;
-    }
-    @media (max-width: 767px) {
-      .feedback-section { flex-direction: column; }
-      .feedback-right { width: 100%; }
-    }
-
     /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
@@ -474,7 +436,7 @@
 
 <header>
   <a class="back-link" href="tracker.html">← Tracker</a>
-  <span class="header-title">Lesson Feedback</span>
+  <span class="header-title">Lesson Summary</span>
   <a class="new-btn" href="tracker.html" onclick="startNew()">New Lesson</a>
 </header>
 
@@ -490,17 +452,6 @@
 
 <script>
   const SESSION_KEY = 'lt_session';
-
-  // ── Demo mode detection (step 1) ─────────────────────────────────
-  const isDemo = window.location.search.includes("demo=true");
-
-  // ── Demo data (step 2) ───────────────────────────────────────────
-  // Keys use internal snake_case to match LABELS lookups in renderSummary.
-  const demoData = {
-    errors:      { articles: 6, tense: 2, pronunciation: 1 },
-    positives:   { good_grammar: 1, good_vocab: 1 },
-    newLanguage: ["Hello", "Weed"]
-  };
 
   const LABELS = {
     errors: {
@@ -714,7 +665,7 @@
       topCard.innerHTML = `
         <div class="card-header">
           <div class="card-icon red">⚠️</div>
-          <div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div>
+          <div><div class="card-title">Errors</div><div class="card-subtitle">Ranked by frequency</div></div>
         </div>
         <div class="card-body"><p class="no-issues">No errors logged this session — great lesson! 🎉</p></div>`;
     } else {
@@ -733,13 +684,9 @@
       topCard.innerHTML = `
         <div class="card-header">
           <div class="card-icon red">⚠️</div>
-          <div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div>
+          <div><div class="card-title">Errors</div><div class="card-subtitle">Ranked by frequency</div></div>
         </div>
-        <div class="card-body">
-          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">A few small patterns came up during the lesson:</p>
-          <div class="ranked-list">${rows}</div>
-          <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.65rem;font-style:italic;">These are completely normal and we'll improve them quickly.</p>
-        </div>`;
+        <div class="card-body"><div class="ranked-list">${rows}</div></div>`;
     }
     leftCol.appendChild(topCard);
 
@@ -750,7 +697,7 @@
       posCard.innerHTML = `
         <div class="card-header">
           <div class="card-icon green">✨</div>
-          <div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div>
+          <div><div class="card-title">Positives</div><div class="card-subtitle">Student positive moments</div></div>
         </div>
         <div class="card-body"><p class="no-issues">No positives logged this session.</p></div>`;
     } else {
@@ -769,12 +716,9 @@
       posCard.innerHTML = `
         <div class="card-header">
           <div class="card-icon green">✨</div>
-          <div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div>
+          <div><div class="card-title">Positives</div><div class="card-subtitle">Student positive moments</div></div>
         </div>
-        <div class="card-body">
-          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">Today you communicated well and showed clear progress, especially in the following areas:</p>
-          <div class="ranked-list">${rows}</div>
-        </div>`;
+        <div class="card-body"><div class="ranked-list">${rows}</div></div>`;
     }
     centerCol.appendChild(posCard);
 
@@ -845,48 +789,23 @@
       enc.innerHTML = `
         <div class="encourage-icon">💬</div>
         <div class="encourage-text">${encouragement.replace(/(good grammar|great vocabulary|complex structure|connectors|natural phrases|good progress|improving \w[\w\s]*)/gi, m => `<strong>${m}</strong>`)}</div>`;
-      // enc and closing go into feedbackSection (built below)
-      enc._closing = "You're making solid progress — your communication is becoming more natural, and now we're refining accuracy. Looking forward to the next lesson.";
-      rightCol._enc = enc;
+      rightCol.appendChild(enc);
     }
 
-    // Copy button (moved to feedbackSection below)
+    // Copy button in right column
     const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang);
     const copyBtn  = document.createElement('button');
     copyBtn.className = 'copy-btn';
     copyBtn.id        = 'copy-feedback-btn';
     copyBtn.setAttribute('onclick', 'copyFeedback(this)');
-    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Lesson Feedback';
+    rightCol.appendChild(copyBtn);
 
-    // Assemble grid (right col = focus card only)
+    // Assemble grid
     grid.appendChild(leftCol);
     grid.appendChild(centerCol);
     grid.appendChild(rightCol);
     main.appendChild(grid);
-
-    // ── FULL-WIDTH FEEDBACK SECTION (below grid) ──────────────────
-    const feedbackSection = document.createElement('div');
-    feedbackSection.className = 'feedback-section';
-
-    const feedbackLeft = document.createElement('div');
-    feedbackLeft.className = 'feedback-left';
-
-    if (rightCol._enc) {
-      feedbackLeft.appendChild(rightCol._enc);
-
-      const closing = document.createElement('p');
-      closing.style.cssText = 'font-size:.82rem;color:var(--ink-soft);line-height:1.6;padding:0 .1rem;';
-      closing.textContent = rightCol._enc._closing;
-      feedbackLeft.appendChild(closing);
-    }
-
-    const feedbackRight = document.createElement('div');
-    feedbackRight.className = 'feedback-right';
-    feedbackRight.appendChild(copyBtn);
-
-    feedbackSection.appendChild(feedbackLeft);
-    feedbackSection.appendChild(feedbackRight);
-    main.appendChild(feedbackSection);
 
     // Assign copy text after element is in DOM
     document.getElementById('copy-feedback-btn')._copyText = copyText;
@@ -943,13 +862,13 @@
     btn.innerHTML = '<span class="copy-icon">✅</span> Copied to clipboard!';
     setTimeout(() => {
       btn.classList.remove('copied');
-      btn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+      btn.innerHTML = '<span class="copy-icon">📋</span> Copy Lesson Feedback';
     }, 2500);
   }
 
   // ── Init ──────────────────────────────────────────────────────────
   (function init() {
-    // isDemo and demoData are declared at script top (step 1 & 2).
+    const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true';
 
     let state = null;
     try {
@@ -962,8 +881,19 @@
        Object.values(state.positives || {}).some(v => v > 0));
 
     if (isDemo && !hasData) {
-      // ── Demo mode: use demoData instead of real data (step 3) ───
-      renderSummary(demoData);
+      // ── Demo mode: inject example data into existing UI ─────────
+      renderSummary({
+        errors: {
+          articles: 3, tense: 2, word_order: 1,
+          vocabulary: 0, pronunciation: 0, fluency: 0
+        },
+        positives: {
+          good_grammar: 0, good_vocab: 0, complex_structure: 0,
+          connector: 1, natural_phrase: 1
+        },
+        encouragement: "You're improving steadily — let\u2019s build on this next lesson.",
+        newLanguage: []
+      });
 
       // Add "Start Real Lesson" button at the bottom of main
       const mainEl = document.getElementById('main-content');
