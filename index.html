@@ -114,9 +114,9 @@
       justify-content: center;
       text-decoration: none;
       font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      padding: .85rem 2.2rem;
+      padding: 1rem 2.5rem;
       border-radius: 100px;
       border: none;
       min-width: 152px;
@@ -127,19 +127,21 @@
       transition: transform .15s ease, filter .15s ease;
     }
 
-    /* Start lesson — muted warm green */
+    /* Start lesson — primary, calm green */
     .btn-primary {
-      background: linear-gradient(180deg, #3a8f6a 0%, #2f7d5b 100%);
-      box-shadow: 0 4px 18px rgba(47,125,91,.28);
+      background: #3a8f6a;
+      box-shadow: 0 2px 10px rgba(47,125,91,.18);
     }
-    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.07); }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
 
-    /* Try demo — brand accent red, matches headline "teach next" */
+    /* Try demo — secondary, softer weight visually */
     .btn-secondary {
-      background: linear-gradient(180deg, #e8553e 0%, #d44232 100%);
-      box-shadow: 0 4px 18px rgba(232,85,62,.3);
+      background: #d4563e;
+      box-shadow: 0 2px 10px rgba(212,86,62,.15);
+      font-weight: 500;
+      opacity: .88;
     }
-    .btn-secondary:hover { transform: translateY(-1px); filter: brightness(1.07); }
+    .btn-secondary:hover { transform: translateY(-1px); filter: brightness(1.05); opacity: 1; }
 
     .hero-note {
       font-size: .8rem;
