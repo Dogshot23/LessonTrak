@@ -614,6 +614,34 @@
       color: var(--ink);
       border-color: rgba(26,23,20,.24);
     }
+
+    /* ─── TUTOR NOTES ─── */
+    .tutor-notes-label {
+      display: block;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .35rem;
+    }
+    .tutor-notes-textarea {
+      width: 100%;
+      border: 1.5px solid rgba(26,23,20,.12);
+      border-radius: 10px;
+      padding: .6rem .8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .86rem;
+      color: var(--ink);
+      background: var(--paper);
+      resize: vertical;
+      min-height: 72px;
+      outline: none;
+      transition: border-color .2s;
+      line-height: 1.45;
+    }
+    .tutor-notes-textarea::placeholder { color: var(--ink-faint); }
+    .tutor-notes-textarea:focus { border-color: var(--ink-soft); }
   </style>
 </head>
 <body>
@@ -787,7 +815,14 @@
 
       <!-- END LESSON (sticks to bottom of right column) -->
       <div class="end-section">
-        <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;line-height:1.4;">Finish to create feedback you can send</p>
+        <label class="tutor-notes-label" for="tutor-notes">Tutor Notes (optional)</label>
+        <textarea
+          id="tutor-notes"
+          class="tutor-notes-textarea"
+          placeholder="Add a reminder or note for next lesson..."
+          maxlength="1000"
+        ></textarea>
+        <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">Finish to create feedback you can send</p>
         <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
       </div>
     </div><!-- /.col.col-right -->
@@ -1066,6 +1101,8 @@
     if (e.target === document.getElementById('end-overlay')) hideEndSheet();
   }
   function endLesson() {
+    const notes = document.getElementById('tutor-notes')?.value ?? '';
+    sessionStorage.setItem('tutorNotes', notes);
     state.endedAt = Date.now();
     localStorage.setItem(SESSION_KEY, JSON.stringify(state));
     window.location.href = 'summary.html';

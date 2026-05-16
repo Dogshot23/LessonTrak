@@ -398,6 +398,28 @@
       flex-shrink: 0;
     }
 
+    /* ─── TUTOR NOTES CARD ─── */
+    .tutor-notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .tutor-notes-list li {
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .tutor-notes-list li::before {
+      content: '–';
+      color: var(--ink-faint);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
     /* ─── DEMO BANNER ─── */
     .demo-banner {
       display: none;
@@ -594,7 +616,7 @@
       .replace(/"/g, '&quot;');
   }
 
-  function buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang) {
+  function buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes) {
     const topIssue    = primaryKey    ? LABELS.errors[primaryKey]           : null;
     const topStrength = posEntries[0] ? LABELS.positives[posEntries[0][0]] : null;
     const nextPlan    = primaryKey    ? COPY_TIPS.errors[primaryKey]        : null;
@@ -622,6 +644,11 @@
       text += '\n';
     }
 
+    if (tutorNotes) {
+      text += '🗒️ Tutor Notes\n';
+      text += `  • ${tutorNotes}\n\n`;
+    }
+
     if (encouragement) text += encouragement + '\n';
 
     /* ── NEW: append new language if present ── */
@@ -646,7 +673,7 @@
     }
   }
 
-  function renderSummary(state) {
+  function renderSummary(state, tutorNotes) {
     const errEntries = Object.entries(state.errors)
       .filter(([,v]) => v > 0)
       .sort((a, b) => b[1] - a[1]);
@@ -778,6 +805,19 @@
     }
     centerCol.appendChild(posCard);
 
+    // ── TUTOR NOTES (center column, below positives) ──────────────
+    if (tutorNotes && tutorNotes.trim()) {
+      const notesCard = document.createElement('div');
+      notesCard.className = 'card';
+      notesCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon blue">🗒️</div>
+          <div><div class="card-title">Tutor Notes</div><div class="card-subtitle">Additional observations</div></div>
+        </div>
+        <div class="card-body"><ul class="tutor-notes-list"><li>${escapeHtml(tutorNotes.trim())}</li></ul></div>`;
+      centerCol.appendChild(notesCard);
+    }
+
     // ── NEW LANGUAGE (center column, below positives) ─────────────
     if (newLang.length > 0) {
       const langCard = document.createElement('div');
@@ -851,7 +891,7 @@
     }
 
     // Copy button (moved to feedbackSection below)
-    const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang);
+    const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes);
     const copyBtn  = document.createElement('button');
     copyBtn.className = 'copy-btn';
     copyBtn.id        = 'copy-feedback-btn';
@@ -972,6 +1012,8 @@
   (function init() {
     // isDemo and demoData are declared at script top (step 1 & 2).
 
+    const tutorNotes = sessionStorage.getItem('tutorNotes') || '';
+
     let state = null;
     try {
       const raw = localStorage.getItem(SESSION_KEY);
@@ -984,7 +1026,7 @@
 
     if (isDemo && !hasData) {
       // ── Demo mode: use demoData instead of real data (step 3) ───
-      renderSummary(demoData);
+      renderSummary(demoData, tutorNotes);
 
       // Add "Start Real Lesson" button at the bottom of main
       const mainEl = document.getElementById('main-content');
@@ -999,11 +1041,13 @@
     } else if (!hasData) {
       renderEmpty();
     } else {
-      renderSummary(state);
+      renderSummary(state, tutorNotes);
       if (isDemo) {
         document.getElementById('demo-banner').classList.add('visible');
       }
     }
+
+    sessionStorage.removeItem('tutorNotes');
   })();
 </script>
 
