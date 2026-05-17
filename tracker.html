@@ -859,204 +859,25 @@
   </div>
 </div>
 
-<!-- ── Progression System ──────────────────────────────────────────── -->
+<!-- ── (Progression system removed — activity lookup now lives in summary.html) ── -->
 <script>
-  // ── PART 1: Progression data ────────────────────────────────────────
-  const progressionData = {
-    pronunciation: {
-      stages: [
-        {
-          name: "awareness",
-          actions: [
-            "hearing the difference between similar sounds (e.g. ship vs sheep)",
-            "minimal pair comparison for key sounds",
-            "comparing incorrect vs correct pronunciation of common words"
-          ]
-        },
-        {
-          name: "controlled_practice",
-          actions: [
-            "repetition drills of problem sounds (e.g. ship / sheep)",
-            "target sounds in isolation and simple words",
-            "slow repetition to build muscle memory"
-          ]
-        },
-        {
-          name: "structured_use",
-          actions: [
-            "target sounds in short sentences",
-            "simple sentence patterns with correct pronunciation",
-            "repeating short sentences focusing on problem sounds"
-          ]
-        },
-        {
-          name: "free_use",
-          actions: [
-            "clear pronunciation during longer answers",
-            "correcting key pronunciation errors during free speaking",
-            "slower and more deliberate speech in conversation"
-          ]
-        },
-        {
-          name: "refinement",
-          actions: [
-            "sentence stress in natural speech",
-            "word stress in longer phrases",
-            "rhythm and connected speech in conversation",
-            "linking sounds between words in fast speech",
-            "reducing unnatural pauses between words",
-            "intonation patterns in questions and statements",
-            "natural pacing in longer responses",
-            "emphasising key words in sentences for clarity"
-          ]
-        }
-      ]
-    },
-    grammar: {
-      stages: [
-        {
-          name: "awareness",
-          actions: [
-            "noticing repeated [TARGET] errors from today's lesson",
-            "identifying incorrect [TARGET] patterns the student used",
-            "highlighting incorrect vs correct [TARGET] from the lesson"
-          ]
-        },
-        {
-          name: "rule_clarity",
-          actions: [
-            "explaining the correct [TARGET] structure using sentences from today's lesson",
-            "comparing incorrect [TARGET] from the lesson to correct versions",
-            "clarifying the [TARGET] rule using the student's own mistakes"
-          ]
-        },
-        {
-          name: "controlled_practice",
-          actions: [
-            "rebuilding incorrect [TARGET] sentences from today's lesson correctly",
-            "correcting [TARGET] errors the student produced during the lesson",
-            "guided correction of [TARGET] mistakes from the session"
-          ]
-        },
-        {
-          name: "guided_use",
-          actions: [
-            "answering guided questions using correct [TARGET]",
-            "short speaking tasks focused on [TARGET] from the lesson",
-            "using sentence starters to practise correct [TARGET]"
-          ]
-        },
-        {
-          name: "fluency_integration",
-          actions: [
-            "using correct [TARGET] in longer answers",
-            "retelling a past experience using correct [TARGET]",
-            "answering opinion questions using accurate [TARGET]",
-            "describing events using correct [TARGET]",
-            "self-correcting [TARGET] mistakes while speaking",
-            "speaking more freely while maintaining accurate [TARGET]",
-            "responding to follow-up questions using correct [TARGET]",
-            "building longer responses with consistent [TARGET]"
-          ]
-        }
-      ]
-    }
-  };
+  // ── PART 1: Placeholder to preserve script tag structure ────────────
+  // The generic 5-stage progression system has been replaced by the
+  // per-key activityPool in summary.html. No pre-computation needed here.
 
-  // ── PART 2: Stage tracking helpers ─────────────────────────────────
-  function getStage(category) {
-    try { return parseInt(localStorage.getItem(category + '_stage')) || 0; }
-    catch(e) { return 0; }
-  }
+  // ── PART 2: Stage tracking helpers (kept as no-ops for safety) ──────
+  function getStage(category)  { return 0; }
+  function getUsage(category)  { return 0; }
+  function saveProgress() {}
 
-  function getUsage(category) {
-    try { return parseInt(localStorage.getItem(category + '_usage')) || 0; }
-    catch(e) { return 0; }
-  }
+  // ── PART 5 / 6 stubs (consumed only in summary.html now) ─────────
+  const suggestionStarters = [];
+  const tagDisplayNames    = {};
 
-  function saveProgress(category, stage, usage) {
-    try {
-      localStorage.setItem(category + '_stage', stage);
-      localStorage.setItem(category + '_usage', usage);
-    } catch(e) { /* silently ignore if localStorage unavailable */ }
-  }
+  // ── PART 3: getNextLessonFocus → no-op (summary handles this) ──────
+  function getNextLessonFocus(category) { return null; }
 
-  // ── PART 5: Language variation starters ────────────────────────────
-  const suggestionStarters = [
-    "Focus on",
-    "Work on",
-    "Continue developing",
-    "Encourage",
-    "Spend time on"
-  ];
-
-  // ── PART 6: Tag display names for [TARGET] injection ────────────────
-  const tagDisplayNames = {
-    articles:          "articles (a, an, the)",
-    tense:             "tense structures",
-    word_order:        "word order",
-    vocabulary:        "word choice",
-    pronunciation:     "pronunciation",
-    fluency:           "fluency",
-    expression:        "expressing ideas clearly",
-    good_grammar:      "accurate sentence structures",
-    good_vocab:        "vocabulary range",
-    complex_structure: "complex sentence structures",
-    connector:         "linking ideas",
-    natural_phrase:    "natural phrasing"
-  };
-
-  // ── PART 3: Generate next lesson focus ─────────────────────────────
-  function getNextLessonFocus(category) {
-    try {
-      const data = progressionData[category];
-      if (!data) return null;
-
-      let stageIndex = getStage(category);
-      let usage      = getUsage(category);
-
-      const stages = data.stages;
-
-      // prevent overflow
-      if (stageIndex >= stages.length) {
-        stageIndex = stages.length - 1;
-      }
-
-      const actions = stages[stageIndex].actions;
-      const action  = actions[Math.floor(Math.random() * actions.length)];
-
-      // advance usage / stage
-      usage++;
-      if (usage >= 3) {
-        stageIndex++;
-        usage = 0;
-      }
-
-      saveProgress(category, stageIndex, usage);
-
-      // ── Resolve [TARGET]: find highest-count error or positive tag ──
-      let topKey = null, topVal = 0;
-      try {
-        for (const [k, v] of Object.entries(state.errors)) {
-          if (v > topVal) { topVal = v; topKey = k; }
-        }
-        for (const [k, v] of Object.entries(state.positives)) {
-          if (v > topVal) { topVal = v; topKey = k; }
-        }
-      } catch(e) { /* fall through to default */ }
-      const targetName = (topKey && tagDisplayNames[topKey]) || "target structures";
-      const resolvedAction = action.replace(/\[TARGET\]/g, targetName);
-
-      // add language variation (Part 5)
-      const starter = suggestionStarters[Math.floor(Math.random() * suggestionStarters.length)];
-      return starter + ' ' + resolvedAction.charAt(0).toLowerCase() + resolvedAction.slice(1);
-
-    } catch(e) {
-      return null; // ── safety — never break the app
-    }
-  }
-
-  // ── Map error keys → progression categories ────────────────────────
+  // ── Map error keys (kept for any future reference) ──────────────────
   const ERR_KEY_TO_PROGRESSION = {
     pronunciation: 'pronunciation',
     articles:      'grammar',
@@ -1064,10 +885,9 @@
     word_order:    'grammar',
     vocabulary:    'grammar',
     expression:    'grammar',
-    fluency:       null   // no direct progression mapping
+    fluency:       null
   };
 
-  // ── Derive primary progression category from current state ─────────
   function getPrimaryProgressionCategory() {
     try {
       let topKey = null, topVal = 0;
@@ -1076,10 +896,10 @@
       }
       if (!topKey || topVal === 0) return null;
       return ERR_KEY_TO_PROGRESSION[topKey] || null;
-    } catch(e) {
-      return null;
-    }
+    } catch(e) { return null; }
   }
+
+
 </script>
 
 <script>
@@ -1329,17 +1149,7 @@
     state.endedAt = Date.now();
     localStorage.setItem(SESSION_KEY, JSON.stringify(state));
 
-    // ── PART 4: Compute and store next-lesson suggestion ─────────────
-    try {
-      const primaryCategory = getPrimaryProgressionCategory();
-      const suggestion      = getNextLessonFocus(primaryCategory);
-      if (suggestion) {
-        sessionStorage.setItem('nextLessonSuggestion', suggestion);
-      } else {
-        sessionStorage.removeItem('nextLessonSuggestion');
-      }
-    } catch(e) { /* safety — never block navigation */ }
-
+    // summary.html derives Next Lesson Focus directly from session state
     window.location.href = 'summary.html';
   }
 
