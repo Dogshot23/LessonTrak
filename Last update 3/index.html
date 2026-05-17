@@ -127,10 +127,10 @@
       transition: transform .15s ease, filter .15s ease;
     }
 
-    /* Start Live Lesson Tracker — primary, charcoal (matches nav) */
+    /* Start lesson — primary, calm green */
     .btn-primary {
-      background: var(--ink);
-      box-shadow: 0 2px 10px rgba(26,23,20,.22);
+      background: #3a8f6a;
+      box-shadow: 0 2px 10px rgba(47,125,91,.18);
     }
     .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
 
@@ -142,31 +142,6 @@
       opacity: .88;
     }
     .btn-secondary:hover { transform: translateY(-1px); filter: brightness(1.05); opacity: 1; }
-
-    /* ─── TARGETING BADGE ─── */
-    .targeting-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: rgba(232, 85, 62, .08);
-      color: #c03a26;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: .35rem .9rem;
-      border-radius: 100px;
-      border: 1px solid rgba(232, 85, 62, .18);
-      margin-bottom: 1rem;
-    }
-    .targeting-badge::before {
-      content: '';
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--coral);
-      opacity: .8;
-    }
 
     .hero-note {
       font-size: .8rem;
@@ -425,12 +400,11 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="targeting-badge">For ESL Teachers</div>
     <h1>Stop guessing what to <em>teach next</em></h1>
     <p class="hero-sub">Track what your student does and get a clear next lesson focus in seconds.</p>
     <div class="hero-actions">
-      <a class="btn-primary" href="tracker.html">Start Live Lesson Tracker →</a>
-      <a class="btn-secondary" href="tracker.html?demo=true">See Example (30 seconds)</a>
+      <a class="btn-primary" href="tracker.html">Start lesson</a>
+      <a class="btn-secondary" href="tracker.html?demo=true">Try demo</a>
     </div>
     <p class="hero-note">No login. Works during your lesson.</p>
   </section>
