@@ -917,46 +917,46 @@
         {
           name: "awareness",
           actions: [
-            "noticing repeated grammar errors from today's lesson",
-            "identifying incorrect sentence patterns the student used",
-            "highlighting incorrect vs correct sentences from the lesson"
+            "noticing repeated [TARGET] errors from today's lesson",
+            "identifying incorrect [TARGET] patterns the student used",
+            "highlighting incorrect vs correct [TARGET] from the lesson"
           ]
         },
         {
           name: "rule_clarity",
           actions: [
-            "explaining the correct structure using sentences from today's lesson",
-            "comparing incorrect sentences from the lesson to correct versions",
-            "clarifying the grammar rule using the student's own mistakes"
+            "explaining the correct [TARGET] structure using sentences from today's lesson",
+            "comparing incorrect [TARGET] from the lesson to correct versions",
+            "clarifying the [TARGET] rule using the student's own mistakes"
           ]
         },
         {
           name: "controlled_practice",
           actions: [
-            "rebuilding incorrect sentences from today's lesson correctly",
-            "correcting sentences the student produced during the lesson",
-            "guided correction of common errors from the session"
+            "rebuilding incorrect [TARGET] sentences from today's lesson correctly",
+            "correcting [TARGET] errors the student produced during the lesson",
+            "guided correction of [TARGET] mistakes from the session"
           ]
         },
         {
           name: "guided_use",
           actions: [
-            "answering guided questions using the corrected structure",
-            "short speaking tasks based on errors from the lesson",
-            "using sentence starters to practise correct forms"
+            "answering guided questions using correct [TARGET]",
+            "short speaking tasks focused on [TARGET] from the lesson",
+            "using sentence starters to practise correct [TARGET]"
           ]
         },
         {
           name: "fluency_integration",
           actions: [
-            "using corrected grammar in longer answers",
-            "retelling a past experience using correct verb forms",
-            "answering opinion questions using accurate sentence structures",
-            "describing events using correct tense and word order",
-            "self-correcting grammar mistakes while speaking",
-            "speaking more freely while maintaining grammatical accuracy",
-            "responding to follow-up questions using correct structures",
-            "building longer responses with consistent grammar use"
+            "using correct [TARGET] in longer answers",
+            "retelling a past experience using correct [TARGET]",
+            "answering opinion questions using accurate [TARGET]",
+            "describing events using correct [TARGET]",
+            "self-correcting [TARGET] mistakes while speaking",
+            "speaking more freely while maintaining accurate [TARGET]",
+            "responding to follow-up questions using correct [TARGET]",
+            "building longer responses with consistent [TARGET]"
           ]
         }
       ]
@@ -990,6 +990,22 @@
     "Spend time on"
   ];
 
+  // ── PART 6: Tag display names for [TARGET] injection ────────────────
+  const tagDisplayNames = {
+    articles:          "articles (a, an, the)",
+    tense:             "tense structures",
+    word_order:        "word order",
+    vocabulary:        "word choice",
+    pronunciation:     "pronunciation",
+    fluency:           "fluency",
+    expression:        "expressing ideas clearly",
+    good_grammar:      "accurate sentence structures",
+    good_vocab:        "vocabulary range",
+    complex_structure: "complex sentence structures",
+    connector:         "linking ideas",
+    natural_phrase:    "natural phrasing"
+  };
+
   // ── PART 3: Generate next lesson focus ─────────────────────────────
   function getNextLessonFocus(category) {
     try {
@@ -1018,12 +1034,25 @@
 
       saveProgress(category, stageIndex, usage);
 
+      // ── Resolve [TARGET]: find highest-count error or positive tag ──
+      let topKey = null, topVal = 0;
+      try {
+        for (const [k, v] of Object.entries(state.errors)) {
+          if (v > topVal) { topVal = v; topKey = k; }
+        }
+        for (const [k, v] of Object.entries(state.positives)) {
+          if (v > topVal) { topVal = v; topKey = k; }
+        }
+      } catch(e) { /* fall through to default */ }
+      const targetName = (topKey && tagDisplayNames[topKey]) || "target structures";
+      const resolvedAction = action.replace(/\[TARGET\]/g, targetName);
+
       // add language variation (Part 5)
       const starter = suggestionStarters[Math.floor(Math.random() * suggestionStarters.length)];
-      return starter + ' ' + action.charAt(0).toLowerCase() + action.slice(1);
+      return starter + ' ' + resolvedAction.charAt(0).toLowerCase() + resolvedAction.slice(1);
 
     } catch(e) {
-      return null; // ── PART 6: safety — never break the app
+      return null; // ── safety — never break the app
     }
   }
 
