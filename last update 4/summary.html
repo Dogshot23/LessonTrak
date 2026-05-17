@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lesson Feedback</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #F7F4EF;
+      --paper:      #FFFFFF;
+      --ink:        #1A1714;
+      --ink-soft:   #6B6560;
+      --ink-faint:  #C5C0BA;
+      --coral:      #E8553E;
+      --sage:       #3D8C6A;
+      --amber:      #D4850A;
+      --amber-bg:   rgba(212,133,10,.09);
+      --slate:      #4A6FA5; /* ── NEW ── */
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      padding-bottom: 3rem;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.25rem;
+      border-bottom: 1px solid rgba(26,23,20,.07);
+      background: var(--cream);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-link {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--ink); }
+    .header-title {
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      font-weight: 700;
+    }
+    .new-btn {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: .4rem .9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .12s;
+    }
+    .new-btn:hover  { background: var(--coral); }
+    .new-btn:active { transform: scale(.96); }
+
+    /* ─── MAIN ─── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    /* ─── 3-COLUMN SUMMARY GRID ─── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .summary-col {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    /* Right col: focus card sits flush in column — no extra outer card wrapper */
+    .summary-col .card { animation: none; opacity: 1; transform: none; }
+
+    @media (max-width: 767px) {
+      main { max-width: 540px; padding: 1.25rem 1.1rem 0; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── HERO SCORE ─── */
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      animation: fadeUp .4s ease both;
+    }
+    .score-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 1.1rem 1rem;
+      border: 1px solid rgba(26,23,20,.06);
+      text-align: center;
+    }
+    .score-val {
+      font-family: 'Lora', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .score-card.err .score-val { color: var(--coral); }
+    .score-card.pos .score-val { color: var(--sage); }
+    .score-lbl {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ─── SECTION CARDS ─── */
+    .card {
+      background: var(--paper);
+      border-radius: 16px;
+      border: 1px solid rgba(26,23,20,.06);
+      overflow: hidden;
+      animation: fadeUp .4s ease both;
+    }
+    .card:nth-child(2) { animation-delay: .07s; }
+    .card:nth-child(3) { animation-delay: .13s; }
+    .card:nth-child(4) { animation-delay: .19s; }
+    .card:nth-child(5) { animation-delay: .25s; }
+    .card:nth-child(6) { animation-delay: .31s; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .9rem 1rem .75rem;
+      border-bottom: 1px solid rgba(26,23,20,.06);
+    }
+    .card-icon {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .95rem;
+      flex-shrink: 0;
+    }
+    .card-icon.red   { background: rgba(232,85,62,.1); }
+    .card-icon.green { background: rgba(61,140,106,.1); }
+    .card-icon.amber { background: var(--amber-bg); }
+    .card-icon.blue  { background: rgba(74,111,165,.1); } /* ── NEW ── */
+    .card-title {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--ink);
+    }
+    .card-subtitle {
+      font-size: .75rem;
+      color: var(--ink-faint);
+      margin-top: .1rem;
+    }
+
+    .card-body { padding: .85rem 1rem; }
+
+    /* ─── RANKED LIST ─── */
+    .ranked-list {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .rank-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .rank-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: .7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-num.r1 { background: rgba(232,85,62,.15); color: var(--coral); }
+    .rank-num.r2 { background: rgba(212,133,10,.12); color: var(--amber); }
+    .rank-num.r3 { background: rgba(26,23,20,.07); color: var(--ink-soft); }
+    .rank-num.rn { background: rgba(26,23,20,.05); color: var(--ink-faint); }
+
+    .rank-body { flex: 1; }
+    .rank-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .2rem;
+    }
+    .rank-bar-track {
+      height: 4px;
+      background: rgba(26,23,20,.07);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .rank-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+    }
+    .rank-bar-fill.err { background: var(--coral); }
+    .rank-bar-fill.pos { background: var(--sage); }
+    .rank-count {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      min-width: 1.6rem;
+      text-align: right;
+    }
+    .rank-row .rank-count.err { color: var(--coral); }
+    .rank-row .rank-count.pos { color: var(--sage); }
+
+    /* ─── FOCUS CARD ─── */
+    .focus-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .focus-item {
+      display: flex;
+      gap: .85rem;
+      align-items: flex-start;
+    }
+    .focus-tag {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .28rem .6rem;
+      border-radius: 100px;
+      flex-shrink: 0;
+      margin-top: .12rem;
+      white-space: nowrap;
+    }
+    .focus-tag.primary   { background: rgba(232,85,62,.12); color: var(--coral); }
+    .focus-tag.secondary { background: rgba(212,133,10,.12); color: var(--amber); }
+    .focus-text { font-size: .88rem; line-height: 1.55; color: var(--ink-soft); }
+    .focus-text strong { font-weight: 700; color: var(--ink); display: block; margin-bottom: .2rem; }
+    .focus-divider {
+      height: 1px;
+      background: rgba(26,23,20,.06);
+      margin: .25rem 0;
+    }
+
+    /* ─── ENCOURAGEMENT CARD ─── */
+    .encourage-card {
+      background: linear-gradient(135deg, rgba(61,140,106,.07) 0%, rgba(61,140,106,.03) 100%);
+      border: 1.5px solid rgba(61,140,106,.18);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      animation: fadeUp .4s .32s ease both;
+    }
+    .encourage-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+    .encourage-text {
+      font-size: .88rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .encourage-text strong { color: var(--sage); font-weight: 600; }
+
+    /* ─── COPY BUTTON ─── */
+    .copy-btn {
+      width: 100%;
+      padding: .95rem 1rem;
+      background: var(--paper);
+      border: 1.5px solid rgba(26,23,20,.12);
+      border-radius: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      transition: background .2s, border-color .2s, transform .12s;
+      animation: fadeUp .4s .28s ease both;
+    }
+    .copy-btn:hover {
+      background: #f0ede8;
+      border-color: rgba(26,23,20,.22);
+    }
+    .copy-btn:active { transform: scale(.98); }
+    .copy-btn.copied {
+      background: rgba(61,140,106,.08);
+      border-color: rgba(61,140,106,.3);
+      color: var(--sage);
+    }
+    .copy-btn .copy-icon { font-size: 1rem; }
+
+    /* ─── ACTIONS ─── */
+    .actions {
+      display: flex;
+      gap: .65rem;
+      animation: fadeUp .4s .35s ease both;
+    }
+    .action-btn {
+      flex: 1;
+      padding: .9rem;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      text-align: center;
+      transition: background .2s, transform .12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+    }
+    .action-btn.secondary { background: var(--paper); color: var(--ink); border: 1px solid rgba(26,23,20,.1); }
+    .action-btn.primary   { background: var(--coral); color: #fff; }
+    .action-btn.secondary:hover { background: #ede9e3; }
+    .action-btn.primary:hover   { background: #d44232; }
+    .action-btn:active { transform: scale(.97); }
+
+    /* ─── NO ISSUES / EMPTY ─── */
+    .no-issues {
+      font-size: .85rem;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      animation: fadeUp .5s ease both;
+    }
+    .empty-state h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      margin-bottom: .75rem;
+    }
+    .empty-state p {
+      color: var(--ink-soft);
+      font-size: .9rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    /* ─── NEW LANGUAGE LIST ─── */ /* ── NEW ── */
+    .lang-covered-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .lang-covered-list li {
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--ink-soft);
+    }
+    .lang-covered-list li::before {
+      content: '–';
+      color: var(--slate);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ─── TUTOR NOTES CARD ─── */
+    .tutor-notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .tutor-notes-list li {
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .tutor-notes-list li::before {
+      content: '–';
+      color: var(--ink-faint);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ─── DEMO BANNER ─── */
+    .demo-banner {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+      background: rgba(212,133,10,.09);
+      border: 1px solid rgba(212,133,10,.22);
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.25rem auto 0;
+      max-width: 1100px;
+      text-align: center;
+    }
+    .demo-banner.visible { display: flex; }
+    .demo-banner-text {
+      font-size: .88rem;
+      color: var(--amber);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .demo-banner-text strong { font-weight: 700; }
+    .demo-banner .action-btn {
+      font-size: .88rem;
+      padding: .6rem 1.4rem;
+    }
+
+    /* ─── FULL-WIDTH FEEDBACK SECTION ─── */
+    .feedback-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-top: .5rem;
+      animation: fadeUp .4s .3s ease both;
+    }
+    .feedback-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      min-width: 0;
+    }
+    /* encourage-card inside feedback-section: cancel its own animation
+       (the parent section is already animating) */
+    .feedback-section .encourage-card {
+      animation: none;
+      opacity: 1;
+    }
+    .feedback-right {
+      width: 260px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+    /* copy-btn inside feedback-right: full width, cancel own animation */
+    .feedback-right .copy-btn {
+      animation: none;
+      opacity: 1;
+    }
+    @media (max-width: 767px) {
+      .feedback-section { flex-direction: column; }
+      .feedback-right { width: 100%; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="tracker.html">← Tracker</a>
+  <span class="header-title">Lesson Feedback</span>
+  <a class="new-btn" href="tracker.html" onclick="startNew()">New Lesson</a>
+</header>
+
+<div class="demo-banner" id="demo-banner">
+  <div class="demo-banner-text">
+    <strong>This is a demo lesson summary.</strong>
+  </div>
+</div>
+
+<main id="main-content">
+  <!-- JS renders content here -->
+</main>
+
+<script>
+  const SESSION_KEY = 'lt_session';
+
+  // ── Demo mode detection (step 1) ─────────────────────────────────
+  const isDemo = window.location.search.includes("demo=true");
+
+  // ── Demo data (step 2) ───────────────────────────────────────────
+  // Keys use internal snake_case to match LABELS lookups in renderSummary.
+  const demoData = {
+    errors:      { articles: 6, tense: 2, pronunciation: 1 },
+    positives:   { good_grammar: 1, good_vocab: 1 },
+    newLanguage: ["Hello", "Weed"]
+  };
+
+  const LABELS = {
+    errors: {
+      articles:      'Articles',
+      tense:         'Tense',
+      word_order:    'Word Order',
+      vocabulary:    'Vocabulary',
+      pronunciation: 'Pronunciation',
+      fluency:       'Fluency'
+    },
+    positives: {
+      good_grammar:      'Good Grammar',
+      good_vocab:        'Good Vocabulary',
+      complex_structure: 'Complex Structure',
+      connector:         'Connector Used',
+      natural_phrase:    'Natural Phrase'
+    }
+  };
+
+  // Actionable teaching guidance for the "Suggested Focus" card
+  const FOCUS_GUIDANCE = {
+    errors: {
+      articles:
+        'Try gap-fill tasks with real context sentences to make article rules stick — then move into guided speaking where the student has to choose on the spot.',
+      tense:
+        'Pick the most frequent tense slip and correct it consistently; a short visual timeline or storytelling task helps the student see the logic rather than just memorise the form.',
+      word_order:
+        'Sentence-scramble cards work well here — let the student rebuild the structure themselves, then compare it aloud to a model sentence.',
+      vocabulary:
+        'Revisit today\'s target words at the start of next session, then push them into natural conversation rather than drilling in isolation.',
+      pronunciation:
+        'Choose two or three sounds to work on and stick with them — minimal pairs followed by a short recording the student can listen back to makes the improvement tangible.',
+      fluency:
+        'Remove the pressure to be perfect: timed free-talk tasks with familiar topics help the student build momentum and trust their own instincts.'
+    },
+    positives: {
+      good_grammar:
+        'The foundation is solid — now\'s a good time to introduce more demanding structures like conditionals or passive forms to keep progress moving.',
+      good_vocab:
+        'Good word choices are already there; push for more precision by exploring synonyms and collocations, and highlight moments when the student picks the best word, not just a safe one.',
+      complex_structure:
+        'Build on this by introducing relative clauses or concession phrases — model a few examples and invite the student to create their own in a short speaking activity.',
+      connector:
+        'Widen the range: practise less common linkers like "as a result", "despite", or "not only…but also" through a quick write-then-speak activity.',
+      natural_phrase:
+        'Keep feeding in authentic input — real conversations and role-play tasks help fixed phrases become automatic rather than something the student has to think about.'
+    }
+  };
+
+  // Short tip for the copyable feedback message
+  const COPY_TIPS = {
+    errors: {
+      articles:      'work on using the correct articles (a, an, the) in sentences',
+      tense:         'practise using the right tense when speaking',
+      word_order:    'improve word order and sentence structure',
+      vocabulary:    'build a wider range of vocabulary',
+      pronunciation: 'work on clear and accurate pronunciation',
+      fluency:       'build confidence and fluency in speaking'
+    },
+    positives: {
+      good_grammar:      'great grammar',
+      good_vocab:        'great vocabulary choices',
+      complex_structure: 'using complex sentence structures',
+      connector:         'using connectors and linkers',
+      natural_phrase:    'using natural, authentic phrases'
+    }
+  };
+
+  function startNew() {
+    localStorage.removeItem(SESSION_KEY);
+  }
+
+  function renderEmpty() {
+    document.getElementById('main-content').innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:3rem; margin-bottom:1rem;">📋</div>
+        <h2>No lesson data yet</h2>
+        <p>Complete a live lesson first and tap "End Lesson" to see your summary here.</p>
+        <a class="action-btn primary" href="tracker.html" style="display:inline-flex;max-width:240px;margin:0 auto">
+          Start Tracking →
+        </a>
+      </div>`;
+  }
+
+  /* ── NEW: html escaping helper ─────────────────────────────────── */
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes) {
+    const topIssue    = primaryKey    ? LABELS.errors[primaryKey]           : null;
+    const topStrength = posEntries[0] ? LABELS.positives[posEntries[0][0]] : null;
+    const nextPlan    = primaryKey    ? COPY_TIPS.errors[primaryKey]        : null;
+    const secPlan     = secondaryKey  ? COPY_TIPS.positives[secondaryKey] || COPY_TIPS.errors[secondaryKey] : null;
+
+    let text = '📝 Lesson Summary\n';
+    text += '─────────────────\n\n';
+
+    if (topIssue) {
+      text += '🎯 Main focus\n';
+      text += `  • ${topIssue}\n\n`;
+    }
+
+    if (topStrength) {
+      text += '✨ Strengths\n';
+      text += `  • ${topStrength}\n`;
+      if (posEntries[1]) text += `  • ${LABELS.positives[posEntries[1][0]]}\n`;
+      text += '\n';
+    }
+
+    if (nextPlan || secPlan) {
+      text += '📅 Next lesson\n';
+      if (nextPlan) text += `  • We'll ${nextPlan}.\n`;
+      if (secPlan)  text += `  • We'll also work on ${secPlan}.\n`;
+      text += '\n';
+    }
+
+    if (tutorNotes) {
+      text += '🗒️ Tutor Notes\n';
+      text += `  • ${tutorNotes}\n\n`;
+    }
+
+    if (encouragement) text += encouragement + '\n';
+
+    /* ── NEW: append new language if present ── */
+    if (newLang && newLang.length > 0) {
+      text += '\n📖 New Language Covered\n';
+      newLang.forEach(item => { text += `  • ${item}\n`; });
+    }
+
+    return text.trim();
+  }
+
+  function buildEncouragement(topStrengthKey, primaryKey) {
+    if (!topStrengthKey && !primaryKey) return '';
+    const strength = topStrengthKey ? LABELS.positives[topStrengthKey].toLowerCase() : null;
+    const issue    = primaryKey     ? LABELS.errors[primaryKey].toLowerCase()         : null;
+    if (strength && issue) {
+      return `Your ${strength} is really coming along — next session let's give some attention to ${issue} and keep that momentum going. 🎯`;
+    } else if (strength) {
+      return `Excellent work today — your ${strength} stood out. Keep it up! 🌟`;
+    } else {
+      return `Working on ${issue} takes time, but you're making real progress — see you next lesson! 🎯`;
+    }
+  }
+
+  function renderSummary(state, tutorNotes) {
+    const errEntries = Object.entries(state.errors)
+      .filter(([,v]) => v > 0)
+      .sort((a, b) => b[1] - a[1]);
+
+    const posEntries = Object.entries(state.positives)
+      .filter(([,v]) => v > 0)
+      .sort((a, b) => b[1] - a[1]);
+
+    const missingPos = Object.entries(state.positives)
+      .filter(([,v]) => v === 0)
+      .map(([k]) => k);
+
+    const totalErr = Object.values(state.errors).reduce((a,b) => a+b, 0);
+    const totalPos = Object.values(state.positives).reduce((a,b) => a+b, 0);
+    const maxErr   = errEntries[0]?.[1] || 1;
+    const maxPos   = posEntries[0]?.[1] || 1;
+
+    // Focus logic
+    const primaryKey     = errEntries[0]?.[0] || null;
+    const secondaryKey   = missingPos[0] || posEntries[posEntries.length - 1]?.[0] || null;
+    const topStrengthKey = posEntries[0]?.[0] || null;
+
+    const encouragement = state.encouragement || buildEncouragement(topStrengthKey, primaryKey);
+
+    // Format duration
+    let durationStr = '';
+    if (state.startedAt && state.endedAt) {
+      const mins = Math.round((state.endedAt - state.startedAt) / 60000);
+      durationStr = mins < 1 ? 'Less than a minute' : `${mins} min${mins !== 1 ? 's' : ''}`;
+    }
+
+    /* ── NEW: read new language list ── */
+    const newLang = Array.isArray(state.newLanguage) ? state.newLanguage : [];
+
+    const main = document.getElementById('main-content');
+
+    // ── Score row (full width) ────────────────────────────────────
+    const scoreRow = document.createElement('div');
+    scoreRow.className = 'score-row';
+    scoreRow.innerHTML = `
+      <div class="score-card err">
+        <div class="score-val">${totalErr}</div>
+        <div class="score-lbl">Errors logged</div>
+      </div>
+      <div class="score-card pos">
+        <div class="score-val">${totalPos}</div>
+        <div class="score-lbl">Positives logged</div>
+      </div>`;
+    main.appendChild(scoreRow);
+
+    // ── Build column nodes ────────────────────────────────────────
+    const grid      = document.createElement('div');
+    grid.className  = 'summary-grid';
+    const leftCol   = document.createElement('div');
+    leftCol.className = 'summary-col';
+    const centerCol = document.createElement('div');
+    centerCol.className = 'summary-col';
+    const rightCol  = document.createElement('div');
+    rightCol.className = 'summary-col';
+
+    // ── LEFT COLUMN: Errors ───────────────────────────────────────
+    const topCard = document.createElement('div');
+    topCard.className = 'card';
+    if (errEntries.length === 0) {
+      topCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon red">⚠️</div>
+          <div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div>
+        </div>
+        <div class="card-body"><p class="no-issues">No errors logged this session — great lesson! 🎉</p></div>`;
+    } else {
+      const rows = errEntries.map(([key, count], i) => {
+        const pct = Math.round((count / maxErr) * 100);
+        const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+        return `<div class="rank-row">
+          <div class="rank-num ${cls}">${i + 1}</div>
+          <div class="rank-body">
+            <div class="rank-label">${LABELS.errors[key]}</div>
+            <div class="rank-bar-track"><div class="rank-bar-fill err" style="width:0%" data-pct="${pct}"></div></div>
+          </div>
+          <div class="rank-count err">${count}</div>
+        </div>`;
+      }).join('');
+      topCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon red">⚠️</div>
+          <div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">A few small patterns came up during the lesson:</p>
+          <div class="ranked-list">${rows}</div>
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.65rem;font-style:italic;">These are completely normal and we'll improve them quickly.</p>
+        </div>`;
+    }
+    leftCol.appendChild(topCard);
+
+    // ── CENTER COLUMN: Positives ──────────────────────────────────
+    const posCard = document.createElement('div');
+    posCard.className = 'card';
+    if (posEntries.length === 0) {
+      posCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon green">✨</div>
+          <div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div>
+        </div>
+        <div class="card-body"><p class="no-issues">No positives logged this session.</p></div>`;
+    } else {
+      const rows = posEntries.map(([key, count], i) => {
+        const pct = Math.round((count / maxPos) * 100);
+        const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+        return `<div class="rank-row">
+          <div class="rank-num ${cls}">${i + 1}</div>
+          <div class="rank-body">
+            <div class="rank-label">${LABELS.positives[key]}</div>
+            <div class="rank-bar-track"><div class="rank-bar-fill pos" style="width:0%" data-pct="${pct}"></div></div>
+          </div>
+          <div class="rank-count pos">${count}</div>
+        </div>`;
+      }).join('');
+      posCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon green">✨</div>
+          <div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">Today you communicated well and showed clear progress, especially in the following areas:</p>
+          <div class="ranked-list">${rows}</div>
+        </div>`;
+    }
+    centerCol.appendChild(posCard);
+
+    // ── TUTOR NOTES (center column, below positives) ──────────────
+    if (tutorNotes && tutorNotes.trim()) {
+      const notesCard = document.createElement('div');
+      notesCard.className = 'card';
+      notesCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon blue">🗒️</div>
+          <div><div class="card-title">Tutor Notes</div><div class="card-subtitle">Additional observations</div></div>
+        </div>
+        <div class="card-body"><ul class="tutor-notes-list"><li>${escapeHtml(tutorNotes.trim())}</li></ul></div>`;
+      centerCol.appendChild(notesCard);
+    }
+
+    // ── NEW LANGUAGE (center column, below positives) ─────────────
+    if (newLang.length > 0) {
+      const langCard = document.createElement('div');
+      langCard.className = 'card';
+      const items = newLang.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+      langCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon blue">📖</div>
+          <div><div class="card-title">New Language Covered</div><div class="card-subtitle">Words and phrases introduced</div></div>
+        </div>
+        <div class="card-body"><ul class="lang-covered-list">${items}</ul></div>`;
+      centerCol.appendChild(langCard);
+    }
+
+    // ── RIGHT COLUMN: Suggested Focus + Encouragement + Copy ──────
+    if (primaryKey || secondaryKey) {
+      const focusCard = document.createElement('div');
+      focusCard.className = 'card';
+
+      let focusItems = '';
+
+      if (primaryKey) {
+        const guidance = FOCUS_GUIDANCE.errors[primaryKey] || '';
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag primary">Primary</div>
+            <div class="focus-text">
+              <strong>${LABELS.errors[primaryKey]}</strong>
+              ${guidance}
+            </div>
+          </div>`;
+      }
+
+      if (secondaryKey) {
+        const isError  = !!FOCUS_GUIDANCE.errors[secondaryKey];
+        const guidance = isError
+          ? FOCUS_GUIDANCE.errors[secondaryKey]
+          : (FOCUS_GUIDANCE.positives[secondaryKey] || '');
+        const secLabel = isError
+          ? LABELS.errors[secondaryKey]
+          : (LABELS.positives[secondaryKey] || secondaryKey);
+        const verb     = isError ? 'Also address' : 'Introduce & develop';
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag secondary">Secondary</div>
+            <div class="focus-text">
+              <strong>${verb}: ${secLabel}</strong>
+              ${guidance}
+            </div>
+          </div>`;
+      }
+
+      focusCard.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon amber">🎯</div>
+          <div><div class="card-title">Suggested Focus — Next Lesson</div><div class="card-subtitle">Based on today's patterns</div></div>
+        </div>
+        <div class="card-body"><div class="focus-grid">${focusItems}</div></div>`;
+      rightCol.appendChild(focusCard);
+    }
+
+    if (encouragement) {
+      const enc = document.createElement('div');
+      enc.className = 'encourage-card';
+      enc.innerHTML = `
+        <div class="encourage-icon">💬</div>
+        <div class="encourage-text">${encouragement.replace(/(good grammar|great vocabulary|complex structure|connectors|natural phrases|good progress|improving \w[\w\s]*)/gi, m => `<strong>${m}</strong>`)}</div>`;
+      // enc and closing go into feedbackSection (built below)
+      enc._closing = "You're making solid progress — your communication is becoming more natural, and now we're refining accuracy. Looking forward to the next lesson.";
+      rightCol._enc = enc;
+    }
+
+    // Copy button (moved to feedbackSection below)
+    const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes);
+    const copyBtn  = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.id        = 'copy-feedback-btn';
+    copyBtn.setAttribute('onclick', 'copyFeedback(this)');
+    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+
+    // Assemble grid (right col = focus card only)
+    grid.appendChild(leftCol);
+    grid.appendChild(centerCol);
+    grid.appendChild(rightCol);
+    main.appendChild(grid);
+
+    // ── FULL-WIDTH FEEDBACK SECTION (below grid) ──────────────────
+    const feedbackSection = document.createElement('div');
+    feedbackSection.className = 'feedback-section';
+
+    const feedbackLeft = document.createElement('div');
+    feedbackLeft.className = 'feedback-left';
+
+    if (rightCol._enc) {
+      feedbackLeft.appendChild(rightCol._enc);
+
+      const closing = document.createElement('p');
+      closing.style.cssText = 'font-size:.82rem;color:var(--ink-soft);line-height:1.6;padding:0 .1rem;';
+      closing.textContent = rightCol._enc._closing;
+      feedbackLeft.appendChild(closing);
+    }
+
+    const feedbackRight = document.createElement('div');
+    feedbackRight.className = 'feedback-right';
+    feedbackRight.appendChild(copyBtn);
+
+    feedbackSection.appendChild(feedbackLeft);
+    feedbackSection.appendChild(feedbackRight);
+    main.appendChild(feedbackSection);
+
+    // Assign copy text after element is in DOM
+    document.getElementById('copy-feedback-btn')._copyText = copyText;
+
+    // ── Demo override: replace copy text with exact demo content ──
+    if (new URLSearchParams(window.location.search).get('demo') === 'true') {
+      document.getElementById('copy-feedback-btn')._copyText =
+        '📝 Lesson Summary\n' +
+        '─────────────────\n\n' +
+        '🎯 Main focus\n' +
+        '  • Articles\n\n' +
+        '✨ Strengths\n' +
+        '  • Modal verbs\n' +
+        '  • Natural phrases\n\n' +
+        '📅 Next lesson\n' +
+        '  • We\'ll work on using articles (a, an, the) more naturally in conversation.\n' +
+        '  • We\'ll continue building confidence with past tense forms.\n\n' +
+        'You\'re already communicating clearly and using strong language — now we\'re refining accuracy and consistency. Looking forward to next lesson 👍\n\n' +
+        '📖 New Language Covered\n' +
+        '  • might have\n' +
+        '  • used to\n' +
+        '  • in the end\n' +
+        '  • at the moment';
+    }
+
+    // ── Duration ──────────────────────────────────────────────────
+    if (durationStr) {
+      const durDiv = document.createElement('div');
+      durDiv.style.cssText = 'text-align:center;font-size:.78rem;color:var(--ink-faint);padding:.25rem 0 0;animation:fadeUp .4s .38s ease both;opacity:0;animation-fill-mode:both';
+      durDiv.textContent = `Lesson duration: ${durationStr}`;
+      main.appendChild(durDiv);
+    }
+
+    // ── Actions ───────────────────────────────────────────────────
+    const acts = document.createElement('div');
+    acts.className = 'actions';
+    acts.innerHTML = `
+      <a class="action-btn secondary" href="tracker.html">← Back to Tracker</a>
+      <a class="action-btn primary" href="tracker.html" onclick="startNew()">New Lesson →</a>`;
+    main.appendChild(acts);
+
+    // Animate bars
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.querySelectorAll('.rank-bar-fill[data-pct]').forEach(el => {
+          el.style.width = el.dataset.pct + '%';
+        });
+      }, 100);
+    });
+  }
+
+  function copyFeedback(btn) {
+    const text = btn._copyText || '';
+    if (!text) return;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showCopied(btn)).catch(() => fallbackCopy(text, btn));
+    } else {
+      fallbackCopy(text, btn);
+    }
+  }
+
+  function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-999px;left:-999px;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showCopied(btn); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function showCopied(btn) {
+    btn.classList.add('copied');
+    btn.innerHTML = '<span class="copy-icon">✅</span> Copied to clipboard!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+    }, 2500);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────
+  (function init() {
+    // isDemo and demoData are declared at script top (step 1 & 2).
+
+    const tutorNotes = sessionStorage.getItem('tutorNotes') || '';
+
+    let state = null;
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (raw) state = JSON.parse(raw);
+    } catch(e) {}
+
+    const hasData = state &&
+      (Object.values(state.errors    || {}).some(v => v > 0) ||
+       Object.values(state.positives || {}).some(v => v > 0));
+
+    if (isDemo && !hasData) {
+      // ── Demo mode: use demoData instead of real data (step 3) ───
+      renderSummary(demoData, tutorNotes);
+
+      // Add "Start Real Lesson" button at the bottom of main
+      const mainEl = document.getElementById('main-content');
+      const demoStartBtn = document.createElement('a');
+      demoStartBtn.href = 'tracker.html';
+      demoStartBtn.className = 'action-btn primary';
+      demoStartBtn.style.cssText = 'display:flex;max-width:320px;margin:.25rem auto 0;animation:fadeUp .4s .5s ease both;opacity:0;animation-fill-mode:both';
+      demoStartBtn.textContent = 'Start Real Lesson \u2192';
+      mainEl.appendChild(demoStartBtn);
+
+      document.getElementById('demo-banner').classList.add('visible');
+    } else if (!hasData) {
+      renderEmpty();
+    } else {
+      renderSummary(state, tutorNotes);
+      if (isDemo) {
+        document.getElementById('demo-banner').classList.add('visible');
+      }
+    }
+
+    sessionStorage.removeItem('tutorNotes');
+  })();
+</script>
+
+</body>
+</html>
