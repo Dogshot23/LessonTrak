@@ -20,7 +20,7 @@
       --sage:       #3D8C6A;
       --amber:      #D4850A;
       --amber-bg:   rgba(212,133,10,.09);
-      --slate:      #4A6FA5; /* ── NEW ── */
+      --slate:      #4A6FA5;
     }
 
     html { scroll-behavior: smooth; }
@@ -96,7 +96,6 @@
       flex-direction: column;
       gap: .75rem;
     }
-    /* Right col: focus card sits flush in column — no extra outer card wrapper */
     .summary-col .card { animation: none; opacity: 1; transform: none; }
 
     @media (max-width: 767px) {
@@ -168,7 +167,7 @@
     .card-icon.red   { background: rgba(232,85,62,.1); }
     .card-icon.green { background: rgba(61,140,106,.1); }
     .card-icon.amber { background: var(--amber-bg); }
-    .card-icon.blue  { background: rgba(74,111,165,.1); } /* ── NEW ── */
+    .card-icon.blue  { background: rgba(74,111,165,.1); }
     .card-title {
       font-weight: 700;
       font-size: .9rem;
@@ -354,7 +353,7 @@
     .action-btn.primary:hover   { background: #d44232; }
     .action-btn:active { transform: scale(.97); }
 
-    /* ─── NO ISSUES / EMPTY ─── */
+    /* ─── EMPTY STATES & LISTS ─── */
     .no-issues {
       font-size: .85rem;
       color: var(--ink-soft);
@@ -377,7 +376,6 @@
       line-height: 1.6;
     }
 
-    /* ─── NEW LANGUAGE LIST ─── */ /* ── NEW ── */
     .lang-covered-list {
       list-style: none;
       display: flex;
@@ -398,7 +396,6 @@
       flex-shrink: 0;
     }
 
-    /* ─── TUTOR NOTES CARD ─── */
     .tutor-notes-list {
       list-style: none;
       display: flex;
@@ -420,7 +417,6 @@
       flex-shrink: 0;
     }
 
-    /* ─── DEMO BANNER ─── */
     .demo-banner {
       display: none;
       flex-direction: column;
@@ -435,19 +431,7 @@
       text-align: center;
     }
     .demo-banner.visible { display: flex; }
-    .demo-banner-text {
-      font-size: .88rem;
-      color: var(--amber);
-      font-weight: 500;
-      line-height: 1.5;
-    }
-    .demo-banner-text strong { font-weight: 700; }
-    .demo-banner .action-btn {
-      font-size: .88rem;
-      padding: .6rem 1.4rem;
-    }
-
-    /* ─── FULL-WIDTH FEEDBACK SECTION ─── */
+    
     .feedback-section {
       display: flex;
       align-items: flex-start;
@@ -462,8 +446,6 @@
       gap: .65rem;
       min-width: 0;
     }
-    /* encourage-card inside feedback-section: cancel its own animation
-       (the parent section is already animating) */
     .feedback-section .encourage-card {
       animation: none;
       opacity: 1;
@@ -475,7 +457,6 @@
       flex-direction: column;
       gap: .65rem;
     }
-    /* copy-btn inside feedback-right: full width, cancel own animation */
     .feedback-right .copy-btn {
       animation: none;
       opacity: 1;
@@ -485,12 +466,12 @@
       .feedback-right { width: 100%; }
     }
 
-    /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
   </style>
+ <script src="guidanceData.js"></script>
 </head>
 <body>
 
@@ -507,21 +488,16 @@
 </div>
 
 <main id="main-content">
-  <!-- JS renders content here -->
-</main>
+  </main>
 
 <script>
   const SESSION_KEY = 'lt_session';
-
-  // ── Demo mode detection (step 1) ─────────────────────────────────
   const isDemo = window.location.search.includes("demo=true");
 
-  // ── Demo data (step 2) ───────────────────────────────────────────
-  // Keys use internal snake_case to match LABELS lookups in renderSummary.
   const demoData = {
     errors:      { articles: 6, tense: 2, pronunciation: 1 },
     positives:   { good_grammar: 1, good_vocab: 1 },
-    newLanguage: ["Hello", "Weed"]
+    newLanguage: ["Hello", "World"]
   };
 
   const LABELS = {
@@ -542,37 +518,8 @@
     }
   };
 
-  // Actionable teaching guidance for the "Suggested Focus" card
-  const FOCUS_GUIDANCE = {
-    errors: {
-      articles:
-        'Try gap-fill tasks with real context sentences to make article rules stick — then move into guided speaking where the student has to choose on the spot.',
-      tense:
-        'Pick the most frequent tense slip and correct it consistently; a short visual timeline or storytelling task helps the student see the logic rather than just memorise the form.',
-      word_order:
-        'Sentence-scramble cards work well here — let the student rebuild the structure themselves, then compare it aloud to a model sentence.',
-      vocabulary:
-        'Revisit today\'s target words at the start of next session, then push them into natural conversation rather than drilling in isolation.',
-      pronunciation:
-        'Choose two or three sounds to work on and stick with them — minimal pairs followed by a short recording the student can listen back to makes the improvement tangible.',
-      fluency:
-        'Remove the pressure to be perfect: timed free-talk tasks with familiar topics help the student build momentum and trust their own instincts.'
-    },
-    positives: {
-      good_grammar:
-        'The foundation is solid — now\'s a good time to introduce more demanding structures like conditionals or passive forms to keep progress moving.',
-      good_vocab:
-        'Good word choices are already there; push for more precision by exploring synonyms and collocations, and highlight moments when the student picks the best word, not just a safe one.',
-      complex_structure:
-        'Build on this by introducing relative clauses or concession phrases — model a few examples and invite the student to create their own in a short speaking activity.',
-      connector:
-        'Widen the range: practise less common linkers like "as a result", "despite", or "not only…but also" through a quick write-then-speak activity.',
-      natural_phrase:
-        'Keep feeding in authentic input — real conversations and role-play tasks help fixed phrases become automatic rather than something the student has to think about.'
-    }
-  };
 
-  // Short tip for the copyable feedback message
+
   const COPY_TIPS = {
     errors: {
       articles:      'work on using the correct articles (a, an, the) in sentences',
@@ -591,6 +538,21 @@
     }
   };
 
+  // 🧠 ANTI-REPETITION BRAIN ENGINE
+  function pickSmartRandom(list, storageKey) {
+    if (!Array.isArray(list) || list.length === 0) return list;
+    if (list.length === 1) return list[0];
+
+    const lastUsed = localStorage.getItem(storageKey);
+    let availableChoices = list.filter(item => item !== lastUsed);
+    
+    if (availableChoices.length === 0) availableChoices = list;
+
+    const chosenItem = availableChoices[Math.floor(Math.random() * availableChoices.length)];
+    localStorage.setItem(storageKey, chosenItem);
+    return chosenItem;
+  }
+
   function startNew() {
     localStorage.removeItem(SESSION_KEY);
   }
@@ -607,7 +569,6 @@
       </div>`;
   }
 
-  /* ── NEW: html escaping helper ─────────────────────────────────── */
   function escapeHtml(str) {
     return str
       .replace(/&/g, '&amp;')
@@ -651,7 +612,6 @@
 
     if (encouragement) text += encouragement + '\n';
 
-    /* ── NEW: append new language if present ── */
     if (newLang && newLang.length > 0) {
       text += '\n📖 New Language Covered\n';
       newLang.forEach(item => { text += `  • ${item}\n`; });
@@ -674,43 +634,41 @@
   }
 
   function renderSummary(state, tutorNotes) {
-    const errEntries = Object.entries(state.errors)
+    const main = document.getElementById('main-content');
+    main.innerHTML = ''; 
+
+    const errEntries = Object.entries(state.errors || {})
       .filter(([,v]) => v > 0)
       .sort((a, b) => b[1] - a[1]);
 
-    const posEntries = Object.entries(state.positives)
+    const posEntries = Object.entries(state.positives || {})
       .filter(([,v]) => v > 0)
       .sort((a, b) => b[1] - a[1]);
 
-    const missingPos = Object.entries(state.positives)
+    const missingPos = Object.entries(state.positives || {})
       .filter(([,v]) => v === 0)
       .map(([k]) => k);
 
-    const totalErr = Object.values(state.errors).reduce((a,b) => a+b, 0);
-    const totalPos = Object.values(state.positives).reduce((a,b) => a+b, 0);
+    const totalErr = Object.values(state.errors || {}).reduce((a,b) => a+b, 0);
+    const totalPos = Object.values(state.positives || {}).reduce((a,b) => a+b, 0);
     const maxErr   = errEntries[0]?.[1] || 1;
     const maxPos   = posEntries[0]?.[1] || 1;
 
-    // Focus logic
     const primaryKey     = errEntries[0]?.[0] || null;
     const secondaryKey   = missingPos[0] || posEntries[posEntries.length - 1]?.[0] || null;
     const topStrengthKey = posEntries[0]?.[0] || null;
 
     const encouragement = state.encouragement || buildEncouragement(topStrengthKey, primaryKey);
 
-    // Format duration
     let durationStr = '';
     if (state.startedAt && state.endedAt) {
       const mins = Math.round((state.endedAt - state.startedAt) / 60000);
       durationStr = mins < 1 ? 'Less than a minute' : `${mins} min${mins !== 1 ? 's' : ''}`;
     }
 
-    /* ── NEW: read new language list ── */
     const newLang = Array.isArray(state.newLanguage) ? state.newLanguage : [];
 
-    const main = document.getElementById('main-content');
-
-    // ── Score row (full width) ────────────────────────────────────
+    // Score Cards
     const scoreRow = document.createElement('div');
     scoreRow.className = 'score-row';
     scoreRow.innerHTML = `
@@ -724,7 +682,7 @@
       </div>`;
     main.appendChild(scoreRow);
 
-    // ── Build column nodes ────────────────────────────────────────
+    // Columns Layout
     const grid      = document.createElement('div');
     grid.className  = 'summary-grid';
     const leftCol   = document.createElement('div');
@@ -734,7 +692,7 @@
     const rightCol  = document.createElement('div');
     rightCol.className = 'summary-col';
 
-    // ── LEFT COLUMN: Errors ───────────────────────────────────────
+    // LEFT COLUMN: Errors Card
     const topCard = document.createElement('div');
     topCard.className = 'card';
     if (errEntries.length === 0) {
@@ -770,7 +728,7 @@
     }
     leftCol.appendChild(topCard);
 
-    // ── CENTER COLUMN: Positives ──────────────────────────────────
+    // CENTER COLUMN: Positives Card
     const posCard = document.createElement('div');
     posCard.className = 'card';
     if (posEntries.length === 0) {
@@ -805,7 +763,7 @@
     }
     centerCol.appendChild(posCard);
 
-    // ── TUTOR NOTES (center column, below positives) ──────────────
+    // TUTOR NOTES
     if (tutorNotes && tutorNotes.trim()) {
       const notesCard = document.createElement('div');
       notesCard.className = 'card';
@@ -818,7 +776,7 @@
       centerCol.appendChild(notesCard);
     }
 
-    // ── NEW LANGUAGE (center column, below positives) ─────────────
+    // NEW LANGUAGE CARD
     if (newLang.length > 0) {
       const langCard = document.createElement('div');
       langCard.className = 'card';
@@ -832,15 +790,17 @@
       centerCol.appendChild(langCard);
     }
 
-    // ── RIGHT COLUMN: Suggested Focus + Encouragement + Copy ──────
+    // RIGHT COLUMN: Strategic Focus Generation (Smart Memory Hooked In)
     if (primaryKey || secondaryKey) {
       const focusCard = document.createElement('div');
       focusCard.className = 'card';
-
       let focusItems = '';
 
       if (primaryKey) {
-        const guidance = FOCUS_GUIDANCE.errors[primaryKey] || '';
+        let guidance = FOCUS_GUIDANCE.errors[primaryKey] || '';
+        if (Array.isArray(guidance)) {
+          guidance = pickSmartRandom(guidance, 'last_primary_guidance');
+        }
         focusItems += `
           <div class="focus-item">
             <div class="focus-tag primary">Primary</div>
@@ -852,20 +812,22 @@
       }
 
       if (secondaryKey) {
-        const isError  = !!FOCUS_GUIDANCE.errors[secondaryKey];
-        const guidance = isError
-          ? FOCUS_GUIDANCE.errors[secondaryKey]
-          : (FOCUS_GUIDANCE.positives[secondaryKey] || '');
-        const secLabel = isError
-          ? LABELS.errors[secondaryKey]
-          : (LABELS.positives[secondaryKey] || secondaryKey);
-        const verb     = isError ? 'Also address' : 'Introduce & develop';
+        const isError = !!FOCUS_GUIDANCE.errors[secondaryKey];
+        let secondaryGuidance = isError ? FOCUS_GUIDANCE.errors[secondaryKey] : FOCUS_GUIDANCE.positives[secondaryKey];
+
+        if (Array.isArray(secondaryGuidance)) {
+          secondaryGuidance = pickSmartRandom(secondaryGuidance, 'last_secondary_guidance');
+        }
+
+        const secLabel = isError ? LABELS.errors[secondaryKey] : (LABELS.positives[secondaryKey] || secondaryKey);
+        const verb = isError ? 'Also address' : 'Introduce & develop';
+
         focusItems += `
           <div class="focus-item">
             <div class="focus-tag secondary">Secondary</div>
             <div class="focus-text">
               <strong>${verb}: ${secLabel}</strong>
-              ${guidance}
+              ${secondaryGuidance}
             </div>
           </div>`;
       }
@@ -885,12 +847,11 @@
       enc.innerHTML = `
         <div class="encourage-icon">💬</div>
         <div class="encourage-text">${encouragement.replace(/(good grammar|great vocabulary|complex structure|connectors|natural phrases|good progress|improving \w[\w\s]*)/gi, m => `<strong>${m}</strong>`)}</div>`;
-      // enc and closing go into feedbackSection (built below)
       enc._closing = "You're making solid progress — your communication is becoming more natural, and now we're refining accuracy. Looking forward to the next lesson.";
       rightCol._enc = enc;
     }
 
-    // Copy button (moved to feedbackSection below)
+    // Build Copy Message Payload
     const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes);
     const copyBtn  = document.createElement('button');
     copyBtn.className = 'copy-btn';
@@ -898,13 +859,12 @@
     copyBtn.setAttribute('onclick', 'copyFeedback(this)');
     copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
 
-    // Assemble grid (right col = focus card only)
     grid.appendChild(leftCol);
     grid.appendChild(centerCol);
     grid.appendChild(rightCol);
     main.appendChild(grid);
 
-    // ── FULL-WIDTH FEEDBACK SECTION (below grid) ──────────────────
+    // Assemble Full Width Copy/Encouragement Section Safely
     const feedbackSection = document.createElement('div');
     feedbackSection.className = 'feedback-section';
 
@@ -913,7 +873,6 @@
 
     if (rightCol._enc) {
       feedbackLeft.appendChild(rightCol._enc);
-
       const closing = document.createElement('p');
       closing.style.cssText = 'font-size:.82rem;color:var(--ink-soft);line-height:1.6;padding:0 .1rem;';
       closing.textContent = rightCol._enc._closing;
@@ -928,10 +887,9 @@
     feedbackSection.appendChild(feedbackRight);
     main.appendChild(feedbackSection);
 
-    // Assign copy text after element is in DOM
     document.getElementById('copy-feedback-btn')._copyText = copyText;
 
-    // ── Demo override: replace copy text with exact demo content ──
+    // Demo Mode String Replacement Override
     if (new URLSearchParams(window.location.search).get('demo') === 'true') {
       document.getElementById('copy-feedback-btn')._copyText =
         '📝 Lesson Summary\n' +
@@ -952,7 +910,6 @@
         '  • at the moment';
     }
 
-    // ── Duration ──────────────────────────────────────────────────
     if (durationStr) {
       const durDiv = document.createElement('div');
       durDiv.style.cssText = 'text-align:center;font-size:.78rem;color:var(--ink-faint);padding:.25rem 0 0;animation:fadeUp .4s .38s ease both;opacity:0;animation-fill-mode:both';
@@ -960,7 +917,6 @@
       main.appendChild(durDiv);
     }
 
-    // ── Actions ───────────────────────────────────────────────────
     const acts = document.createElement('div');
     acts.className = 'actions';
     acts.innerHTML = `
@@ -968,7 +924,6 @@
       <a class="action-btn primary" href="tracker.html" onclick="startNew()">New Lesson →</a>`;
     main.appendChild(acts);
 
-    // Animate bars
     requestAnimationFrame(() => {
       setTimeout(() => {
         document.querySelectorAll('.rank-bar-fill[data-pct]').forEach(el => {
@@ -1008,13 +963,11 @@
     }, 2500);
   }
 
-  // ── Init ──────────────────────────────────────────────────────────
+  // ── APP START CONTROL FLOW ──
   (function init() {
-    // isDemo and demoData are declared at script top (step 1 & 2).
-
     const tutorNotes = sessionStorage.getItem('tutorNotes') || '';
-
     let state = null;
+    
     try {
       const raw = localStorage.getItem(SESSION_KEY);
       if (raw) state = JSON.parse(raw);
@@ -1025,18 +978,17 @@
        Object.values(state.positives || {}).some(v => v > 0));
 
     if (isDemo && !hasData) {
-      // ── Demo mode: use demoData instead of real data (step 3) ───
       renderSummary(demoData, tutorNotes);
-
-      // Add "Start Real Lesson" button at the bottom of main
+      
       const mainEl = document.getElementById('main-content');
-      const demoStartBtn = document.createElement('a');
-      demoStartBtn.href = 'tracker.html';
-      demoStartBtn.className = 'action-btn primary';
-      demoStartBtn.style.cssText = 'display:flex;max-width:320px;margin:.25rem auto 0;animation:fadeUp .4s .5s ease both;opacity:0;animation-fill-mode:both';
-      demoStartBtn.textContent = 'Start Real Lesson \u2192';
-      mainEl.appendChild(demoStartBtn);
-
+      if (mainEl) {
+        const demoStartBtn = document.createElement('a');
+        demoStartBtn.href = 'tracker.html';
+        demoStartBtn.className = 'action-btn primary';
+        demoStartBtn.style.cssText = 'display:flex;max-width:320px;margin:.25rem auto 0;animation:fadeUp .4s .5s ease both;opacity:0;animation-fill-mode:both';
+        demoStartBtn.textContent = 'Start Real Lesson \u2192';
+        mainEl.appendChild(demoStartBtn);
+      }
       document.getElementById('demo-banner').classList.add('visible');
     } else if (!hasData) {
       renderEmpty();
@@ -1046,7 +998,6 @@
         document.getElementById('demo-banner').classList.add('visible');
       }
     }
-
     sessionStorage.removeItem('tutorNotes');
   })();
 </script>

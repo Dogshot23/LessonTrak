@@ -859,49 +859,6 @@
   </div>
 </div>
 
-<!-- ── (Progression system removed — activity lookup now lives in summary.html) ── -->
-<script>
-  // ── PART 1: Placeholder to preserve script tag structure ────────────
-  // The generic 5-stage progression system has been replaced by the
-  // per-key activityPool in summary.html. No pre-computation needed here.
-
-  // ── PART 2: Stage tracking helpers (kept as no-ops for safety) ──────
-  function getStage(category)  { return 0; }
-  function getUsage(category)  { return 0; }
-  function saveProgress() {}
-
-  // ── PART 5 / 6 stubs (consumed only in summary.html now) ─────────
-  const suggestionStarters = [];
-  const tagDisplayNames    = {};
-
-  // ── PART 3: getNextLessonFocus → no-op (summary handles this) ──────
-  function getNextLessonFocus(category) { return null; }
-
-  // ── Map error keys (kept for any future reference) ──────────────────
-  const ERR_KEY_TO_PROGRESSION = {
-    pronunciation: 'pronunciation',
-    articles:      'grammar',
-    tense:         'grammar',
-    word_order:    'grammar',
-    vocabulary:    'grammar',
-    expression:    'grammar',
-    fluency:       null
-  };
-
-  function getPrimaryProgressionCategory() {
-    try {
-      let topKey = null, topVal = 0;
-      for (const [k, v] of Object.entries(state.errors)) {
-        if (v > topVal) { topVal = v; topKey = k; }
-      }
-      if (!topKey || topVal === 0) return null;
-      return ERR_KEY_TO_PROGRESSION[topKey] || null;
-    } catch(e) { return null; }
-  }
-
-
-</script>
-
 <script>
   const SESSION_KEY = 'lt_session';
 
@@ -1091,7 +1048,7 @@
     document.getElementById('tt-focus').textContent    = 'Focus: ' + prompt.focus;
   }
 
-  document.addEventListener('DOMContentLoaded', () => showPrompt(false));
+   showPrompt(false);
 
 
   function escapeHtml(str) {
@@ -1148,8 +1105,6 @@
     sessionStorage.setItem('tutorNotes', notes);
     state.endedAt = Date.now();
     localStorage.setItem(SESSION_KEY, JSON.stringify(state));
-
-    // summary.html derives Next Lesson Focus directly from session state
     window.location.href = 'summary.html';
   }
 
@@ -1183,9 +1138,7 @@
 
   // ── Init ──────────────────────────────────────────────────────────
   loadState();
-</script>
 
-<script>
 (function() {
   const isDemo = new URLSearchParams(window.location.search).get("demo") === "true";
   if (!isDemo) return;
