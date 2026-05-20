@@ -68,6 +68,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
       padding: .9rem 1.25rem .7rem;
       border-bottom: 1px solid rgba(26,23,20,.07);
       background: var(--cream);
@@ -83,6 +84,24 @@
       transition: opacity .2s;
     }
     .header-left a:hover { opacity: 1; }
+    /* ─── HEADER LOGO ─── */
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .header-logo {
+      display: block;
+      height: 28px;
+      width: auto;
+    }
+    @media (min-width: 380px) {
+      .header-logo { height: 32px; }
+    }
+
     .live-pill {
       display: flex;
       align-items: center;
@@ -652,7 +671,10 @@
     <div class="header-left">
       <a href="index.html">← LessonTracker</a>
     </div>
-    <div class="live-pill"><span class="live-dot"></span> Live</div>
+    <div class="header-center">
+      <a href="index.html"><img class="header-logo" src="images/lessontrak-logo.png" alt="LessonTrak" /></a>
+      <div class="live-pill"><span class="live-dot"></span> Live</div>
+    </div>
     <button class="reset-btn" onclick="confirmReset()">Reset</button>
   </header>
 
