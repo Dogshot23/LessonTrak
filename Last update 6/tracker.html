@@ -659,7 +659,7 @@
       color: var(--ink);
       background: var(--paper);
       resize: vertical;
-      min-height: 288px;
+      min-height: 144px;
       outline: none;
       transition: border-color .2s;
       line-height: 1.45;
@@ -746,17 +746,6 @@
           </div>
         </button>
       </div>
-
-      <!-- KEY LANGUAGE FROM TODAY -->
-      <div class="key-language-section">
-        <label class="tutor-notes-label" for="tutor-notes">✍️ Key Language From Today</label>
-        <textarea
-          id="tutor-notes"
-          class="tutor-notes-textarea"
-          placeholder='Examples: • "I went to cinema" → "I went to the cinema" • good use of linking phrases • struggled with present perfect • useful correction or sentence from today'
-          maxlength="1000"
-        ></textarea>
-      </div>
     </div>
 
     <!-- ── CENTER COLUMN: Totals + Positives + End Lesson ── -->
@@ -822,8 +811,19 @@
 
     </div>
 
-    <!-- ── RIGHT COLUMN: New Language ── -->
+    <!-- ── RIGHT COLUMN: Key Language → New Language ── -->
     <div class="col col-right">
+
+      <!-- KEY LANGUAGE FROM TODAY -->
+      <div class="key-language-section">
+        <label class="tutor-notes-label" for="tutor-notes">✍️ Key Language From Today</label>
+        <textarea
+          id="tutor-notes"
+          class="tutor-notes-textarea"
+          placeholder='Examples: • "I went to cinema" → "I went to the cinema" • good use of linking phrases • struggled with present perfect • useful correction or sentence from today'
+          maxlength="1000"
+        ></textarea>
+      </div>
 
       <div class="section-label lang">
         New Language
