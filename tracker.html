@@ -93,9 +93,21 @@
       left: 50%;
       transform: translateX(-50%);
     }
-    @media (max-width: 374px) {
+    /* ─── MOBILE HEADER: swap to flex so logo never overlaps back button ─── */
+    @media (max-width: 600px) {
+      header {
+        justify-content: flex-start;   /* left-anchors the row           */
+        gap: 0;
+      }
       .header-center {
-        transform: translateX(calc(-50% + 16px));
+        /* override the absolute centering – become a flex child instead  */
+        position: static;
+        transform: none;
+        flex: 1;                       /* fill remaining space            */
+        justify-content: center;       /* keep logo+badge centred within  */
+      }
+      .reset-btn {
+        flex-shrink: 0;                /* reset button never squashes     */
       }
     }
     .header-logo {
@@ -543,7 +555,10 @@
         min-height: 0;
         width: 100%;
       }
-      /* Right column: flex so End Lesson sticks to bottom */
+      /* Right column: flex column so margin-top: auto on .end-section
+         pushes it to the bottom. overflow-y: auto (from .col base rule)
+         lets the column scroll internally when the viewport is short,
+         keeping the End Lesson button reachable at all times. */
       .col-right {
         display: flex;
         flex-direction: column;
