@@ -659,7 +659,7 @@
       color: var(--ink);
       background: var(--paper);
       resize: vertical;
-      min-height: 72px;
+      min-height: 144px;
       outline: none;
       transition: border-color .2s;
       line-height: 1.45;
@@ -811,8 +811,20 @@
 
     </div>
 
-    <!-- ── RIGHT COLUMN: New Language ── -->
+    <!-- ── RIGHT COLUMN: Key Language → New Language ── -->
     <div class="col col-right">
+
+      <!-- KEY LANGUAGE FROM TODAY -->
+      <div class="key-language-section">
+        <label class="tutor-notes-label" for="tutor-notes">✍️ Key Language From Today</label>
+        <textarea
+          id="tutor-notes"
+          class="tutor-notes-textarea"
+          placeholder='Examples: • "I went to cinema" → "I went to the cinema" • good use of linking phrases • struggled with present perfect • useful correction or sentence from today'
+          maxlength="1000"
+        ></textarea>
+      </div>
+
       <div class="section-label lang">
         New Language
         <div class="section-label-line"></div>
@@ -842,13 +854,6 @@
 
       <!-- END LESSON (sticks to bottom of right column) -->
       <div class="end-section">
-        <label class="tutor-notes-label" for="tutor-notes">✍️ Key Language From Today</label>
-        <textarea
-          id="tutor-notes"
-          class="tutor-notes-textarea"
-          placeholder='Examples: • "I went to cinema" → "I went to the cinema" • good use of linking phrases • struggled with present perfect • useful correction or sentence from today'
-          maxlength="1000"
-        ></textarea>
         <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">Finish to create feedback you can send</p>
         <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
       </div>
