@@ -507,12 +507,10 @@
       .col-center { order: 1; }
       .col-errors  { order: 2; }
       .col-right   { order: 3; }
-      .end-section {
-        padding: .6rem 0 calc(.8rem + env(safe-area-inset-bottom, 0px));
-        margin-top: .25rem;
-        border-top: 1px solid rgba(26,23,20,.07);
-      }
-      .end-btn { width: 100%; }
+      /* Hide in-column end-section on mobile — fixed .cta-bar takes over */
+      .end-section { display: none; }
+      /* Add bottom clearance so content never hides behind the fixed CTA bar */
+      main { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
     }
 
     /* ─── DESKTOP: 3-column grid ─── */
@@ -572,6 +570,10 @@
         border-top: 1px solid rgba(26,23,20,.07);
       }
       .end-btn { width: 100%; }
+      /* Desktop activity state: border-top warms slightly once data captured */
+      .has-activity .end-section {
+        border-top-color: rgba(26,23,20,.14);
+      }
       /* Slightly tighter buttons on desktop to fit columns */
       .track-btn {
         padding: .65rem .7rem .6rem;
@@ -681,6 +683,60 @@
     }
     .tutor-notes-textarea::placeholder { color: var(--ink-faint); }
     .tutor-notes-textarea:focus { border-color: var(--ink-soft); }
+
+    /* ─── FIXED CTA BAR (mobile / tablet only) ─── */
+    .cta-bar {
+      display: none;
+    }
+    @media (max-width: 899px) {
+      .cta-bar {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: var(--cream);
+        border-top: 1px solid rgba(26,23,20,.09);
+        padding: .65rem 1rem calc(.65rem + env(safe-area-inset-bottom, 0px));
+      }
+      .cta-bar-inner {
+        max-width: 540px;
+        margin: 0 auto;
+      }
+      .cta-microcopy {
+        font-size: .72rem;
+        color: var(--ink-faint);
+        text-align: center;
+        margin-bottom: .45rem;
+        line-height: 1.4;
+        transition: color .3s;
+      }
+      .has-activity .cta-microcopy {
+        color: var(--ink-soft);
+      }
+      .cta-btn {
+        display: block;
+        width: 100%;
+        padding: .9rem;
+        background: var(--ink);
+        color: #fff;
+        border: none;
+        border-radius: 13px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: -.01em;
+        transition: background .2s, transform .12s, box-shadow .3s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .cta-btn:hover  { background: #2e2a26; }
+      .cta-btn:active { transform: scale(.98); }
+      .has-activity .cta-btn {
+        box-shadow: 0 0 0 2px rgba(26,23,20,.12);
+      }
+    }
   </style>
 </head>
 <body>
@@ -700,7 +756,7 @@
 
   <main id="main-scroll">
 
-    <p style="font-size:.8rem;color:var(--ink-soft);text-align:center;padding:.1rem .5rem .25rem;line-height:1.45;">Track a few key moments, then click 'End Lesson' to generate feedback for your student.</p>
+    <p style="font-size:.8rem;color:var(--ink-soft);text-align:center;padding:.1rem .5rem .25rem;line-height:1.45;">Track key moments during your lesson — then generate your student feedback report when you're done.</p>
 
     <div class="cols-wrapper">
 
@@ -770,6 +826,7 @@
           class="tutor-notes-textarea"
           placeholder='Examples: • "I went to cinema" → "I went to the cinema" • good use of linking phrases • struggled with present perfect • useful correction or sentence from today'
           maxlength="1000"
+          oninput="updateCTAState()"
         ></textarea>
       </div>
     </div>
@@ -867,16 +924,24 @@
         <button class="test-this-new-btn" onclick="showPrompt(true)">↻ New prompt</button>
       </div>
 
-      <!-- END LESSON (sticks to bottom of right column) -->
+      <!-- GENERATE FEEDBACK (desktop: sticks to bottom of right column) -->
       <div class="end-section">
-        <p style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">Finish to create feedback you can send</p>
-        <button class="end-btn" onclick="showEndSheet()">End Lesson →</button>
+        <p class="end-microcopy" style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">When you're ready, generate your student feedback report</p>
+        <button class="end-btn" onclick="showEndSheet()">Generate Feedback →</button>
       </div>
     </div><!-- /.col.col-right -->
 
     </div><!-- /.cols-wrapper -->
 
   </main>
+
+  <!-- FIXED CTA BAR: mobile / tablet only. Hidden on desktop via CSS. -->
+  <div class="cta-bar">
+    <div class="cta-bar-inner">
+      <p class="cta-microcopy" id="cta-microcopy">When you're done, generate your student feedback report</p>
+      <button class="cta-btn" onclick="showEndSheet()">Generate Feedback →</button>
+    </div>
+  </div>
 
 </div>
 
@@ -885,7 +950,7 @@
   <div class="sheet">
     <div class="sheet-handle"></div>
     <h3>End this lesson?</h3>
-    <p>Your session data will be saved and you'll see the full summary.</p>
+    <p>Your lesson data will be saved and your feedback report will open.</p>
     <div class="sheet-actions">
       <button class="sheet-cancel" onclick="hideEndSheet()">Cancel</button>
       <button class="sheet-confirm" onclick="endLesson()">See Summary →</button>
@@ -998,6 +1063,7 @@
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
     renderLanguage();   // ← NEW
+    updateCTAState();
   }
 
   // ── Tap handler ────────────────────────────────────────────────────
@@ -1024,6 +1090,7 @@
     for (const v of Object.values(state.positives)) posTotal += v;
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
+    updateCTAState();
   }
 
   // ── Test This: Prompt Library ──────────────────────────────────────
@@ -1115,6 +1182,7 @@
     input.value = '';
     input.focus();
     renderLanguage();
+    updateCTAState();
   }
 
   function removeLanguage(i) {
@@ -1135,6 +1203,31 @@
         `<button class="lang-remove" onclick="removeLanguage(${i})" aria-label="Remove">×</button>`;
       list.appendChild(li);
     });
+  }
+
+  // ── CTA state: reflects whether lesson data has been captured ────────
+  function updateCTAState() {
+    let hasData = false;
+    for (const v of Object.values(state.errors))    if (v > 0) { hasData = true; break; }
+    if (!hasData) for (const v of Object.values(state.positives)) if (v > 0) { hasData = true; break; }
+    if (!hasData && state.newLanguage && state.newLanguage.length > 0) hasData = true;
+    if (!hasData) {
+      const notes = document.getElementById('tutor-notes');
+      if (notes && notes.value.trim().length > 0) hasData = true;
+    }
+    document.querySelector('.app').classList.toggle('has-activity', hasData);
+    const microcopy = document.getElementById('cta-microcopy');
+    if (microcopy) {
+      microcopy.textContent = hasData
+        ? 'Lesson data captured — generate your feedback report'
+        : "When you're done, generate your student feedback report";
+    }
+    const endMicro = document.querySelector('.end-microcopy');
+    if (endMicro) {
+      endMicro.textContent = hasData
+        ? 'Lesson data captured — ready to generate your report'
+        : "When you're ready, generate your student feedback report";
+    }
   }
 
   // ── End lesson sheet ──────────────────────────────────────────────
