@@ -334,21 +334,20 @@
     }
     .end-btn {
       width: 100%;
-      padding: 1.15rem 1rem;
+      padding: 1rem;
       background: var(--ink);
       color: #fff;
       border: none;
       border-radius: 13px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background .2s, transform .12s, box-shadow .2s;
+      transition: background .2s, transform .12s;
       -webkit-tap-highlight-color: transparent;
       letter-spacing: -.01em;
-      box-shadow: 0 2px 10px rgba(26,23,20,.18);
     }
-    .end-btn:hover   { background: #2e2a26; box-shadow: 0 3px 14px rgba(26,23,20,.26); }
+    .end-btn:hover   { background: #2e2a26; }
     .end-btn:active  { transform: scale(.98); }
 
     /* ─── CONFIRM OVERLAY ─── */
@@ -554,10 +553,10 @@
         min-height: 0;
         width: 100%;
       }
-      /* Right column: flex column so .end-section sits close below the
-         Test This box with a fixed gap, keeping it reachable and prominent.
-         overflow-y: auto (from .col base rule) lets the column scroll
-         internally when the viewport is short. */
+      /* Right column: flex column so margin-top: auto on .end-section
+         pushes it to the bottom. overflow-y: auto (from .col base rule)
+         lets the column scroll internally when the viewport is short,
+         keeping the End Lesson button reachable at all times. */
       .col-right {
         display: flex;
         flex-direction: column;
@@ -566,7 +565,7 @@
         flex: 1;
       }
       .end-section {
-        margin-top: 1.25rem;
+        margin-top: auto;
         padding-top: .75rem;
         border-top: 1px solid rgba(26,23,20,.07);
       }
