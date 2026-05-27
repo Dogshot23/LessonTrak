@@ -318,6 +318,15 @@
     }
     .copy-btn .copy-icon { font-size: 1rem; }
 
+    /* ─── COPY HELPER TEXT ─── */
+    .copy-helper {
+      font-size: .75rem;
+      color: var(--ink-faint);
+      line-height: 1.45;
+      text-align: center;
+      padding: 0 .25rem;
+    }
+
     /* ─── COPY TOAST ─── */
     .copy-toast {
       display: flex;
@@ -910,7 +919,7 @@
     copyBtn.className = 'copy-btn';
     copyBtn.id        = 'copy-feedback-btn';
     copyBtn.setAttribute('onclick', 'copyFeedback(this)');
-    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Student Report →';
 
     grid.appendChild(leftCol);
     grid.appendChild(centerCol);
@@ -934,10 +943,15 @@
     feedbackRight.className = 'feedback-right';
     feedbackRight.appendChild(copyBtn);
 
+    const copyHelper = document.createElement('p');
+    copyHelper.className = 'copy-helper';
+    copyHelper.textContent = 'Copies the report so you can paste it into WhatsApp, Preply, email, etc.';
+    feedbackRight.appendChild(copyHelper);
+
     const copyToast = document.createElement('div');
     copyToast.className = 'copy-toast';
     copyToast.id = 'copy-toast';
-    copyToast.innerHTML = '<span class="copy-toast-icon">✓</span><span>Report copied. Paste it into WhatsApp, Preply, email, etc.</span>';
+    copyToast.innerHTML = '<span class="copy-toast-icon">✓</span><span>Report copied to clipboard.</span>';
     feedbackRight.appendChild(copyToast);
 
     feedbackSection.appendChild(feedbackLeft);
@@ -994,7 +1008,7 @@
     btn.innerHTML = '<span class="copy-icon">✅</span> Copied!';
     setTimeout(() => {
       btn.classList.remove('copied');
-      btn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
+      btn.innerHTML = '<span class="copy-icon">📋</span> Copy Student Report →';
     }, 2500);
 
     const toast = document.getElementById('copy-toast');
