@@ -318,6 +318,34 @@
     }
     .copy-btn .copy-icon { font-size: 1rem; }
 
+    /* ─── COPY TOAST ─── */
+    .copy-toast {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      background: rgba(61,140,106,.09);
+      border: 1px solid rgba(61,140,106,.22);
+      border-radius: 10px;
+      padding: .65rem .85rem;
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--sage);
+      line-height: 1.45;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
+    }
+    .copy-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .copy-toast.fading {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    .copy-toast-icon { flex-shrink: 0; font-size: .9rem; }
+
     /* ─── ACTIONS ─── */
     .actions {
       display: flex;
@@ -906,6 +934,12 @@
     feedbackRight.className = 'feedback-right';
     feedbackRight.appendChild(copyBtn);
 
+    const copyToast = document.createElement('div');
+    copyToast.className = 'copy-toast';
+    copyToast.id = 'copy-toast';
+    copyToast.innerHTML = '<span class="copy-toast-icon">✓</span><span>Report copied. Paste it into WhatsApp, Preply, email, etc.</span>';
+    feedbackRight.appendChild(copyToast);
+
     feedbackSection.appendChild(feedbackLeft);
     feedbackSection.appendChild(feedbackRight);
     main.appendChild(feedbackSection);
@@ -957,11 +991,27 @@
 
   function showCopied(btn) {
     btn.classList.add('copied');
-    btn.innerHTML = '<span class="copy-icon">✅</span> Copied to clipboard!';
+    btn.innerHTML = '<span class="copy-icon">✅</span> Copied!';
     setTimeout(() => {
       btn.classList.remove('copied');
       btn.innerHTML = '<span class="copy-icon">📋</span> Copy &amp; Send to Student';
     }, 2500);
+
+    const toast = document.getElementById('copy-toast');
+    if (!toast) return;
+    // Clear any running timer so rapid clicks don't stack
+    if (toast._hideTimer) clearTimeout(toast._hideTimer);
+    if (toast._fadeTimer) clearTimeout(toast._fadeTimer);
+    toast.classList.remove('fading');
+    toast.classList.add('visible');
+    // After ~3 s start the fade-out
+    toast._fadeTimer = setTimeout(() => {
+      toast.classList.add('fading');
+      // Remove visible after the CSS transition (300 ms) finishes
+      toast._hideTimer = setTimeout(() => {
+        toast.classList.remove('visible', 'fading');
+      }, 320);
+    }, 3000);
   }
 
   (function init() {
