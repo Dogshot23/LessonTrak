@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KKHTF8PMYV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KKHTF8PMYV');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Tracker — Teach with clarity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F7F4EF;
+      --paper:    #FFFFFF;
+      --ink:      #1A1714;
+      --ink-soft: #6B6560;
+      --ink-faint:#B8B4AE;
+      --coral:    #E8553E;
+      --sage:     #3D8C6A;
+      --amber:    #D4850A;
+      --card-shadow: 0 2px 12px rgba(26,23,20,.07), 0 1px 3px rgba(26,23,20,.05);
+      --card-shadow-hover: 0 8px 32px rgba(26,23,20,.12), 0 2px 8px rgba(26,23,20,.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -.01em;
+    }
+    .logo span { color: var(--coral); }
+    .nav-cta {
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 500;
+      padding: .5rem 1.1rem;
+      border-radius: 100px;
+    }
+    .nav-cta:hover { background: var(--coral); }
+
+    /* ─── BRAND LOGO ─── */
+    .brand-logo {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      margin: 0 auto 1.75rem;
+    }
+    @media (max-width: 480px) {
+      .brand-logo { max-width: 200px; }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 600px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.9rem, 5vw, 2.9rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin-bottom: .9rem;
+    }
+    h1 em { font-style: italic; color: var(--coral); }
+
+    .hero-sub {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      max-width: 440px;
+      margin: 0 auto 1.5rem;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .6rem;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: wrap;
+      margin-bottom: .75rem;
+    }
+
+    /* Shared button base */
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border-radius: 100px;
+      border: none;
+      min-width: 152px;
+      text-align: center;
+      cursor: pointer;
+      line-height: 1;
+      color: #fff;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    /* Start Live Lesson Tracker — primary, charcoal (matches nav) */
+    .btn-primary {
+      background: var(--ink);
+      box-shadow: 0 2px 10px rgba(26,23,20,.22);
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    /* Try demo — secondary, softer weight visually */
+    .btn-secondary {
+      background: #d4563e;
+      box-shadow: 0 2px 10px rgba(212,86,62,.15);
+      font-weight: 500;
+      opacity: .88;
+    }
+    .btn-secondary:hover { transform: translateY(-1px); filter: brightness(1.05); opacity: 1; }
+
+    /* ─── TARGETING BADGE ─── */
+    .targeting-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(232, 85, 62, .08);
+      color: #c03a26;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 100px;
+      border: 1px solid rgba(232, 85, 62, .18);
+      margin-bottom: 1rem;
+    }
+    .targeting-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--coral);
+      opacity: .8;
+    }
+
+    .hero-note {
+      font-size: .8rem;
+      color: var(--ink-faint);
+      letter-spacing: .01em;
+    }
+    .hero-microcopy {
+      font-size: .75rem;
+      color: var(--ink-faint);
+      margin-top: .2rem;
+      display: block;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how {
+      max-width: 540px;
+      margin: 4rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+    .how h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      letter-spacing: -.02em;
+      margin-bottom: 1.5rem;
+      color: var(--ink);
+    }
+    .steps-simple {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      text-align: left;
+    }
+    .step-simple {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: .95rem;
+      color: var(--ink-soft);
+    }
+    .step-simple .num {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .82rem;
+      flex-shrink: 0;
+    }
+    .step-simple:nth-child(1) .num { background: rgba(232,85,62,.12); color: var(--coral); }
+    .step-simple:nth-child(2) .num { background: rgba(212,133,10,.12); color: var(--amber); }
+    .step-simple:nth-child(3) .num { background: rgba(61,140,106,.12); color: var(--sage); }
+
+    /* ─── SUMMARY PREVIEW ─── */
+    .preview-section {
+      max-width: 540px;
+      margin: 3.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .preview-intro {
+      font-size: .85rem;
+      color: var(--ink-soft);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .feedback-teaser-preview {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(26,23,20,.06);
+      font-size: .9rem;
+      color: #444;
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: .85rem;
+    }
+    .btn-copy-feedback {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: #eef1fb;
+      color: #3a4a7a;
+      border: 1.5px solid rgba(58,74,122,.15);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .84rem;
+      font-weight: 500;
+      padding: .55rem 1.2rem;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+    .btn-copy-feedback:hover { background: #e0e5f7; border-color: rgba(58,74,122,.3); color: #2a3860; }
+    .btn-copy-feedback svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .feedback-teaser-hint {
+      font-size: .74rem;
+      color: var(--ink-soft);
+      margin-top: .5rem;
+    }
+
+    /* ─── MOCK PREVIEW ─── */
+    .hero-visual {
+      margin: 3.5rem auto 0;
+      max-width: 460px;
+      padding: 0 1.5rem;
+    }
+    .mock-card {
+      background: var(--paper);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(26,23,20,.06);
+    }
+    .mock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .mock-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .mock-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: rgba(61,140,106,.1);
+      color: var(--sage);
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 100px;
+    }
+    .mock-live-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+    .mock-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+    }
+    .mock-btn {
+      padding: .75rem .5rem;
+      border-radius: 12px;
+      font-size: .78rem;
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: .85rem;
+    }
+    .mock-btn.err { background: rgba(232,85,62,.08); color: #c03a26; }
+    .mock-btn.pos { background: rgba(61,140,106,.09); color: #2d7254; }
+    .mock-btn .count {
+      background: rgba(26,23,20,.08);
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .1rem .45rem;
+      min-width: 1.4rem;
+      text-align: center;
+    }
+    .mock-footer {
+      margin-top: 1rem;
+      padding-top: .85rem;
+      border-top: 1px solid rgba(26,23,20,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mock-tally { font-size: .75rem; color: var(--ink-soft); }
+    .mock-tally strong { color: var(--ink); font-weight: 600; }
+    .mock-end-btn {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--coral);
+      background: rgba(232,85,62,.08);
+      border-radius: 100px;
+      padding: .3rem .8rem;
+    }
+
+    /* ─── BOTTOM CTA ─── */
+    .cta-section {
+      max-width: 540px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+    .cta-box {
+      background: var(--ink);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      margin-bottom: .6rem;
+      letter-spacing: -.02em;
+    }
+    .cta-box h2 em { font-style: italic; color: #F5A68E; }
+    .cta-box p {
+      font-size: .88rem;
+      color: rgba(255,255,255,.6);
+      margin-bottom: 1.75rem;
+    }
+    .btn-primary-light {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--coral);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: .85rem 2rem;
+      border-radius: 100px;
+      box-shadow: 0 4px 20px rgba(232,85,62,.45);
+    }
+    .btn-primary-light:hover { transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .78rem;
+      color: var(--ink-faint);
+      border-top: 1px solid rgba(26,23,20,.06);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">Lesson<span>.</span>Tracker</a>
+    <a class="nav-cta" href="tracker.html">Start Tracking →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="brand-logo" src="images/lessontrak-logo.png" alt="LessonTrak" />
+    <div class="targeting-badge">For ESL Teachers</div>
+    <h1>Stop guessing what to <em>teach next</em></h1>
+    <p class="hero-sub">Track what your student does and get a clear next lesson focus in seconds.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="tracker.html">Start Live Lesson Tracker →</a>
+      <a class="btn-secondary" href="tracker.html?demo=true">See Example (30 seconds)</a>
+    </div>
+    <p class="hero-note">No login. Works during your lesson.</p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <h2>How it works</h2>
+    <div class="steps-simple">
+      <div class="step-simple">
+        <div class="num">1</div>
+        <span>Tap what happens during the lesson</span>
+      </div>
+      <div class="step-simple">
+        <div class="num">2</div>
+        <span>End the lesson and see the summary</span>
+      </div>
+      <div class="step-simple">
+        <div class="num">3</div>
+        <span>Get a clear next lesson focus</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY PREVIEW -->
+  <section class="preview-section">
+    <p class="preview-intro">This is what you get at the end of a lesson:</p>
+    <div class="feedback-teaser-preview">
+      <pre style="font-family:'DM Sans',sans-serif;font-size:.88rem;font-style:normal;line-height:1.7;white-space:pre-wrap;color:#333;">📝 Lesson Summary
+─────────────────
+🎯 Main focus
+  • Articles
+✨ Strengths
+  • Modal verbs
+  • Natural phrases
+📅 Next lesson
+  • We'll work on using articles (a, an, the) more naturally in conversation.
+  • We'll continue building confidence with past tense forms.
+You're already communicating clearly and using strong language. Now we're refining accuracy and consistency. Looking forward to next lesson 👍
+📖 New Language Covered
+  • might have
+  • used to
+  • in the end
+  • at the moment</pre>
+    </div>
+    <button class="btn-copy-feedback" id="copyFeedbackBtn" onclick="copyLessonFeedback()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Lesson Feedback
+    </button>
+    <p class="feedback-teaser-hint">Click to copy → paste into chat, notes, or messages</p>
+  </section>
+
+  <!-- MOCK PREVIEW -->
+  <div class="hero-visual">
+    <div class="mock-card">
+      <div class="mock-header">
+        <div class="mock-label">Live Lesson — Now tracking</div>
+        <div class="mock-live-badge">Live</div>
+      </div>
+      <div class="mock-buttons">
+        <div class="mock-btn err">Wrong article <span class="count">3</span></div>
+        <div class="mock-btn err">Past tense <span class="count">5</span></div>
+        <div class="mock-btn err">Hesitation <span class="count">2</span></div>
+        <div class="mock-btn err">Repeating word <span class="count">1</span></div>
+        <div class="mock-btn pos">Used modal <span class="count">2</span></div>
+        <div class="mock-btn pos">Phrasal verb <span class="count">0</span></div>
+      </div>
+      <div class="mock-footer">
+        <div class="mock-tally"><strong>13</strong> events logged</div>
+        <div class="mock-end-btn">End Lesson</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2>Stop guessing what to <em>teach next.</em></h2>
+      <p>No sign-up, no downloads. Works right in your browser.</p>
+      <a class="btn-primary-light" href="tracker.html">Open Live Tracker →</a>
+    </div>
+  </div>
+
+  <footer>Built for ESL teachers. No data leaves your device.</footer>
+
+  <script>
+    function copyLessonFeedback() {
+      const text = "📝 Lesson Summary\n─────────────────\n🎯 Main focus\n  • Articles\n✨ Strengths\n  • Modal verbs\n  • Natural phrases\n📅 Next lesson\n  • We'll work on using articles (a, an, the) more naturally in conversation.\n  • We'll continue building confidence with past tense forms.\nYou're already communicating clearly and using strong language. Now we're refining accuracy and consistency. Looking forward to next lesson 👍\n📖 New Language Covered\n  • might have\n  • used to\n  • in the end\n  • at the moment";
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyFeedbackBtn');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        btn.style.borderColor = 'var(--sage)';
+        btn.style.color = 'var(--sage)';
+        setTimeout(() => { btn.innerHTML = original; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

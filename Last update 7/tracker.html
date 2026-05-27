@@ -12,7 +12,7 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Lesson Tracker — LessonTrak</title>
+  <title>Live Lesson Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -762,14 +762,14 @@
     </div>
     <div class="header-center">
       <a href="index.html"><img class="header-logo" src="images/lessontrak-logo.png" alt="LessonTrak" /></a>
-      <div class="live-pill"><span class="live-dot"></span> Tracking Active</div>
+      <div class="live-pill"><span class="live-dot"></span> Live</div>
     </div>
     <button class="reset-btn" onclick="confirmReset()">Reset</button>
   </header>
 
   <main id="main-scroll">
 
-    <p style="font-size:.8rem;color:var(--ink-soft);text-align:center;padding:.1rem .5rem .25rem;line-height:1.45;">Tap errors and positives during the lesson to build the student report.</p>
+    <p style="font-size:.8rem;color:var(--ink-soft);text-align:center;padding:.1rem .5rem .25rem;line-height:1.45;">Track key moments during your lesson — then generate your student feedback report when you're done.</p>
 
     <div class="cols-wrapper">
 
@@ -940,7 +940,6 @@
       <!-- GENERATE FEEDBACK (desktop: sticks to bottom of right column) -->
       <div class="end-section">
         <p class="workflow-hint">① Track issues during class &nbsp;·&nbsp; ② Generate report at the end</p>
-        <p style="font-size:.72rem;color:var(--ink-faint);text-align:center;margin-bottom:.45rem;line-height:1.45;">The report is created from the errors, positives, and notes you tracked during the lesson.</p>
         <p class="end-microcopy" style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">When you're ready, generate your student feedback report</p>
         <button class="end-btn" onclick="showEndSheet()">Generate Feedback →</button>
       </div>
@@ -954,7 +953,6 @@
   <div class="cta-bar">
     <div class="cta-bar-inner">
       <p class="workflow-hint">① Track issues during class &nbsp;·&nbsp; ② Generate report at the end</p>
-      <p style="font-size:.7rem;color:var(--ink-faint);text-align:center;margin-bottom:.3rem;line-height:1.4;">The report is created from the errors, positives, and notes you tracked.</p>
       <p class="cta-microcopy" id="cta-microcopy">When you're done, generate your student feedback report</p>
       <button class="cta-btn" onclick="showEndSheet()">Generate Feedback →</button>
     </div>
