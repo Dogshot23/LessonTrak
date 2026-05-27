@@ -738,6 +738,18 @@
         box-shadow: 0 0 0 2px rgba(26,23,20,.12);
       }
     }
+
+    /* ─── WORKFLOW HINT ─── */
+    .workflow-hint {
+      font-size: .68rem;
+      color: var(--ink-faint);
+      text-align: center;
+      letter-spacing: .01em;
+      line-height: 1.4;
+      margin-bottom: .3rem;
+      transition: opacity .35s;
+    }
+    .has-activity .workflow-hint { opacity: 0; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -927,6 +939,7 @@
 
       <!-- GENERATE FEEDBACK (desktop: sticks to bottom of right column) -->
       <div class="end-section">
+        <p class="workflow-hint">① Track issues during class &nbsp;·&nbsp; ② Generate report at the end</p>
         <p class="end-microcopy" style="font-size:.75rem;color:var(--ink-soft);text-align:center;margin-bottom:.55rem;margin-top:.55rem;line-height:1.4;">When you're ready, generate your student feedback report</p>
         <button class="end-btn" onclick="showEndSheet()">Generate Feedback →</button>
       </div>
@@ -939,6 +952,7 @@
   <!-- FIXED CTA BAR: mobile / tablet only. Hidden on desktop via CSS. -->
   <div class="cta-bar">
     <div class="cta-bar-inner">
+      <p class="workflow-hint">① Track issues during class &nbsp;·&nbsp; ② Generate report at the end</p>
       <p class="cta-microcopy" id="cta-microcopy">When you're done, generate your student feedback report</p>
       <button class="cta-btn" onclick="showEndSheet()">Generate Feedback →</button>
     </div>
