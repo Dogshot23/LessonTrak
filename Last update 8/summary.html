@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lesson Feedback</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #F7F4EF;
+      --paper:      #FFFFFF;
+      --ink:        #1A1714;
+      --ink-soft:   #6B6560;
+      --ink-faint:  #C5C0BA;
+      --coral:      #E8553E;
+      --sage:       #3D8C6A;
+      --amber:      #D4850A;
+      --amber-bg:   rgba(212,133,10,.09);
+      --slate:      #4A6FA5;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      padding-bottom: 3rem;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.25rem;
+      border-bottom: 1px solid rgba(26,23,20,.07);
+      background: var(--cream);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-link {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--ink); }
+    .header-title {
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      font-weight: 700;
+    }
+    .new-btn {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: .4rem .9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .12s;
+    }
+    .new-btn:hover  { background: var(--coral); }
+    .new-btn:active { transform: scale(.96); }
+
+    /* ─── HEADER LOGO ─── */
+    .header-logo {
+      display: block;
+      height: 28px;
+      width: auto;
+    }
+    @media (min-width: 380px) {
+      .header-logo { height: 42px; }
+    }
+
+    /* ─── MAIN ─── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    /* ─── 3-COLUMN SUMMARY GRID ─── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .summary-col {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    @media (max-width: 767px) {
+      main { max-width: 540px; padding: 1.25rem 1.1rem 0; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── HERO SCORE ─── */
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+    .score-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 1.1rem 1rem;
+      border: 1px solid rgba(26,23,20,.06);
+      text-align: center;
+    }
+    .score-val {
+      font-family: 'Lora', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .score-card.err .score-val { color: var(--coral); }
+    .score-card.pos .score-val { color: var(--sage); }
+    .score-lbl {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ─── SECTION CARDS ─── */
+    .card {
+      background: var(--paper);
+      border-radius: 16px;
+      border: 1px solid rgba(26,23,20,.06);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .9rem 1rem .75rem;
+      border-bottom: 1px solid rgba(26,23,20,.06);
+    }
+    .card-icon {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .95rem;
+      flex-shrink: 0;
+    }
+    .card-icon.red   { background: rgba(232,85,62,.1); }
+    .card-icon.green { background: rgba(61,140,106,.1); }
+    .card-icon.amber { background: var(--amber-bg); }
+    .card-icon.blue  { background: rgba(74,111,165,.1); }
+    .card-title {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--ink);
+    }
+    .card-subtitle {
+      font-size: .75rem;
+      color: var(--ink-faint);
+      margin-top: .1rem;
+    }
+
+    .card-body { padding: .85rem 1rem; }
+
+    /* ─── RANKED LIST ─── */
+    .ranked-list {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .rank-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .rank-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: .7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-num.r1 { background: rgba(232,85,62,.15); color: var(--coral); }
+    .rank-num.r2 { background: rgba(212,133,10,.12); color: var(--amber); }
+    .rank-num.r3 { background: rgba(26,23,20,.07); color: var(--ink-soft); }
+    .rank-num.rn { background: rgba(26,23,20,.05); color: var(--ink-faint); }
+
+    .rank-body { flex: 1; }
+    .rank-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .2rem;
+    }
+    .rank-bar-track {
+      height: 4px;
+      background: rgba(26,23,20,.07);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .rank-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+    }
+    .rank-bar-fill.err { background: var(--coral); }
+    .rank-bar-fill.pos { background: var(--sage); }
+    .rank-count {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      min-width: 1.6rem;
+      text-align: right;
+    }
+    .rank-row .rank-count.err { color: var(--coral); }
+    .rank-row .rank-count.pos { color: var(--sage); }
+
+    /* ─── FOCUS CARD ─── */
+    .focus-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .focus-item {
+      display: flex;
+      gap: .85rem;
+      align-items: flex-start;
+    }
+    .focus-tag {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .28rem .6rem;
+      border-radius: 100px;
+      flex-shrink: 0;
+      margin-top: .12rem;
+      white-space: nowrap;
+    }
+    .focus-tag.primary   { background: rgba(232,85,62,.12); color: var(--coral); }
+    .focus-tag.secondary { background: rgba(212,133,10,.12); color: var(--amber); }
+    .focus-text { font-size: .88rem; line-height: 1.55; color: var(--ink-soft); }
+    .focus-text strong { font-weight: 700; color: var(--ink); display: block; margin-bottom: .2rem; }
+
+    /* ─── ENCOURAGEMENT CARD ─── */
+    .encourage-card {
+      background: linear-gradient(135deg, rgba(61,140,106,.07) 0%, rgba(61,140,106,.03) 100%);
+      border: 1.5px solid rgba(61,140,106,.18);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+    }
+    .encourage-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+    .encourage-text {
+      font-size: .88rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .encourage-text strong { color: var(--sage); font-weight: 600; }
+
+    /* ─── COPY BUTTON ─── */
+    .copy-btn {
+      width: 100%;
+      padding: .95rem 1rem;
+      background: var(--paper);
+      border: 1.5px solid rgba(26,23,20,.12);
+      border-radius: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      transition: background .2s, border-color .2s, transform .12s;
+    }
+    .copy-btn:hover {
+      background: #f0ede8;
+      border-color: rgba(26,23,20,.22);
+    }
+    .copy-btn:active { transform: scale(.98); }
+    .copy-btn.copied {
+      background: rgba(61,140,106,.08);
+      border-color: rgba(61,140,106,.3);
+      color: var(--sage);
+    }
+    .copy-btn .copy-icon { font-size: 1rem; }
+
+    /* ─── COPY HELPER TEXT ─── */
+    .copy-helper {
+      font-size: .75rem;
+      color: var(--ink-faint);
+      line-height: 1.45;
+      text-align: center;
+      padding: 0 .25rem;
+    }
+
+    /* ─── COPY TOAST ─── */
+    .copy-toast {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      background: rgba(61,140,106,.09);
+      border: 1px solid rgba(61,140,106,.22);
+      border-radius: 10px;
+      padding: .65rem .85rem;
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--sage);
+      line-height: 1.45;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
+    }
+    .copy-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .copy-toast.fading {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    .copy-toast-icon { flex-shrink: 0; font-size: .9rem; }
+
+    /* ─── ACTIONS ─── */
+    .actions {
+      display: flex;
+      gap: .65rem;
+    }
+    .action-btn {
+      flex: 1;
+      padding: .9rem;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      text-align: center;
+      transition: background .2s, transform .12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+    }
+    .action-btn.secondary { background: var(--paper); color: var(--ink); border: 1px solid rgba(26,23,20,.1); }
+    .action-btn.primary   { background: var(--coral); color: #fff; }
+    .action-btn.secondary:hover { background: #ede9e3; }
+    .action-btn.primary:hover   { background: #d44232; }
+    .action-btn:active { transform: scale(.97); }
+
+    .no-issues {
+      font-size: .85rem;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    .empty-state h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      margin-bottom: .75rem;
+    }
+    .empty-state p {
+      color: var(--ink-soft);
+      font-size: .9rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    .lang-covered-list, .tutor-notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .lang-covered-list li, .tutor-notes-list li {
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .lang-covered-list li::before {
+      content: '–';
+      color: var(--slate);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .tutor-notes-list li::before {
+      content: '–';
+      color: var(--ink-faint);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .demo-banner {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+      background: rgba(212,133,10,.09);
+      border: 1px solid rgba(212,133,10,.22);
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.25rem auto 0;
+      max-width: 1100px;
+      text-align: center;
+    }
+    .demo-banner.visible { display: flex; }
+    
+    .feedback-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-top: .5rem;
+    }
+    .feedback-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      min-width: 0;
+    }
+    .feedback-right {
+      width: 260px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+    @media (max-width: 767px) {
+      .feedback-section { flex-direction: column; }
+      .feedback-right { width: 100%; }
+    }
+  </style>
+  <script src="guidanceData.js"></script>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="tracker.html">← Tracker</a>
+  <span class="header-title"><a href="index.html"><img class="header-logo" src="images/lessontrak-logo.png" alt="LessonTrak" /></a></span>
+  <a class="new-btn" href="tracker.html" onclick="startNew()">New Lesson</a>
+</header>
+
+<div class="demo-banner" id="demo-banner">
+  <div class="demo-banner-text">
+    <strong>This is a demo lesson summary.</strong>
+  </div>
+</div>
+
+<main id="main-content">
+</main>
+
+<script>
+  const SESSION_KEY = 'lt_session';
+  const isDemo = window.location.search.includes("demo=true");
+
+  const demoData = {
+    errors:      { articles: 6, tense: 2, pronunciation: 1 },
+    positives:   { good_grammar: 1, good_vocab: 1 },
+    newLanguage: ["Hello", "World"]
+  };
+
+  const LABELS = {
+    errors: {
+      articles:      'Articles',
+      tense:         'Tense',
+      word_order:    'Word Order',
+      vocabulary:    'Vocabulary',
+      pronunciation: 'Pronunciation',
+      fluency:       'Fluency',
+      expression:    'Expression'
+    },
+    positives: {
+      good_grammar:      'Good Grammar',
+      good_vocab:        'Good Vocabulary',
+      complex_structure: 'Complex Structure',
+      connector:         'Connector Used',
+      natural_phrase:    'Natural Phrase'
+    }
+  };
+
+  const COPY_TIPS = {
+    errors: {
+      articles:      'work on using the correct articles (a, an, the) in sentences',
+      tense:         'practise using the right tense when speaking',
+      word_order:    'improve word order and sentence structure',
+      vocabulary:    'build a wider range of vocabulary',
+      pronunciation: 'work on clear and accurate pronunciation',
+      fluency:       'build confidence and fluency in speaking',
+      expression:    'improve clear expression of ideas'
+    },
+    positives: {
+      good_grammar:      'great grammar',
+      good_vocab:        'great vocabulary choices',
+      complex_structure: 'using complex sentence structures',
+      connector:         'using connectors and linkers',
+      natural_phrase:    'using natural, authentic phrases'
+    }
+  };
+
+  // Safe mappings for raw mid-lesson input logger keys
+  const tagMappingDict = {
+    'wrong_word_choice': 'vocabulary',
+    'vocab':             'vocabulary',
+    'hesitation':        'fluency'
+  };
+
+  // ─── SAFETY HELPERS ──────────────────────────────────────────────────────────
+
+  /**
+   * Safely retrieve a display label from any lookup object.
+   * Falls back to the raw key with underscores replaced by spaces.
+   * Never throws, never returns undefined.
+   * @param {Object|null|undefined} dict  — e.g. LABELS.errors or LABELS.positives
+   * @param {*}                     key   — the key to look up
+   * @returns {string}
+   */
+  function safeLabel(dict, key) {
+    const k = String(key == null ? '' : key);
+    const fallback = k.replace(/_/g, ' ') || '—';
+    if (!dict || typeof dict !== 'object') return fallback;
+    const val = dict[k];
+    return (val != null && val !== '') ? String(val) : fallback;
+  }
+
+  /**
+   * Safely retrieve guidance from window.FOCUS_GUIDANCE.
+   * Handles missing FOCUS_GUIDANCE, missing sub-object, missing key, and
+   * non-string values (e.g. null / undefined).
+   * @param {'errors'|'positives'} bucket
+   * @param {string}               key
+   * @returns {string|Array}  — raw value (string or array) or ''
+   */
+  function safeGuidance(bucket, key) {
+    try {
+      const fg = window.FOCUS_GUIDANCE;
+      if (!fg || typeof fg !== 'object') return '';
+      const sub = fg[bucket];
+      if (!sub || typeof sub !== 'object') return '';
+      const val = sub[key];
+      return (val != null) ? val : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  /**
+   * Coerce a raw logger value to a safe non-negative integer.
+   * Handles strings, booleans, arrays (treated as count of elements), and
+   * plain objects. Returns 0 for anything uninterpretable.
+   * @param {*} v
+   * @returns {number}
+   */
+  function safeCount(v) {
+    if (v == null) return 0;
+    if (typeof v === 'number') return Math.max(0, Math.floor(v));
+    if (typeof v === 'boolean') return v ? 1 : 0;
+    if (Array.isArray(v)) return v.length;
+    const n = Number(v);
+    return isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  function pickSmartRandom(list, storageKey) {
+    if (!Array.isArray(list) || list.length === 0) return '';
+    if (list.length === 1) return String(list[0]);
+    let lastUsed;
+    try { lastUsed = localStorage.getItem(storageKey); } catch (_) {}
+    let available = list.filter(item => item !== lastUsed);
+    if (available.length === 0) available = list;
+    const chosen = available[Math.floor(Math.random() * available.length)];
+    try { localStorage.setItem(storageKey, chosen); } catch (_) {}
+    return String(chosen);
+  }
+
+  function startNew() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (_) {}
+  }
+
+  function renderEmpty() {
+    document.getElementById('main-content').innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:3rem; margin-bottom:1rem;">📋</div>
+        <h2>No lesson data yet</h2>
+        <p>Complete a live lesson first and tap "End Lesson" to see your summary here.</p>
+        <a class="action-btn primary" href="tracker.html" style="display:inline-flex;max-width:240px;margin:0 auto">
+          Start Tracking →
+        </a>
+      </div>`;
+  }
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes) {
+    // All label lookups use safeLabel so unmapped keys degrade gracefully.
+    const topIssue    = primaryKey    ? safeLabel(LABELS.errors, primaryKey)                               : null;
+    const topStrength = posEntries[0] ? safeLabel(LABELS.positives, posEntries[0][0])                     : null;
+    const nextPlan    = primaryKey    ? (COPY_TIPS.errors[primaryKey]    || 'address target areas')        : null;
+    const secPlan     = secondaryKey  ? (COPY_TIPS.positives[secondaryKey] || COPY_TIPS.errors[secondaryKey] || 'further refinements') : null;
+
+    let text = '📝 Lesson Summary\n─────────────────\n\n';
+    if (topIssue) text += `🎯 Main focus\n  • ${topIssue}\n\n`;
+    if (topStrength) {
+      text += '✨ Strengths\n';
+      text += `  • ${topStrength}\n`;
+      if (posEntries[1]) text += `  • ${safeLabel(LABELS.positives, posEntries[1][0])}\n`;
+      text += '\n';
+    }
+    if (nextPlan || secPlan) {
+      text += '📅 Next lesson\n';
+      if (nextPlan) text += `  • We'll ${nextPlan}.\n`;
+      if (secPlan)  text += `  • We'll also work on ${secPlan}.\n`;
+      text += '\n';
+    }
+    if (tutorNotes) text += `🗒️ Tutor Notes\n  • ${tutorNotes}\n\n`;
+    if (encouragement) text += encouragement + '\n';
+    if (newLang && newLang.length > 0) {
+      text += '\n📖 New Language Covered\n';
+      newLang.forEach(item => { text += `  • ${item}\n`; });
+    }
+    return text.trim();
+  }
+
+  function buildEncouragement(topStrengthKey, primaryKey) {
+    if (!topStrengthKey && !primaryKey) return '';
+
+    let strength = null;
+    if (topStrengthKey) {
+      // Resolve through mapping dict first, then look up display label safely.
+      const cleanKey = tagMappingDict[topStrengthKey] || topStrengthKey;
+      strength = safeLabel(LABELS.positives, cleanKey).toLowerCase();
+    }
+
+    let issue = null;
+    if (primaryKey) {
+      const cleanKey = tagMappingDict[primaryKey] || primaryKey;
+      issue = safeLabel(LABELS.errors, cleanKey).toLowerCase();
+    }
+
+    if (strength && issue) {
+      return `Your ${strength} is really coming along — next session let's give some attention to ${issue} and keep that momentum going. 🎯`;
+    } else if (strength) {
+      return `Excellent work today — your ${strength} stood out. Keep it up! 🌟`;
+    } else if (issue) {
+      return `Working on ${issue} takes time, but you're making real progress — see you next lesson! 🎯`;
+    }
+    return '';
+  }
+
+  function renderSummary(state, tutorNotes) {
+    const main = document.getElementById('main-content');
+    main.innerHTML = '';
+
+    // ── Normalize raw entries ──────────────────────────────────────────────────
+    // 1. Coerce every value to a safe non-negative integer via safeCount().
+    // 2. Resolve known logger aliases (wrong_word_choice → vocabulary, etc.).
+    // 3. Accumulate counts so aliased keys merge correctly.
+    // 4. Guard against state.errors / state.positives being null/undefined/non-object.
+
+    const rawErrors    = (state && state.errors    && typeof state.errors    === 'object' && !Array.isArray(state.errors))    ? state.errors    : {};
+    const rawPositives = (state && state.positives && typeof state.positives === 'object' && !Array.isArray(state.positives)) ? state.positives : {};
+
+    const cleanErrors = {};
+    Object.entries(rawErrors).forEach(([k, v]) => {
+      const count    = safeCount(v);
+      const cleanKey = tagMappingDict[k] || k;
+      cleanErrors[cleanKey] = (cleanErrors[cleanKey] || 0) + count;
+    });
+
+    const cleanPositives = {};
+    Object.entries(rawPositives).forEach(([k, v]) => {
+      const count    = safeCount(v);
+      const cleanKey = tagMappingDict[k] || k;
+      cleanPositives[cleanKey] = (cleanPositives[cleanKey] || 0) + count;
+    });
+
+    const errEntries = Object.entries(cleanErrors).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+    const posEntries = Object.entries(cleanPositives).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+    const missingPos = Object.keys(LABELS.positives).filter(k => !cleanPositives[k]);
+
+    const totalErr = errEntries.reduce((a, [, v]) => a + v, 0);
+    const totalPos = posEntries.reduce((a, [, v]) => a + v, 0);
+    const maxErr   = errEntries[0]?.[1] || 1;
+    const maxPos   = posEntries[0]?.[1] || 1;
+
+    const primaryKey     = errEntries[0]?.[0] || null;
+    // secondaryKey is always a positive-domain key (a strength to develop).
+    const secondaryKey   = missingPos[0] || posEntries[posEntries.length - 1]?.[0] || null;
+    const topStrengthKey = posEntries[0]?.[0] || null;
+
+    const encouragement = buildEncouragement(topStrengthKey, primaryKey);
+
+    let durationStr = '';
+    if (state && state.startedAt && state.endedAt) {
+      const mins = Math.round((state.endedAt - state.startedAt) / 60000);
+      durationStr = mins < 1 ? 'Less than a minute' : `${mins} min${mins !== 1 ? 's' : ''}`;
+    }
+
+    const newLang = Array.isArray(state && state.newLanguage) ? state.newLanguage : [];
+
+    // ── Score row ──────────────────────────────────────────────────────────────
+    const scoreRow = document.createElement('div');
+    scoreRow.className = 'score-row';
+    scoreRow.innerHTML = `
+      <div class="score-card err"><div class="score-val">${totalErr}</div><div class="score-lbl">Errors logged</div></div>
+      <div class="score-card pos"><div class="score-val">${totalPos}</div><div class="score-lbl">Positives logged</div></div>`;
+    main.appendChild(scoreRow);
+
+    const grid      = document.createElement('div');
+    grid.className  = 'summary-grid';
+    const leftCol   = document.createElement('div');
+    leftCol.className = 'summary-col';
+    const centerCol = document.createElement('div');
+    centerCol.className = 'summary-col';
+    const rightCol  = document.createElement('div');
+    rightCol.className = 'summary-col';
+
+    // ── Errors Card ────────────────────────────────────────────────────────────
+    const topCard = document.createElement('div');
+    topCard.className = 'card';
+    if (errEntries.length === 0) {
+      topCard.innerHTML = `
+        <div class="card-header"><div class="card-icon red">⚠️</div><div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div></div>
+        <div class="card-body"><p class="no-issues">No errors logged this session — great lesson! 🎉</p></div>`;
+    } else {
+      const rows = errEntries.map(([key, count], i) => {
+        const pct = Math.round((count / maxErr) * 100);
+        const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+        // safeLabel guarantees a clean string even for unmapped keys.
+        return `<div class="rank-row">
+          <div class="rank-num ${cls}">${i + 1}</div>
+          <div class="rank-body">
+            <div class="rank-label">${escapeHtml(safeLabel(LABELS.errors, key))}</div>
+            <div class="rank-bar-track"><div class="rank-bar-fill err" style="width:0%" data-pct="${pct}"></div></div>
+          </div>
+          <div class="rank-count err">${count}</div>
+        </div>`;
+      }).join('');
+      topCard.innerHTML = `
+        <div class="card-header"><div class="card-icon red">⚠️</div><div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div></div>
+        <div class="card-body">
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">A few small patterns came up during the lesson:</p>
+          <div class="ranked-list">${rows}</div>
+        </div>`;
+    }
+    leftCol.appendChild(topCard);
+
+    // ── Positives Card ─────────────────────────────────────────────────────────
+    const posCard = document.createElement('div');
+    posCard.className = 'card';
+    if (posEntries.length === 0) {
+      posCard.innerHTML = `
+        <div class="card-header"><div class="card-icon green">✨</div><div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div></div>
+        <div class="card-body"><p class="no-issues">No positives logged this session.</p></div>`;
+    } else {
+      const rows = posEntries.map(([key, count], i) => {
+        const pct = Math.round((count / maxPos) * 100);
+        const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+        return `<div class="rank-row">
+          <div class="rank-num ${cls}">${i + 1}</div>
+          <div class="rank-body">
+            <div class="rank-label">${escapeHtml(safeLabel(LABELS.positives, key))}</div>
+            <div class="rank-bar-track"><div class="rank-bar-fill pos" style="width:0%" data-pct="${pct}"></div></div>
+          </div>
+          <div class="rank-count pos">${count}</div>
+        </div>`;
+      }).join('');
+      posCard.innerHTML = `
+        <div class="card-header"><div class="card-icon green">✨</div><div><div class="card-title">What you did well</div><div class="card-subtitle">Student positive moments</div></div></div>
+        <div class="card-body">
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:.65rem;">Today you communicated well and showed clear progress:</p>
+          <div class="ranked-list">${rows}</div>
+        </div>`;
+    }
+    centerCol.appendChild(posCard);
+
+    if (tutorNotes && tutorNotes.trim()) {
+      const notesCard = document.createElement('div');
+      notesCard.className = 'card';
+      notesCard.innerHTML = `
+        <div class="card-header"><div class="card-icon blue">🗒️</div><div><div class="card-title">Tutor Notes</div><div class="card-subtitle">Additional observations</div></div></div>
+        <div class="card-body"><ul class="tutor-notes-list"><li>${escapeHtml(tutorNotes.trim())}</li></ul></div>`;
+      centerCol.appendChild(notesCard);
+    }
+
+    if (newLang.length > 0) {
+      const langCard = document.createElement('div');
+      langCard.className = 'card';
+      const items = newLang.map(item => `<li>${escapeHtml(String(item))}</li>`).join('');
+      langCard.innerHTML = `
+        <div class="card-header"><div class="card-icon blue">📖</div><div><div class="card-title">New Language Covered</div><div class="card-subtitle">Words and phrases introduced</div></div></div>
+        <div class="card-body"><ul class="lang-covered-list">${items}</ul></div>`;
+      centerCol.appendChild(langCard);
+    }
+
+    // ── Suggested Focus Card ───────────────────────────────────────────────────
+    if (primaryKey || secondaryKey) {
+      const focusCard = document.createElement('div');
+      focusCard.className = 'card';
+      let focusItems = '';
+
+      if (primaryKey) {
+        // primaryKey is always an error-domain key.
+        let guidance = safeGuidance('errors', primaryKey);
+        if (Array.isArray(guidance)) {
+          guidance = pickSmartRandom(guidance, 'last_primary_guidance');
+        } else {
+          guidance = String(guidance || '');
+        }
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag primary">Primary</div>
+            <div class="focus-text">
+              <strong>${escapeHtml(safeLabel(LABELS.errors, primaryKey))}</strong>
+              ${guidance}
+            </div>
+          </div>`;
+      }
+
+      if (secondaryKey) {
+        // secondaryKey is always a positive-domain key (a strength to develop).
+        // We look it up in FOCUS_GUIDANCE.positives; if absent there, try errors
+        // as a final fallback (e.g. a manually added error key used as secondary).
+        let secondaryGuidance = safeGuidance('positives', secondaryKey);
+        if (!secondaryGuidance && secondaryGuidance !== 0) {
+          secondaryGuidance = safeGuidance('errors', secondaryKey);
+        }
+        if (Array.isArray(secondaryGuidance)) {
+          secondaryGuidance = pickSmartRandom(secondaryGuidance, 'last_secondary_guidance');
+        } else {
+          secondaryGuidance = String(secondaryGuidance || '');
+        }
+
+        // Determine display label: prefer positives dict, then errors dict, then safe fallback.
+        const secLabel = safeLabel(
+          LABELS.positives[secondaryKey] !== undefined ? LABELS.positives : LABELS.errors,
+          secondaryKey
+        );
+        // Use "Introduce & develop" for positive-domain keys; "Also address" for error-domain.
+        const verb = (LABELS.errors[secondaryKey] !== undefined && LABELS.positives[secondaryKey] === undefined)
+          ? 'Also address'
+          : 'Introduce & develop';
+
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag secondary">Secondary</div>
+            <div class="focus-text">
+              <strong>${verb}: ${escapeHtml(secLabel)}</strong>
+              ${secondaryGuidance}
+            </div>
+          </div>`;
+      }
+
+      focusCard.innerHTML = `
+        <div class="card-header"><div class="card-icon amber">🎯</div><div><div class="card-title">Suggested Focus — Next Lesson</div><div class="card-subtitle">Based on today's patterns</div></div></div>
+        <div class="card-body"><div class="focus-grid">${focusItems}</div></div>`;
+      rightCol.appendChild(focusCard);
+    }
+
+    if (encouragement) {
+      const enc = document.createElement('div');
+      enc.className = 'encourage-card';
+      enc.innerHTML = `
+        <div class="encourage-icon">💬</div>
+        <div class="encourage-text">${encouragement.replace(/(good grammar|great vocabulary|complex structure|connectors|natural phrases|good progress|improving \w[\w\s]*)/gi, m => `<strong>${m}</strong>`)}</div>`;
+      enc._closing = "You're making solid progress — your communication is becoming more natural, and now we're refining accuracy. Looking forward to the next lesson.";
+      rightCol._enc = enc;
+    }
+
+    const copyText = buildCopyText(errEntries, posEntries, primaryKey, secondaryKey, encouragement, newLang, tutorNotes);
+    const copyBtn  = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.id        = 'copy-feedback-btn';
+    copyBtn.setAttribute('onclick', 'copyFeedback(this)');
+    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Student Report →';
+
+    grid.appendChild(leftCol);
+    grid.appendChild(centerCol);
+    grid.appendChild(rightCol);
+    main.appendChild(grid);
+
+    const feedbackSection = document.createElement('div');
+    feedbackSection.className = 'feedback-section';
+    const feedbackLeft = document.createElement('div');
+    feedbackLeft.className = 'feedback-left';
+
+    if (rightCol._enc) {
+      feedbackLeft.appendChild(rightCol._enc);
+      const closing = document.createElement('p');
+      closing.style.cssText = 'font-size:.82rem;color:var(--ink-soft);line-height:1.6;padding:0 .1rem;';
+      closing.textContent = rightCol._enc._closing;
+      feedbackLeft.appendChild(closing);
+    }
+
+    const feedbackRight = document.createElement('div');
+    feedbackRight.className = 'feedback-right';
+    feedbackRight.appendChild(copyBtn);
+
+    const copyHelper = document.createElement('p');
+    copyHelper.className = 'copy-helper';
+    copyHelper.textContent = 'Copies the report so you can paste it into WhatsApp, Preply, email, etc.';
+    feedbackRight.appendChild(copyHelper);
+
+    const copyToast = document.createElement('div');
+    copyToast.className = 'copy-toast';
+    copyToast.id = 'copy-toast';
+    copyToast.innerHTML = '<span class="copy-toast-icon">✓</span><span>Report copied to clipboard.</span>';
+    feedbackRight.appendChild(copyToast);
+
+    feedbackSection.appendChild(feedbackLeft);
+    feedbackSection.appendChild(feedbackRight);
+    main.appendChild(feedbackSection);
+
+    document.getElementById('copy-feedback-btn')._copyText = copyText;
+
+    if (durationStr) {
+      const durDiv = document.createElement('div');
+      durDiv.style.cssText = 'text-align:center;font-size:.78rem;color:var(--ink-faint);padding:.25rem 0 0;';
+      durDiv.textContent = `Lesson duration: ${durationStr}`;
+      main.appendChild(durDiv);
+    }
+
+    const acts = document.createElement('div');
+    acts.className = 'actions';
+    acts.innerHTML = `
+      <a class="action-btn secondary" href="tracker.html">← Back to Tracker</a>
+      <a class="action-btn primary" href="tracker.html" onclick="startNew()">New Lesson →</a>`;
+    main.appendChild(acts);
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.querySelectorAll('.rank-bar-fill[data-pct]').forEach(el => {
+          el.style.width = el.dataset.pct + '%';
+        });
+      }, 100);
+    });
+  }
+
+  function copyFeedback(btn) {
+    const text = btn._copyText || '';
+    if (!text) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showCopied(btn)).catch(() => fallbackCopy(text, btn));
+    } else {
+      fallbackCopy(text, btn);
+    }
+  }
+
+  function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-999px;left:-999px;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showCopied(btn); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function showCopied(btn) {
+    btn.classList.add('copied');
+    btn.innerHTML = '<span class="copy-icon">✅</span> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span class="copy-icon">📋</span> Copy Student Report →';
+    }, 2500);
+
+    const toast = document.getElementById('copy-toast');
+    if (!toast) return;
+    // Clear any running timer so rapid clicks don't stack
+    if (toast._hideTimer) clearTimeout(toast._hideTimer);
+    if (toast._fadeTimer) clearTimeout(toast._fadeTimer);
+    toast.classList.remove('fading');
+    toast.classList.add('visible');
+    // After ~3 s start the fade-out
+    toast._fadeTimer = setTimeout(() => {
+      toast.classList.add('fading');
+      // Remove visible after the CSS transition (300 ms) finishes
+      toast._hideTimer = setTimeout(() => {
+        toast.classList.remove('visible', 'fading');
+      }, 320);
+    }, 3000);
+  }
+
+  (function init() {
+    let tutorNotes = '';
+    try { tutorNotes = sessionStorage.getItem('tutorNotes') || ''; } catch (_) {}
+    let state = null;
+
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (raw) state = JSON.parse(raw);
+    } catch(e) {}
+
+    const hasData = state &&
+      (Object.values(state.errors    || {}).some(v => safeCount(v) > 0) ||
+       Object.values(state.positives || {}).some(v => safeCount(v) > 0));
+
+    if (isDemo && !hasData) {
+      renderSummary(demoData, tutorNotes);
+      document.getElementById('demo-banner').classList.add('visible');
+    } else if (!hasData) {
+      renderEmpty();
+    } else {
+      renderSummary(state, tutorNotes);
+      if (isDemo) document.getElementById('demo-banner').classList.add('visible');
+    }
+    try { sessionStorage.removeItem('tutorNotes'); } catch (_) {}
+  })();
+</script>
+
+</body>
+</html>
