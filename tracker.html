@@ -829,6 +829,13 @@
             <div class="btn-icon">🤔</div>
           </div>
         </button>
+        <button class="track-btn err" onclick="tap('errors','prepositions',this)">
+          <div class="btn-label">Prepositions</div>
+          <div class="btn-bottom">
+            <div class="btn-count" id="c-prepositions">0</div>
+            <div class="btn-icon">📌</div>
+          </div>
+        </button>
       </div>
 
       <!-- KEY LANGUAGE FROM TODAY -->
@@ -999,7 +1006,8 @@
       vocabulary:    'Wrong Word Choice',
       pronunciation: 'Unclear Pronunciation',
       fluency:       'Hesitation / Long Pauses',
-      expression:    'Struggled to Express Idea'
+      expression:    'Struggled to Express Idea',
+      prepositions:  'Prepositions'
     },
     positives: {
       good_grammar:      'Accurate Sentence',
@@ -1014,7 +1022,7 @@
   let state = {
     errors: {
       articles: 0, tense: 0, word_order: 0,
-      vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0
+      vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0, prepositions: 0
     },
     positives: {
       good_grammar: 0, good_vocab: 0, complex_structure: 0,
@@ -1146,6 +1154,11 @@
       { text: "Explain something difficult or surprising you learned recently.", focus: "Watch for idea breakdown, circumlocution, or topic switch" },
       { text: "Describe how you felt during an important moment in your life.", focus: "Listen for idea abandonment or vague substitution" },
       { text: "Explain what frustrates you most about learning English.", focus: "Watch for loss of specificity when ideas get complex" }
+    ],
+    "Prepositions": [
+      { text: "Tell me about someone you admire — what are they good at, and what are you interested in about them?", focus: "Listen for correct prepositions in fixed phrases: good at, interested in, depend on" },
+      { text: "Describe a journey — where did you arrive, and how do you feel about travelling?", focus: "Watch for arrive at / arrive in, and prepositions after adjectives and verbs" },
+      { text: "Tell me about someone close to you — how did you meet and what do you have in common?", focus: "Listen for married to, common to, and other relationship-linked prepositions" }
     ]
   };
 
@@ -1157,7 +1170,8 @@
     vocabulary:    'Wrong Word Choice',
     pronunciation: 'Unclear Pronunciation',
     fluency:       'Hesitation / Long Pauses',
-    expression:    'Struggled to Express Idea'
+    expression:    'Struggled to Express Idea',
+    prepositions:  'Prepositions'
   };
 
   function getTopErrorCategory() {
@@ -1279,7 +1293,7 @@
     state = {
       errors: {
         articles: 0, tense: 0, word_order: 0,
-        vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0
+        vocabulary: 0, pronunciation: 0, fluency: 0, expression: 0, prepositions: 0
       },
       positives: {
         good_grammar: 0, good_vocab: 0, complex_structure: 0,
