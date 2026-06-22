@@ -750,20 +750,6 @@
       transition: opacity .35s;
     }
     .has-activity .workflow-hint { opacity: 0; pointer-events: none; }
-    /* ─── PRIORITY FOCUS STAR ─── */
-    .focus-star {
-      cursor: pointer;
-      font-size: .8rem;
-      line-height: 1;
-      opacity: .2;
-      transition: opacity .18s, transform .15s;
-      -webkit-tap-highlight-color: transparent;
-      flex-shrink: 0;
-      padding: .1rem;
-      user-select: none;
-    }
-    .focus-star:hover { opacity: .55; transform: scale(1.2); }
-    .track-btn.focus-active .focus-star { opacity: 1; }
   </style>
 </head>
 <body>
@@ -798,7 +784,6 @@
           <div class="btn-label">Articles</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-articles">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'articles')" title="Mark as priority focus">★</span>
             <div class="btn-icon">📝</div>
           </div>
         </button>
@@ -806,7 +791,6 @@
           <div class="btn-label">Tense</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-tense">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'tense')" title="Mark as priority focus">★</span>
             <div class="btn-icon">⏱️</div>
           </div>
         </button>
@@ -814,7 +798,6 @@
           <div class="btn-label">Word Order</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-word_order">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'word_order')" title="Mark as priority focus">★</span>
             <div class="btn-icon">🔀</div>
           </div>
         </button>
@@ -822,7 +805,6 @@
           <div class="btn-label">Wrong Word Choice</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-vocabulary">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'vocabulary')" title="Mark as priority focus">★</span>
             <div class="btn-icon">📚</div>
           </div>
         </button>
@@ -830,7 +812,6 @@
           <div class="btn-label">Unclear Pronunciation</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-pronunciation">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'pronunciation')" title="Mark as priority focus">★</span>
             <div class="btn-icon">🗣️</div>
           </div>
         </button>
@@ -838,7 +819,6 @@
           <div class="btn-label">Hesitation / Long Pauses</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-fluency">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'fluency')" title="Mark as priority focus">★</span>
             <div class="btn-icon">💬</div>
           </div>
         </button>
@@ -846,7 +826,6 @@
           <div class="btn-label">Struggled to Express Idea</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-expression">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'expression')" title="Mark as priority focus">★</span>
             <div class="btn-icon">🤔</div>
           </div>
         </button>
@@ -854,7 +833,6 @@
           <div class="btn-label">Prepositions</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-prepositions">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'prepositions')" title="Mark as priority focus">★</span>
             <div class="btn-icon">📌</div>
           </div>
         </button>
@@ -862,7 +840,6 @@
           <div class="btn-label">Verb Form</div>
           <div class="btn-bottom">
             <div class="btn-count" id="c-verb_form">0</div>
-            <span class="focus-star" onclick="setPriorityFocus(event,'verb_form')" title="Mark as priority focus">★</span>
             <div class="btn-icon">🔧</div>
           </div>
         </button>
@@ -1060,7 +1037,6 @@
       connector: 0, natural_phrase: 0
     },
     newLanguage: [],   // ← NEW
-    priorityFocus: null,
     startedAt: null
   };
 
@@ -1080,10 +1056,6 @@
           }
           // ── NEW: restore language list ──
           if (Array.isArray(parsed.newLanguage)) state.newLanguage = parsed.newLanguage;
-          // ── restore priority focus ──
-          if (typeof parsed.priorityFocus === 'string' || parsed.priorityFocus === null) {
-            state.priorityFocus = parsed.priorityFocus ?? null;
-          }
         } else {
           state.startedAt = Date.now();
           saveState();
@@ -1124,7 +1096,6 @@
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
     renderLanguage();   // ← NEW
-    renderPriorityFocus();
     updateCTAState();
   }
 
@@ -1153,28 +1124,6 @@
     document.getElementById('total-errors').textContent    = errTotal;
     document.getElementById('total-positives').textContent = posTotal;
     updateCTAState();
-  }
-
-  // ── Priority Focus ────────────────────────────────────────────────
-  function setPriorityFocus(e, key) {
-    e.stopPropagation(); // don't trigger the parent tap()
-    // Toggle off if already selected; otherwise set
-    state.priorityFocus = (state.priorityFocus === key) ? null : key;
-    saveState();
-    renderPriorityFocus();
-  }
-
-  function renderPriorityFocus() {
-    document.querySelectorAll('.track-btn.err').forEach(btn => {
-      const star = btn.querySelector('.focus-star');
-      if (!star) return;
-      const onclick = star.getAttribute('onclick') || '';
-      const match   = onclick.match(/'([^']+)'\)/);
-      const key     = match ? match[1] : null;
-      const isActive = key && key === state.priorityFocus;
-      btn.classList.toggle('focus-active', isActive);
-      star.setAttribute('aria-label', isActive ? 'Remove priority focus' : 'Mark as priority focus');
-    });
   }
 
   // ── Test This: Prompt Library ──────────────────────────────────────
@@ -1365,7 +1314,6 @@
         connector: 0, natural_phrase: 0
       },
       newLanguage: [],   // ← NEW
-      priorityFocus: null,
       startedAt: Date.now()
     };
     saveState();

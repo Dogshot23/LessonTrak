@@ -466,36 +466,6 @@
       flex-direction: column;
       gap: .65rem;
     }
-    /* ─── STRONGEST AREA CARD ─── */
-    .strongest-area-card {
-      background: linear-gradient(135deg, rgba(61,140,106,.08) 0%, rgba(61,140,106,.03) 100%);
-      border: 1.5px solid rgba(61,140,106,.22);
-      border-radius: 16px;
-      padding: .9rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: .85rem;
-    }
-    .strongest-area-icon {
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-    .strongest-area-heading {
-      font-size: .65rem;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: .2rem;
-    }
-    .strongest-area-label {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.2;
-    }
-
     /* ─── PRIORITY FOCUS CARD ─── */
     .priority-focus-card {
       background: var(--paper);
@@ -580,25 +550,6 @@
       natural_phrase:    'Natural Phrase'
     }
   };
-
-  // Student-facing display labels — used only in the rendered summary.
-  // Internal keys, copy text, and encouragement continue to use LABELS.
-  const STUDENT_LABELS = {
-    articles:      'Using a/an/the more naturally',
-    tense:         'Using tenses more consistently',
-    word_order:    'Building sentences more naturally',
-    vocabulary:    'Choosing more precise vocabulary',
-    pronunciation: 'Speaking more clearly',
-    fluency:       'Speaking with more fluency and flow',
-    expression:    'Expressing ideas more confidently',
-    prepositions:  'Using prepositions more accurately',
-    verb_form:     'Using verb patterns correctly'
-  };
-
-  // Look up a student-friendly label, falling back to the teacher label.
-  function studentLabel(key) {
-    return STUDENT_LABELS[key] || safeLabel(LABELS.errors, key);
-  }
 
   const COPY_TIPS = {
     errors: {
@@ -729,16 +680,8 @@
     let text = '📝 Lesson Summary\n─────────────────\n\n';
     if (teacherFocusKey) {
       text += `★ Priority focus — next lesson\n  • ${safeLabel(LABELS.errors, teacherFocusKey)}\n\n`;
-      // Other patterns: all errors except the starred one
-      const others = errEntries.filter(([k]) => k !== teacherFocusKey);
-      if (others.length > 0) {
-        text += `Other patterns observed\n`;
-        others.forEach(([k]) => { text += `  • ${safeLabel(LABELS.errors, k)}\n`; });
-        text += '\n';
-      }
-    } else {
-      if (topIssue) text += `🎯 Main focus\n  • ${topIssue}\n\n`;
     }
+    if (topIssue) text += `🎯 Main focus\n  • ${topIssue}\n\n`;
     if (topStrength) {
       text += '✨ Strengths\n';
       text += `  • ${topStrength}\n`;
@@ -760,16 +703,15 @@
     return text.trim();
   }
 
-  function buildEncouragement(topStrengthKey, primaryKey, totalErr, totalPos) {
+  function buildEncouragement(topStrengthKey, primaryKey) {
     if (!topStrengthKey && !primaryKey) return '';
 
-    // ── Error density: how many errors relative to total taps ──────────────────
-    // "High error" = errors make up more than half of all taps, or absolute count ≥ 6.
-    // At high density we avoid praising accuracy/grammar directly because the lesson
-    // data contradicts it. Instead we praise communication, effort, and engagement.
-    const totalTaps   = (totalErr || 0) + (totalPos || 0);
-    const errRatio    = totalTaps > 0 ? (totalErr || 0) / totalTaps : 0;
-    const highError   = (totalErr || 0) >= 6 || errRatio > 0.5;
+    let strength = null;
+    if (topStrengthKey) {
+      // Resolve through mapping dict first, then look up display label safely.
+      const cleanKey = tagMappingDict[topStrengthKey] || topStrengthKey;
+      strength = safeLabel(LABELS.positives, cleanKey).toLowerCase();
+    }
 
     let issue = null;
     if (primaryKey) {
@@ -777,45 +719,13 @@
       issue = safeLabel(LABELS.errors, cleanKey).toLowerCase();
     }
 
-    if (highError) {
-      // ── High error density: praise effort, communication, and engagement ──────
-      // Avoid praising the specific error category or accuracy.
-      const commPhrases = [
-        'kept the conversation going throughout the lesson',
-        'communicated your ideas clearly and kept trying',
-        'showed real willingness to speak and engage',
-        'stayed engaged and worked hard throughout',
-        'showed good confidence in expressing your ideas',
-      ];
-      const praise = commPhrases[Math.floor(Math.random() * commPhrases.length)];
-
-      if (issue) {
-        return `You ${praise} — that matters. Next lesson we'll work on ${issue} to help your English feel even more natural. 🎯`;
-      }
-      return `You ${praise} — that's what makes progress possible. Keep it up! 🌟`;
-
-    } else {
-      // ── Low error density: accuracy-based praise is credible ─────────────────
-      let strength = null;
-      if (topStrengthKey) {
-        const cleanKey = tagMappingDict[topStrengthKey] || topStrengthKey;
-        strength = safeLabel(LABELS.positives, cleanKey).toLowerCase();
-      }
-
-      if (strength && issue) {
-        // Avoid "your grammar is coming along" when grammar IS the issue
-        const praiseIsAboutIssue = strength.includes(issue.split(' ')[0]);
-        if (praiseIsAboutIssue) {
-          return `Good work today — you showed solid communication skills. Next session let's keep building on that and give some attention to ${issue}. 🎯`;
-        }
-        return `Your ${strength} stood out today — next session let's also give some attention to ${issue} and keep that momentum going. 🎯`;
-      } else if (strength) {
-        return `Excellent work today — your ${strength} really stood out. Keep building on this progress! 🌟`;
-      } else if (issue) {
-        return `Good lesson today. Working on ${issue} takes time, but you're making real progress — see you next lesson! 🎯`;
-      }
+    if (strength && issue) {
+      return `Your ${strength} is really coming along — next session let's give some attention to ${issue} and keep that momentum going. 🎯`;
+    } else if (strength) {
+      return `Excellent work today — your ${strength} stood out. Keep it up! 🌟`;
+    } else if (issue) {
+      return `Working on ${issue} takes time, but you're making real progress — see you next lesson! 🎯`;
     }
-
     return '';
   }
 
@@ -860,7 +770,7 @@
     const secondaryKey   = missingPos[0] || posEntries[posEntries.length - 1]?.[0] || null;
     const topStrengthKey = posEntries[0]?.[0] || null;
 
-    const encouragement = buildEncouragement(topStrengthKey, primaryKey, totalErr, totalPos);
+    const encouragement = buildEncouragement(topStrengthKey, primaryKey);
 
     let durationStr = '';
     if (state && state.startedAt && state.endedAt) {
@@ -892,21 +802,6 @@
     const rightCol  = document.createElement('div');
     rightCol.className = 'summary-col';
 
-    // ── Strongest Area Card ────────────────────────────────────────────────────
-    if (posEntries.length > 0) {
-      const strongestKey   = posEntries[0][0];
-      const strongestLabel = escapeHtml(safeLabel(LABELS.positives, strongestKey));
-      const strongestCard  = document.createElement('div');
-      strongestCard.className = 'strongest-area-card';
-      strongestCard.innerHTML = `
-        <div class="strongest-area-icon">🌟</div>
-        <div>
-          <div class="strongest-area-heading">Strongest Area Today</div>
-          <div class="strongest-area-label">${strongestLabel}</div>
-        </div>`;
-      leftCol.appendChild(strongestCard);
-    }
-
     // ── Errors Card ────────────────────────────────────────────────────────────
     const topCard = document.createElement('div');
     topCard.className = 'card';
@@ -915,17 +810,14 @@
         <div class="card-header"><div class="card-icon red">⚠️</div><div><div class="card-title">What we're improving</div><div class="card-subtitle">Ranked by frequency</div></div></div>
         <div class="card-body"><p class="no-issues">No errors logged this session — great lesson! 🎉</p></div>`;
     } else {
-      // Show categories with more than one occurrence. If every category scored
-      // exactly 1, fall back to showing just the top item so the card is never empty.
-      const displayEntries = errEntries.filter(([, v]) => v > 1);
-      const rowEntries = displayEntries.length > 0 ? displayEntries : errEntries.slice(0, 1);
-      const rows = rowEntries.map(([key, count], i) => {
+      const rows = errEntries.map(([key, count], i) => {
         const pct = Math.round((count / maxErr) * 100);
         const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+        // safeLabel guarantees a clean string even for unmapped keys.
         return `<div class="rank-row">
           <div class="rank-num ${cls}">${i + 1}</div>
           <div class="rank-body">
-            <div class="rank-label">${escapeHtml(studentLabel(key))}</div>
+            <div class="rank-label">${escapeHtml(safeLabel(LABELS.errors, key))}</div>
             <div class="rank-bar-track"><div class="rank-bar-fill err" style="width:0%" data-pct="${pct}"></div></div>
           </div>
           <div class="rank-count err">${count}</div>
@@ -988,12 +880,8 @@
       centerCol.appendChild(langCard);
     }
 
-    // ── Focus Cards: teacher priority overrides auto-suggestion ───────────────
+    // ── Priority Focus Card (teacher-selected) ─────────────────────────────────
     if (teacherFocusKey) {
-      // ── Teacher has starred a category: show it as the primary recommendation,
-      //    then list other error patterns below (excluding the starred one).
-
-      // Teacher Priority card
       const pfCard = document.createElement('div');
       pfCard.className = 'priority-focus-card card';
       pfCard.innerHTML = `
@@ -1006,82 +894,75 @@
         </div>
         <div class="priority-focus-body">
           <div>
-            <div class="priority-focus-label">${escapeHtml(studentLabel(teacherFocusKey))}</div>
+            <div class="priority-focus-label">${escapeHtml(safeLabel(LABELS.errors, teacherFocusKey))}</div>
             <div class="priority-focus-sub">You flagged this as the area to prioritise next session.</div>
           </div>
         </div>`;
       rightCol.appendChild(pfCard);
+    }
 
-      // Other Patterns card — remaining error categories, excluding the starred one
-      const otherErrors = errEntries.filter(([key]) => key !== teacherFocusKey);
-      if (otherErrors.length > 0) {
-        const otherCard = document.createElement('div');
-        otherCard.className = 'card';
-        const bullets = otherErrors
-          .map(([key]) => `<li>${escapeHtml(studentLabel(key))}</li>`)
-          .join('');
-        otherCard.innerHTML = `
-          <div class="card-header"><div class="card-icon red" style="background:rgba(26,23,20,.07);font-size:.8rem">◦</div><div><div class="card-title">Other Patterns Observed</div><div class="card-subtitle">Also came up this session</div></div></div>
-          <div class="card-body"><ul class="lang-covered-list" style="--bullet-color:var(--ink-faint)">${bullets}</ul></div>`;
-        rightCol.appendChild(otherCard);
+    // ── Suggested Focus Card ───────────────────────────────────────────────────
+    if (primaryKey || secondaryKey) {
+      const focusCard = document.createElement('div');
+      focusCard.className = 'card';
+      let focusItems = '';
+
+      if (primaryKey) {
+        // primaryKey is always an error-domain key.
+        let guidance = safeGuidance('errors', primaryKey);
+        if (Array.isArray(guidance)) {
+          guidance = pickSmartRandom(guidance, 'last_primary_guidance');
+        } else {
+          guidance = String(guidance || '');
+        }
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag primary">Primary</div>
+            <div class="focus-text">
+              <strong>${escapeHtml(safeLabel(LABELS.errors, primaryKey))}</strong>
+              ${guidance}
+            </div>
+          </div>`;
       }
 
-    } else {
-      // ── No teacher priority: show the existing auto-suggested focus card ──────
-      if (primaryKey || secondaryKey) {
-        const focusCard = document.createElement('div');
-        focusCard.className = 'card';
-        let focusItems = '';
-
-        if (primaryKey) {
-          let guidance = safeGuidance('errors', primaryKey);
-          if (Array.isArray(guidance)) {
-            guidance = pickSmartRandom(guidance, 'last_primary_guidance');
-          } else {
-            guidance = String(guidance || '');
-          }
-          focusItems += `
-            <div class="focus-item">
-              <div class="focus-tag primary">Primary</div>
-              <div class="focus-text">
-                <strong>${escapeHtml(studentLabel(primaryKey))}</strong>
-                ${guidance}
-              </div>
-            </div>`;
+      if (secondaryKey) {
+        // secondaryKey is always a positive-domain key (a strength to develop).
+        // We look it up in FOCUS_GUIDANCE.positives; if absent there, try errors
+        // as a final fallback (e.g. a manually added error key used as secondary).
+        let secondaryGuidance = safeGuidance('positives', secondaryKey);
+        if (!secondaryGuidance && secondaryGuidance !== 0) {
+          secondaryGuidance = safeGuidance('errors', secondaryKey);
+        }
+        if (Array.isArray(secondaryGuidance)) {
+          secondaryGuidance = pickSmartRandom(secondaryGuidance, 'last_secondary_guidance');
+        } else {
+          secondaryGuidance = String(secondaryGuidance || '');
         }
 
-        if (secondaryKey) {
-          let secondaryGuidance = safeGuidance('positives', secondaryKey);
-          if (!secondaryGuidance && secondaryGuidance !== 0) {
-            secondaryGuidance = safeGuidance('errors', secondaryKey);
-          }
-          if (Array.isArray(secondaryGuidance)) {
-            secondaryGuidance = pickSmartRandom(secondaryGuidance, 'last_secondary_guidance');
-          } else {
-            secondaryGuidance = String(secondaryGuidance || '');
-          }
-          const secLabel = safeLabel(
-            LABELS.positives[secondaryKey] !== undefined ? LABELS.positives : LABELS.errors,
-            secondaryKey
-          );
-          const verb = (LABELS.errors[secondaryKey] !== undefined && LABELS.positives[secondaryKey] === undefined)
-            ? 'Also address'
-            : 'Introduce & develop';
-          focusItems += `
-            <div class="focus-item">
-              <div class="focus-tag secondary">Secondary</div>
-              <div class="focus-text">
-                <strong>${verb}: ${escapeHtml(secLabel)}</strong>
-                ${secondaryGuidance}
-              </div>
-            </div>`;
-        }
+        // Determine display label: prefer positives dict, then errors dict, then safe fallback.
+        const secLabel = safeLabel(
+          LABELS.positives[secondaryKey] !== undefined ? LABELS.positives : LABELS.errors,
+          secondaryKey
+        );
+        // Use "Introduce & develop" for positive-domain keys; "Also address" for error-domain.
+        const verb = (LABELS.errors[secondaryKey] !== undefined && LABELS.positives[secondaryKey] === undefined)
+          ? 'Also address'
+          : 'Introduce & develop';
 
-        focusCard.innerHTML = `
-          <div class="card-header"><div class="card-icon amber">🎯</div><div><div class="card-title">Suggested Focus — Next Lesson</div><div class="card-subtitle">Based on today's patterns</div></div></div>
-          <div class="card-body"><div class="focus-grid">${focusItems}</div></div>`;
-        rightCol.appendChild(focusCard);
+        focusItems += `
+          <div class="focus-item">
+            <div class="focus-tag secondary">Secondary</div>
+            <div class="focus-text">
+              <strong>${verb}: ${escapeHtml(secLabel)}</strong>
+              ${secondaryGuidance}
+            </div>
+          </div>`;
       }
+
+      focusCard.innerHTML = `
+        <div class="card-header"><div class="card-icon amber">🎯</div><div><div class="card-title">Suggested Focus — Next Lesson</div><div class="card-subtitle">Based on today's patterns</div></div></div>
+        <div class="card-body"><div class="focus-grid">${focusItems}</div></div>`;
+      rightCol.appendChild(focusCard);
     }
 
     if (encouragement) {

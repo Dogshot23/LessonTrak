@@ -304,7 +304,7 @@ const FOCUS_GUIDANCE = {
       'Use a familiar topic to reduce hesitation pressure.',
       'Ask them to speak faster deliberately.',
       'Use a storytelling task with continuous flow.',
-      'Interrupt pauses and prompt continuation.',
+      'Interrupt pauses and prompt discontinuation.',
       'Ask them to paraphrase instead of stopping.',
       'Use guided prompts to keep them moving.',
       'Build confidence with short, fast answers.',
@@ -410,7 +410,7 @@ const FOCUS_GUIDANCE = {
     complex_structure: [
       'Build on this by introducing relative clauses or concession phrases — model a few examples and invite the student to create their own in a short speaking activity.',
       'Challenge them to maintain this structural complexity even during fast-paced, unpredictable conversational topics.',
-      'Have them experiment with combining two simple thoughts into a single elegant, complex sentence using subordinating conjunctions.'
+      'Have them experiment with combining two simple thoughts into a single elegant, complex sentence using subverting conjunctions.'
     ],
     connector: [
       'Widen the range: practise less common linkers like "as a result", "despite", or "not only…but also" through a quick write-then-speak activity.',
